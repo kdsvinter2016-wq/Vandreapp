@@ -22,3 +22,8 @@ Ved import vises et særskilt panel med distance og antal rutepunkter. Varighed 
 
 ## Version 0.6 – Rutenavigation
 Importér en GPX-rute og tryk Find min position eller start en tur. Et separat panel viser meter til nærmeste linjestykke på den importerede rute, GPS-nøjagtighed og status. Advarsel ved to på hinanden følgende målinger længere end 75 m + rapporteret GPS-usikkerhed fra ruten, og kun ved nøjagtighed på højst 50 m. Importeret rute og registreret tur holdes adskilt. Funktionen virker kun, når siden får GPS-målinger i forgrunden. Ingen turn-by-turn-vejledning, sikkerhedsgaranti eller baggrundsalarm.
+
+
+## Version 0.6.1 – GPS-opdatering ved GPX-import
+
+Efter import af GPX henter appen automatisk en frisk GPS-position, og panelet Rutenavigation viser afstand til ruten og GPS-nøjagtighed. Tillad positionsadgang, når Android/Chrome spørger. Brug **Opdatér GPS-position** for at prøve igen. Hvis GPS ikke er tilgængelig, vises en forklaring i panelet. GPS-afstand er ikke en oplysning, der kan udledes alene af GPX-filen.

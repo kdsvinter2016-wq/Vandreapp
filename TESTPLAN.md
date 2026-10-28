@@ -14,3 +14,11 @@
 10. Test ved dårlig GPS-nøjagtighed (>50m): ingen ruteadvarsel; status skal sige upræcis.
 
 Advarsel er kun visuel i aktiv browser. GPS-afvigelse kan medføre falske eller manglende advarsler.
+
+
+## Supplerende test 0.6.1
+1. Importér tidligere GPX fra version 0.4: afstand/nøjagtighed skal vise tal efter en GPS-måling.
+2. Afvis GPS-tilladelse: tydelig fejlbesked i navigationspanelet, ikke permanent tankestreg.
+3. Brug Opdatér GPS-position: nye værdier vises.
+4. Fjern GPX under GPS-anmodning: panelet forbliver skjult uden fejl.
+5. Genkontrollér Mine ture, GPS-start/stop og GPX-eksport.

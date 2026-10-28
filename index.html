@@ -14,7 +14,7 @@
   </style>
 </head>
 <body>
-<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.6</small></header>
+<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.6.1</small></header>
 <main>
 <p class="intro">Se en eksempelrute på kortet, find din position, og registrér en kort vandretur med GPS.</p>
 <div id="status" class="status" role="status" aria-live="polite">Kortet vises omkring København. GPS bruges først, når du vælger det.</div>
@@ -48,8 +48,8 @@
   <h3 class="import-heading">Rutenavigation</h3>
   <p class="note">Afstanden måles til nærmeste linjestykke på den importerede GPX-rute. Kun vejledende – GPS kan være upræcis.</p>
   <div class="stats"><div class="stat"><strong id="navDistance">–</strong><span>Meter til ruten</span></div><div class="stat"><strong id="navAccuracy">–</strong><span>GPS-nøjagtighed (m)</span></div><div class="stat"><strong id="navThreshold">75</strong><span>Advarsel ved (m)</span></div></div>
-  <p class="nav-unknown" id="navState" role="status">Navigation klar. Find din position for at se afstand til ruten.</p>
-  <div class="actions"><button class="secondary" id="navToggle" aria-pressed="true">Ruteovervågning: Til</button><button class="secondary" id="navReset">Nulstil navigationsstatus</button></div>
+  <p class="nav-unknown" id="navState" role="status">Navigation klar. GPS-position hentes efter import.</p>
+  <div class="actions"><button class="secondary" id="navRefresh">Opdatér GPS-position</button><button class="secondary" id="navToggle" aria-pressed="true">Ruteovervågning: Til</button><button class="secondary" id="navReset">Nulstil navigationsstatus</button></div>
   <p class="note">Advarsel udløses først ved to på hinanden følgende pålidelige GPS-målinger uden for ruten. Ingen lyd eller baggrundsnotifikation.</p>
  </section>
 </div>
@@ -130,6 +130,36 @@
       else{$('navState').className='nav-unknown';$('navState').textContent='Mulig ruteafvigelse – afventer næste GPS-måling.';}
     }else{offRouteCount=0;$('navState').className='nav-safe';$('navState').textContent=distance<=NAV_LIMIT_METERS?'På ruten (inden for 75 m).':'Tæt på ruten – GPS-usikkerhed taget i betragtning.';}
   }
+  // En GPX-fil indeholder rutekoordinater, ikke telefonens aktuelle position.
+  // Hent en særskilt GPS-måling ved import og ved manuelt tryk i navigationspanelet.
+  let navRequestGeneration=0;
+  function requestNavigationPosition(){
+    const generation=++navRequestGeneration;
+    if(!navigationSegments.length)return;
+    if(!navEnabled){$('navState').textContent='Slå ruteovervågning til for at se GPS-afstand.';return;}
+    if(!navigator.geolocation||!window.isSecureContext){$('navState').textContent='GPS kræver HTTPS og en browser med positionsadgang.';return;}
+    $('navRefresh').disabled=true;
+    $('navState').className='nav-unknown';
+    $('navState').textContent='Henter telefonens GPS-position… Tillad position, hvis Android spørger.';
+    try{
+      navigator.geolocation.getCurrentPosition(p=>{
+        if(generation!==navRequestGeneration)return;
+        $('navRefresh').disabled=false;
+        if(!navigationSegments.length)return;
+        if(!validPosition(p)){$('navState').textContent='GPS returnerede ugyldige koordinater. Prøv igen.';return;}
+        followAuthorized=true;
+        setPosition([p.coords.latitude,p.coords.longitude],p.coords.accuracy);
+        updateNavigation(p);
+        startIdleFollow();
+      },e=>{
+        if(generation!==navRequestGeneration)return;
+        $('navRefresh').disabled=false;
+        $('navState').className='nav-unknown';
+        $('navState').textContent=errorText(e)+' Tryk på Opdatér GPS-position for at prøve igen.';
+      },{enableHighAccuracy:true,timeout:20000,maximumAge:0});
+    }catch(e){$('navRefresh').disabled=false;$('navState').textContent='GPS kunne ikke startes. Tjek browserens positionsadgang.';}
+  }
+  $('navRefresh').onclick=requestNavigationPosition;
   $('navToggle').onclick=()=>{navEnabled=!navEnabled;$('navToggle').textContent='Ruteovervågning: '+(navEnabled?'Til':'Fra');$('navToggle').setAttribute('aria-pressed',String(navEnabled));resetNavigationStatus();if(navEnabled&&navLastPosition)updateNavigation(navLastPosition);};
   $('navReset').onclick=()=>{resetNavigationStatus();showStatus('Navigationsstatus nulstillet. GPS-registreringen er uændret.');};
   function errorText(error){return error.code===1?'Tilladelse til GPS blev afvist. Giv browseren positionsadgang.':error.code===2?'GPS-position er ikke tilgængelig. Tjek enhedens lokationstjenester.':'GPS-positionen kunne ikke findes i tide. Prøv igen.';}
@@ -264,11 +294,13 @@
       $('importSpeed').textContent=elapsed===null||elapsed<=0?'–':((meters/1000)/(elapsed/3600000)).toLocaleString('da-DK',{minimumFractionDigits:1,maximumFractionDigits:1});
       $('importDetails').textContent=`${data.segments.length} segment(er). ${elapsed===null?'Filen indeholder ikke komplette tidsstempler, så varighed og hastighed kan ikke beregnes.':'Varighed beregnes som summen af tidsrum mellem første og sidste punkt i hvert segment.'}`;
       showStatus(`GPX-rute importeret: ${data.pointCount} punkter og ${fmtLength(meters)} km. Den registrerede tur er uændret.`);
+      requestNavigationPosition();
     }catch(e){showStatus(`GPX-import mislykkedes: ${e.message || 'Kunne ikke læse filen.'}`);}
     finally{$('importGpx').disabled=false;}
   });
   $('clearGpx').onclick=()=>{
     if(importedLayer)map.removeLayer(importedLayer);
+    navRequestGeneration++;$('navRefresh').disabled=false;
     importedLayer=null;navigationSegments=[];navLastPosition=null;$('navPanel').hidden=true;resetNavigationStatus();$('clearGpx').disabled=true;
     $('importSummary').textContent='Ingen GPX-rute indlæst.';
     $('importStats').hidden=true;

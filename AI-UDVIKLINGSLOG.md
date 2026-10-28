@@ -21,3 +21,10 @@ Brugertest: Efter GPX-import blev statistikken under Min vandretur ikke udfyldt,
 **Problem:** GPS-ruter kan vises, men brugeren kan ikke se, hvor langt væk vedkommende er fra importeret GPX-spor.
 **Løsning:** Afstandsberegning til nærmeste GPX-linjestykke, separat navigationspanel og visuel advarsel ved vedvarende ruteafvigelse, hvor GPS-nøjagtighed vægtes. Importerede GPX-segmenter forbindes ikke.
 **Begrænsning:** Ingen sikker navigation eller baggrundsalarmer; fysisk GPS-test mangler ved kodelevering.
+
+
+## Version 0.6.1 – fejlrettelse
+**Observation fra fysisk Android-test:** Efter import af GPX fra version 0.4 stod GPS-afstand og nøjagtighed som `–`.
+**Årsag:** GPX-importen indlæste ruten, men udløste ikke selv en GPS-anmodning. En aktuel GPS-position er nødvendig for disse værdier.
+**Ændring:** Automatisk positionsanmodning efter vellykket GPX-import, manuel Opdatér GPS-position-knap, tilstands- og fejlbeskeder.
+**Kontrol:** JavaScript-syntaks og pakkestruktur kontrolleres maskinelt. Android-test afventes.

@@ -21,3 +21,6 @@ Upload alle 8 filer til roden af GitHub-repositoriet, og commit. Åbn via HTTPS.
 
 ## Rettelse i 0.8.1
 GPS-knapper og rutegenvej er nu placeret synligt over kortet. Knappen Planlæg rute åbner det eksisterende planlægningspanel og scroller til det. Den underliggende GPS- og rutelogik er ikke ændret.
+
+## Nyt i 0.8.2 – Google Maps til rutens start
+Første valgte tegnepunkt vises med koordinater og linket **Navigér til start i Google Maps**. Google Maps åbnes med punktet som destination (bil som udgangspunkt), og ruten til start beregnes i Google Maps. Der foretages ikke adresseopslag. Linket opdateres ved fortryd/ryd rutepunkt og efter automatisk ruteberegning.

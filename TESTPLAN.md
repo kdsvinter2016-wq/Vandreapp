@@ -24,3 +24,11 @@ Hvis der opstår fejl: registrér trin, forventet/faktisk resultat og telefonens
 3. Planlæg rute åbner panelet og ruller til knapperne til tegning.
 4. GPS-kort, import, gemte ture og eksisterende registrering skal stadig virke.
 5. Test på Galaxy S25 FE; ikke verificeret her på fysisk telefon.
+
+## Version 0.8.2 – startpunkt og Google Maps
+1. Sæt første rutepunkt og kontrollér, at koordinater og Google Maps-link vises.
+2. Klik på linket; kontrollér at destinationen svarer til første rutepunkt (ikke telefonens aktuelle position).
+3. Tilføj flere punkter og beregn gangrute; linket må stadig pege på oprindeligt startpunkt.
+4. Fortryd samtlige punkter eller tryk Ryd tegnet rute; startpanelet skal forsvinde.
+5. Lav en ny rute; linket skal opdateres til det nye første punkt.
+6. Regressionstest GPS, GPX, gemte ture, kortfølgning og faner på Android.

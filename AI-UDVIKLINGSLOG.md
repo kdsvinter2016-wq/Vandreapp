@@ -9,3 +9,8 @@
 
 ## Version 0.8.1
 **Fejl rapporteret:** Kort-fanen viste ikke GPS-knapper og ruteplanlægning umiddelbart. **Årsag:** Funktionerne var placeret under et højt kort, og ruteplanlægningen lå i et lukket details-element. **Løsning:** Synlig handlingslinje over kortet, som aktiverer de eksisterende knapper, samt genvej der åbner planlægningspanelet. **Teststatus:** Statisk kontrol og JavaScript-syntaks; Android-test afventer.
+
+## 0.8.2 – Google Maps-rute til start
+**Brugerønske:** Vis startpunkt for manuelt/automatisk planlagt rute og link til Google Maps for vejvisning dertil.
+**Løsning:** Brug første valgte punkt `drawnPoints[0]`, vis koordinater og Google Maps Directions URL med API 1 og destination samt biltransport som standard. Linket opdateres ved ændringer af rutepunkter. Ingen ekstern geokodning og ingen deling, før brugeren åbner Google Maps.
+**Test:** JavaScript-syntaks og HTML-struktur kontrolleret automatisk; faktisk Android-åbning af Google Maps afventer brugerens test.

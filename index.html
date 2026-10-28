@@ -35,10 +35,15 @@
   .map-quick-actions button.q-position{grid-column:span 1}
   .map-quick-actions button.q-stop{background:#9d3030}
   @media (max-width:360px){.map-quick-actions button{font-size:12px}}
-  </style>
+  
+  .route-start-panel{margin-top:12px;background:#eaf3ed;border:1px solid #bdd7c8;border-radius:10px;padding:12px}
+  .route-start-panel[hidden]{display:none}
+  .maps-link{display:inline-block;background:#155c42;color:white;text-decoration:none;padding:11px 13px;border-radius:9px;font-weight:650;margin-top:7px}
+  .maps-link:focus-visible{outline:3px solid #edab39;outline-offset:2px}
+</style>
 </head>
 <body>
-<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.1</small></div><span class="header-tag">Vandring og GPS</span></div></header>
+<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.2</small></div><span class="header-tag">Vandring og GPS</span></div></header>
 <nav id="mainTabs" class="main-tabs" aria-label="Hovednavigation">
   <button type="button" class="tab selected" data-tab="kort" aria-current="page">Kort</button>
   <button type="button" class="tab" data-tab="ture">Mine ture</button>
@@ -89,6 +94,12 @@
    <button id="drawExport" class="secondary" disabled>Eksportér tegnet rute (GPX)</button>
   </div>
   <div class="stats draw-stat"><div class="stat"><strong id="drawDistance">0,00</strong><span>Planlagt distance (km)</span></div><div class="stat"><strong id="drawPoints">0</strong><span>Rutepunkter</span></div><div class="stat"><strong id="drawMode">Fra</strong><span>Tegnetilstand</span></div></div>
+  <div id="routeStartPanel" class="route-start-panel" hidden aria-live="polite">
+   <strong>Startpunkt for din planlagte rute</strong>
+   <p class="note" style="margin:5px 0"><span id="routeStartCoords"></span></p>
+   <a id="routeStartMaps" class="maps-link" href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Navigér til start i Google Maps</a>
+   <p class="note">Åbner Google Maps med startpunktet som destination. Google Maps beregner turen dertil, ikke din planlagte vandrerute.</p>
+  </div>
   <p class="note">Automatisk ruteføring bruger en ekstern routingtjeneste og kræver internet. Ruten kan afvige fra dit valg; kontroller altid fremkommelighed og adgangsforhold. Maksimum 20 via-punkter.</p>
   <p class="note" id="drawStatus" aria-live="polite">Tegning er slået fra. En tegnet rute gemmes kun på denne side, indtil du eksporterer den.</p>
  </section>
@@ -320,6 +331,18 @@
     drawnLine.setStyle({color:routedPoints?'#23875a':'#dc436c'});
     drawnMarkers.clearLayers();
     drawnPoints.forEach((p,i)=>L.circleMarker(p,{radius:5,color:'#fff',weight:2,fillColor:'#dc436c',fillOpacity:1,interactive:false}).addTo(drawnMarkers));
+    // Første valgte punkt er brugerens ønskede startpunkt, også efter stiberegning.
+    // Brug koordinater direkte: geokodning/adresseopslag kræver en separat tjeneste.
+    const startPanel=$('routeStartPanel');
+    if(drawnPoints.length){
+      const [lat,lon]=drawnPoints[0];
+      if(Number.isFinite(lat)&&Number.isFinite(lon)&&Math.abs(lat)<=90&&Math.abs(lon)<=180){
+        const dest=lat.toFixed(6)+','+lon.toFixed(6);
+        $('routeStartCoords').textContent='Koordinater: '+dest;
+        $('routeStartMaps').href='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(dest)+'&travelmode=driving';
+        startPanel.hidden=false;
+      }else{startPanel.hidden=true;}
+    }else{startPanel.hidden=true;$('routeStartMaps').removeAttribute('href');}
     $('drawPoints').textContent=String(drawnPoints.length);
     $('drawDistance').textContent=fmtLength(drawDistanceMeters());
     $('drawMode').textContent=drawing?'Til':'Fra';
@@ -367,7 +390,7 @@
   $('drawExport').onclick=()=>{
     if(drawnPoints.length<2)return;
     const vertices=activeDrawPoints().map(p=>`<rtept lat="${p[0].toFixed(7)}" lon="${p[1].toFixed(7)}"/>`).join('');
-    const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp 0.7.3" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>Min tegnede rute</name>${vertices}</rte></gpx>`;
+    const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp 0.8.2" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>Min tegnede rute</name>${vertices}</rte></gpx>`;
     const url=URL.createObjectURL(new Blob([xml],{type:'application/gpx+xml'}));
     const a=document.createElement('a');a.href=url;a.download='vandreapp-tegnet-rute.gpx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
     $('drawStatus').textContent=routedPoints?'Beregnet vandrerute eksporteret som GPX.':'Manuelt tegnet rute eksporteret som GPX (rette linjer).';

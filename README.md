@@ -17,3 +17,7 @@ Upload alle 8 filer til roden af GitHub-repositoriet, og commit. Åbn via HTTPS.
 - Valhalla-demotjenesten kan afvise routinger, særligt med problematiske via-punkter.
 - Data ligger lokalt i browseren – eksportér backup.
 - PWA indeholder manifest og basal service worker, men ikke offline-kort.
+
+
+## Rettelse i 0.8.1
+GPS-knapper og rutegenvej er nu placeret synligt over kortet. Knappen Planlæg rute åbner det eksisterende planlægningspanel og scroller til det. Den underliggende GPS- og rutelogik er ikke ændret.

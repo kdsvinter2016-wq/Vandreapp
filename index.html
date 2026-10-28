@@ -25,10 +25,20 @@
   .settings-box h2{font-size:20px;margin:0 0 10px}.settings-row{padding:12px 0;border-bottom:1px solid #e0e9e3}.settings-row:last-child{border-bottom:0}.settings-row strong{display:block;margin-bottom:4px}.settings-row p{font-size:14px;color:#52685e;margin:0;line-height:1.5}.quick-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
   button:focus-visible,summary:focus-visible{outline:3px solid #e7a233;outline-offset:2px}
   @media(max-width:600px){header h1{font-size:21px}.header-tag{display:none}main{padding:10px 9px 32px}#map{height:63dvh;min-height:350px;border-radius:12px}.panel{padding:12px;margin-top:10px}.main-tabs{padding:7px 9px}.main-tabs .tab{font-size:13px;padding:11px 6px}.stats{gap:6px}.stat{padding:10px 5px}.stat strong{font-size:19px}.actions{gap:7px}.actions button{min-height:44px}.history-row{align-items:flex-start;flex-direction:column}.history-row .actions{width:100%}.history-row .actions button{flex:1}.leaflet-control-zoom a{width:36px;height:36px;line-height:36px}}
+
+  /* 0.8.1: centrale handlinger synlige over kortet på mobil */
+  .map-quickbar{background:#fff;border:1px solid #cfe0d4;border-radius:12px;padding:10px;margin:10px 0;box-shadow:0 1px 7px #0001}
+  .map-quickbar-title{font-weight:750;font-size:14px;margin:0 0 8px;color:#194331}
+  .map-quick-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .map-quick-actions button{min-width:0;min-height:46px;padding:9px 5px;font-size:13px;line-height:1.2}
+  .map-quick-actions button.q-plan{grid-column:span 2;background:#175f83}
+  .map-quick-actions button.q-position{grid-column:span 1}
+  .map-quick-actions button.q-stop{background:#9d3030}
+  @media (max-width:360px){.map-quick-actions button{font-size:12px}}
   </style>
 </head>
 <body>
-<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8</small></div><span class="header-tag">Vandring og GPS</span></div></header>
+<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.1</small></div><span class="header-tag">Vandring og GPS</span></div></header>
 <nav id="mainTabs" class="main-tabs" aria-label="Hovednavigation">
   <button type="button" class="tab selected" data-tab="kort" aria-current="page">Kort</button>
   <button type="button" class="tab" data-tab="ture">Mine ture</button>
@@ -123,6 +133,30 @@
   const move=(id,to)=>{const el=document.getElementById(id);if(el)to.appendChild(el);};
   for(const node of [...main.children]){if(node.matches('.intro,#status,#map'))mapView.appendChild(node);}
   move('tripPanel',mapView);move('mapTools',mapView);
+  // Knapperne ligger OVER kortet, men aktiverer den eksisterende og afprøvede logik.
+  const quick=document.createElement('div');quick.className='map-quickbar';quick.id='mapQuickbar';
+  quick.innerHTML=`<div class="map-quickbar-title">GPS og ruteplanlægning</div>
+    <div class="map-quick-actions">
+      <button type="button" id="quickStart">Start tur</button>
+      <button type="button" class="secondary" id="quickPause">Pause tur</button>
+      <button type="button" class="q-stop" id="quickStop">Stop tur</button>
+      <button type="button" class="q-plan" id="quickPlan">Planlæg rute på kortet</button>
+      <button type="button" class="secondary q-position" id="quickLocate">Find GPS</button>
+    </div>`;
+  mapView.insertBefore(quick,document.getElementById('map'));
+  for(const [quickId,actualId] of [['quickStart','start'],['quickPause','pause'],['quickStop','stop'],['quickLocate','locate']]){
+    const source=document.getElementById(actualId),proxy=document.getElementById(quickId);
+    proxy.addEventListener('click',()=>{if(!source.disabled)source.click();});
+    const sync=()=>{proxy.disabled=source.disabled;proxy.textContent=actualId==='pause'?source.textContent:proxy.dataset.label;};
+    proxy.dataset.label=proxy.textContent;
+    new MutationObserver(sync).observe(source,{attributes:true,attributeFilter:['disabled'],childList:true,subtree:true,characterData:true});
+    sync();
+  }
+  document.getElementById('quickPlan').addEventListener('click',()=>{
+    const disclosure=document.getElementById('routeDisclosure');disclosure.open=true;
+    disclosure.scrollIntoView({behavior:'smooth',block:'start'});
+    if(window.vandreMapInvalidate)window.vandreMapInvalidate();
+  });
   move('historyPanel',toursView);move('analysisPanel',toursView);
   settingsView.innerHTML=`<div class="panel settings-box"><h2>Indstillinger og hjælp</h2>
   <div class="settings-row"><strong>GPS og kort</strong><p>Brug “Find min position” og “Følg GPS” på Kort-fanen. Positionsadgang kræver HTTPS og tilladelse i Chrome.</p></div>

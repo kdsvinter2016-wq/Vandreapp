@@ -16,3 +16,11 @@
 12. Tidligere ikke gennemført: ruteafvigelsesadvarsel og GPS-højde fra registreret tur.
 
 Hvis der opstår fejl: registrér trin, forventet/faktisk resultat og telefonens Android/Chrome-version.
+
+
+## 0.8.1 – fejlrettelse
+1. På Kort-fanen skal Start tur, Pause tur, Stop tur, Planlæg rute på kortet og Find GPS være synlige **over** kortet.
+2. Pause og Stop skal være deaktiverede før turstart; de aktiveres korrekt ved start.
+3. Planlæg rute åbner panelet og ruller til knapperne til tegning.
+4. GPS-kort, import, gemte ture og eksisterende registrering skal stadig virke.
+5. Test på Galaxy S25 FE; ikke verificeret her på fysisk telefon.

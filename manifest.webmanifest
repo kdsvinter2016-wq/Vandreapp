@@ -1,25 +1,22 @@
 {
   "name": "VandreApp",
   "short_name": "VandreApp",
-  "description": "Registrér vandreture med GPS og importér GPX-ruter",
+  "description": "VandreApp – vandring og GPS",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f0f4ef",
+  "background_color": "#eef3ef",
   "theme_color": "#173e31",
-  "lang": "da",
   "icons": [
     {
       "src": "./icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
       "src": "./icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ]
 }

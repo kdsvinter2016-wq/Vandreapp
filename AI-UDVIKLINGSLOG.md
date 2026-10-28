@@ -1,14 +1,7 @@
-# AI-udviklingslog – 0.7.2
+# AI-udviklingslog – version 0.8
 
-**Ønske:** Automatisk ruteføring langs eksisterende stier og veje før mobilinterfacedesign 0.8.
-
-**AI-arbejde:** Inspicerede 0.7.1-koden, identificerede tegnepunkter, navigationssegmenter og GPX-eksport. Tilføjede særskilt beregnet rutegeometri, request-fejlhåndtering og annullering af forældede svar ved punktændringer.
-
-**Valg:** Valhalla pedestrian routing fra offentlig FOSSGIS-demo. Brugerinitieret POST med `X-Client-Id`; behold manuel rute som fallback. Beregnet geometri anvendes til både navigation og GPX-eksport.
-
-**Usikkerheder:** Demoens tilgængelighed, browser-CORS og rutekvalitet er ikke verificeret på Android. Ingen påstand om bestået mobiltest. Valhalla-demo kan ændre vilkår eller rate limits.
-
-**Test:** JavaScript-syntakskontrol og ZIP-integritetskontrol lokalt. Reelle online routingtests og regressionstest afventer Android.
-
-## Version 0.7.3 – Routingfejldiagnostik
-Bruger rapporterede HTTP 400 ved automatisk ruteføring. AI undersøgte anmodningens format og Valhallas dokumentation: HTTP 400 kan også betyde manglende ruteforbindelse. Ændringen synliggør serverens fejlbesked og guider til nye rutepunkter. Årsagen er ikke endeligt fastslået, og den eksterne tjeneste er ikke live-testet her.
+**Problem:** Efter mange iterationer var brugerfladen lang og svær at overskue på mobil.
+**Løsning:** AI reorganiserede den eksisterende DOM i tre faner og forbedrede kortlayoutet; alle eksisterende element-id’er og deres JavaScript-hændelser blev bevaret. Rutetegning blev gjort udfoldelig.
+**Yderligere opdagelse:** Kildepakken 0.7.3 henviste til manifest og service worker uden at medtage filerne; version 0.8 medtager dem. Offline-kort er ikke implementeret.
+**Kontrol:** JavaScript-syntaks og ZIP-integritet kontrolleres lokalt. Den praktiske Android-test er brugerens opgave og er endnu ikke gennemført.
+**Begrænsninger:** Valhalla-demotjeneste, browserens baggrunds-GPS, lokal lagring og endnu ikke testet ruteafvigelsesalarm.

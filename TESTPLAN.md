@@ -1,21 +1,18 @@
-# Testplan 0.7.3
+# VandreApp 0.8 – Android-testplan
 
-**Ikke testet på fysisk Android-enhed.**
+**Status:** syntakstest og pakkevalidering; praktisk Android-test afventer.
 
-1. Kontroller teksten Prototype 0.7.3.
-2. Tegn to punkter langs en vej/sti. Kontroller pink manuel rute og afstand.
-3. Tryk Beregn vandrerute langs stier. Bekræft grøn rute, der følger kortets stier, og ændret afstand.
-4. Tilføj et nyt rutepunkt. Bekræft at grøn beregning forsvinder, og at ny beregning kræves.
-5. Beregn igen, tryk Brug ruten til navigation. Bekræft GPS-afstand og status.
-6. Eksportér den grønne rute til GPX og åbn i gpx.studio.
-7. Tryk Vis rette linjer. Bekræft pink linje og tilsvarende eksport.
-8. Slå internet fra inden beregning. Bekræft forståelig fejl og at manuel rute stadig findes.
-9. Regressionstest GPS, pause/genoptag, autosave, Wake Lock, import/eksport, backup og højdeprofil.
-10. Tidligere udestående test: reel ruteafvigelsesadvarsel og GPS-baseret højdeprofil.
+1. Kontroller at Prototype 0.8 vises.
+2. Kort-fanen: kortet vises med korrekt størrelse og GPS-position.
+3. Start, pause, genoptag, stop og gem en kort tur.
+4. Åbn "Planlæg en rute på kortet"; tegn rute og eksportér GPX.
+5. Beregn rute med få via-punkter; prøv GPX-eksport.
+6. Importér GPX; kontroller importstats og Rutenavigation.
+7. Mine ture: vis tidligere tur, omdøb og lav JSON-backup.
+8. Mine ture: kontrollér at højdegraf vises for GPX med højdedata (via Kort-fanens importstatistik).
+9. Indstillinger: genveje fører til korrekte faner.
+10. Genindlæs og bekræft automatisk gendannelse af aktiv tur.
+11. Test Wake Lock og Følg GPS.
+12. Tidligere ikke gennemført: ruteafvigelsesadvarsel og GPS-højde fra registreret tur.
 
-## Særligt: HTTP 400
-1. Vælg to nærliggende punkter på en almindelig vej. Beregn rute.
-2. Hvis routing fejler, noter den præcise fejltekst, som nu vises i appen.
-3. Prøv punkter med manglende sti/vej og kontrollér, at brugeren får forklaring frem for generisk HTTP 400.
-4. Kontrollér at manuel rutetegning og GPX-eksport stadig virker.
-Automatisk rute kan ikke verificeres uden en live routingserver og praktisk Android-test.
+Hvis der opstår fejl: registrér trin, forventet/faktisk resultat og telefonens Android/Chrome-version.

@@ -14,7 +14,7 @@
   </style>
 </head>
 <body>
-<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.7.2</small></header>
+<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.7.3</small></header>
 <main>
 <p class="intro">Se en eksempelrute på kortet, find din position, og registrér en kort vandretur med GPS.</p>
 <div id="status" class="status" role="status" aria-live="polite">Kortet vises omkring København. GPS bruges først, når du vælger det.</div>
@@ -202,7 +202,19 @@
     try{
       const body={locations:drawnPoints.map(([lat,lon])=>({lat,lon})),costing:'pedestrian',shape_format:'polyline6',units:'km',directions_type:'none'};
       const response=await fetch(ROUTE_API,{method:'POST',headers:{'Content-Type':'application/json','X-Client-Id':'VandreApp-exam-prototype'},body:JSON.stringify(body),signal:controller.signal});
-      if(!response.ok)throw Error('Routingserver svarede med HTTP '+response.status);
+      // Valhalla bruger også HTTP 400 for manglende stiforbindelse eller et punkt uden for gangnettet.
+      // Læs den rigtige fejltekst i stedet for kun at vise HTTP-koden.
+      if(!response.ok){
+        const raw=(await response.text()).slice(0,2500);let detail='';
+        try{const failure=JSON.parse(raw);detail=String(failure.error||failure.message||failure.status_message||'');}
+        catch(_){detail=raw.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();}
+        const known=detail.toLowerCase();
+        let guidance=' Kontrollér, at begge punkter ligger tæt på gangbare veje eller stier, og prøv med to nærliggende punkter.';
+        if(response.status===429)guidance=' Demotjenesten begrænser forespørgsler. Prøv senere eller brug manuel rute.';
+        else if(response.status>=500)guidance=' Routingserveren har en midlertidig fejl. Prøv senere.';
+        else if(known.includes('no path')||known.includes('unreachable')||known.includes('unconnected')||known.includes('suitable edges')||known.includes('no data'))guidance=' Vælg punkter på samme tilgængelige sti- eller vejnet og prøv igen.';
+        throw Error('HTTP '+response.status+(detail?' – '+detail:'')+guidance);
+      }
       const data=await response.json();const legs=data.trip?.legs;
       if(!Array.isArray(legs)||!legs.length)throw Error('Ingen gangrute fundet mellem punkterne');
       const result=[];for(const leg of legs){if(typeof leg.shape!=='string')throw Error('Rutens koordinater mangler');const pts=decodePolyline6(leg.shape);if(result.length&&pts.length)pts.shift();result.push(...pts);}
@@ -265,7 +277,7 @@
   $('drawExport').onclick=()=>{
     if(drawnPoints.length<2)return;
     const vertices=activeDrawPoints().map(p=>`<rtept lat="${p[0].toFixed(7)}" lon="${p[1].toFixed(7)}"/>`).join('');
-    const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp 0.7.2" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>Min tegnede rute</name>${vertices}</rte></gpx>`;
+    const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp 0.7.3" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>Min tegnede rute</name>${vertices}</rte></gpx>`;
     const url=URL.createObjectURL(new Blob([xml],{type:'application/gpx+xml'}));
     const a=document.createElement('a');a.href=url;a.download='vandreapp-tegnet-rute.gpx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
     $('drawStatus').textContent=routedPoints?'Beregnet vandrerute eksporteret som GPX.':'Manuelt tegnet rute eksporteret som GPX (rette linjer).';

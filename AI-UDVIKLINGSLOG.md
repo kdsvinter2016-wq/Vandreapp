@@ -9,3 +9,6 @@
 **Usikkerheder:** Demoens tilgængelighed, browser-CORS og rutekvalitet er ikke verificeret på Android. Ingen påstand om bestået mobiltest. Valhalla-demo kan ændre vilkår eller rate limits.
 
 **Test:** JavaScript-syntakskontrol og ZIP-integritetskontrol lokalt. Reelle online routingtests og regressionstest afventer Android.
+
+## Version 0.7.3 – Routingfejldiagnostik
+Bruger rapporterede HTTP 400 ved automatisk ruteføring. AI undersøgte anmodningens format og Valhallas dokumentation: HTTP 400 kan også betyde manglende ruteforbindelse. Ændringen synliggør serverens fejlbesked og guider til nye rutepunkter. Årsagen er ikke endeligt fastslået, og den eksterne tjeneste er ikke live-testet her.

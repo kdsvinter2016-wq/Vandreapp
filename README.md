@@ -1,4 +1,4 @@
-# VandreApp 0.7.2 – automatisk ruteføring
+# VandreApp 0.7.3 – automatisk ruteføring
 
 Bygger på VandreApp 0.7.1. Manuel tegning, GPS, turhistorik, GPX-import/-eksport og navigation bevares.
 
@@ -19,3 +19,6 @@ Bygger på VandreApp 0.7.1. Manuel tegning, GPS, turhistorik, GPX-import/-ekspor
 
 ## Installation
 Udpak alle filer i roden af GitHub-repositoryet og commit. Den hidtidige GitHub Pages-adresse er uændret.
+
+## Fejlrettelse 0.7.3
+Routingfejl viser nu Valhallas faktiske fejlsvar, fx manglende stiforbindelse, i stedet for kun HTTP 400. Der er ikke ændret på selve routing-API-anmodningen, fordi den allerede følger Valhallas dokumenterede format.

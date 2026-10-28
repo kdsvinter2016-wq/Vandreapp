@@ -15,3 +15,9 @@ Webbaseret GPS kan stadig stoppe i baggrunden. localStorage er ikke et sikkert b
 
 ## Version 0.5.1 – Fejlrapport og rettelse
 Brugertest: Efter GPX-import blev statistikken under Min vandretur ikke udfyldt, mens åbning af gemt tur virkede. Kodeanalyse viste, at GPX-distance kun blev vist i en summarisk tekst og at Min vandretur bevidst var separat. Rettelse: særskilt tydeligt statistikpanel for importeret GPX, med beregning af varighed/hastighed kun ved valide timestamps. Regresstest på Android afventer.
+
+
+## 0.6 – AI-assisteret rutenavigation
+**Problem:** GPS-ruter kan vises, men brugeren kan ikke se, hvor langt væk vedkommende er fra importeret GPX-spor.
+**Løsning:** Afstandsberegning til nærmeste GPX-linjestykke, separat navigationspanel og visuel advarsel ved vedvarende ruteafvigelse, hvor GPS-nøjagtighed vægtes. Importerede GPX-segmenter forbindes ikke.
+**Begrænsning:** Ingen sikker navigation eller baggrundsalarmer; fysisk GPS-test mangler ved kodelevering.

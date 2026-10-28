@@ -18,3 +18,7 @@ Automatisk lagring afhænger af browserens localStorage og er ikke en egentlig b
 
 ## Version 0.5.1 – GPX-statistik
 Ved import vises et særskilt panel med distance og antal rutepunkter. Varighed og gennemsnitshastighed vises, når alle punkter i hvert segment har gyldige kronologiske tidsstempler. Min vandretur viser fortsat alene den registrerede eller åbnede gemte tur. GPS-logik, lagring og wake lock er ikke ændret.
+
+
+## Version 0.6 – Rutenavigation
+Importér en GPX-rute og tryk Find min position eller start en tur. Et separat panel viser meter til nærmeste linjestykke på den importerede rute, GPS-nøjagtighed og status. Advarsel ved to på hinanden følgende målinger længere end 75 m + rapporteret GPS-usikkerhed fra ruten, og kun ved nøjagtighed på højst 50 m. Importeret rute og registreret tur holdes adskilt. Funktionen virker kun, når siden får GPS-målinger i forgrunden. Ingen turn-by-turn-vejledning, sikkerhedsgaranti eller baggrundsalarm.

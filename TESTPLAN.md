@@ -1,22 +1,16 @@
-# VandreApp 0.5 – Testplan
+# Testplan VandreApp 0.6
 
-Alle punkter er **afventer test på Android**, medmindre særskilt markeret.
+**Ikke verificeret på fysisk Android ved levering.**
 
-1. **Kortfølgning:** Tryk Find min position, bekræft Følg GPS: Til. Flyt dig med skærmen tændt, og kontrollér at kortcentret flytter sig. Slå Følg GPS fra og kontrollér at kortet ikke længere automatisk flyttes. Slå til igen og kontrollér at det centrerer.
-2. **Aktiv tur/kladde:** Start en tur, registrér mindst to punkter og genindlæs uden at stoppe. Banneret Afbrudt tur fundet skal vises.
-3. **Gendannelse:** Tryk Gendan tur. Kontrollér antal punkter, distance, varighed og kortspor. Turen skal være sat på pause.
-4. **Genoptag:** Tryk Genoptag tur. Kontrollér at nye punkter tilføjes uden forbindelseslinje over tids-/positionshullet.
-5. **Kassér kladde:** Start en ny testtur og genindlæs. Kassér kladde. Ingen gendannelse vises efter endnu en genindlæsning.
-6. **Wake Lock:** Start tur og vælg Hold skærmen tændt: Til. Status skal vise om Wake Lock er aktiv. Pause/Stop frigiver Wake Lock. Kontroller at skærmen ikke sover automatisk, hvis browseren understøtter API'et.
-7. **Regression:** GPX-import, GPX-eksport, gem tur, Mine ture, pause/genoptag, distance og eksempelrute fungerer stadig.
-8. **Browserlager:** Test med begrænset lagerplads / privat browsing; fejl ved lagring skal give en advarsel.
+1. Upload ZIP-filerne til GitHub Pages og kontrollér »Prototype 0.6«.
+2. Importér en GPX: panel »Rutenavigation« skal vises, distancen i importstatistik må ikke ændres.
+3. Tryk Find min position: afstand til ruten og GPS-nøjagtighed skal opdateres.
+4. Gå langs ruten: status viser På ruten, hvis GPS er præcis nok.
+5. Gå mere end 75 m + GPS-usikkerheden væk fra ruten: efter to pålidelige målinger skal advarsel vises.
+6. Slå Ruteovervågning Fra: ingen nye advarsler, GPS-registrering fortsætter. Slå Til igen.
+7. Fjern importeret GPX: navigationspanelet skal skjules, aktiv tur må ikke ændres.
+8. Kontrollér GPS-kortfølgning, lagring/gendannelse, pause, Wake Lock, GPX-eksport, gemte ture.
+9. Test en GPX med separate segmenter: afstand må ikke beregnes via en imaginær forbindelseslinje.
+10. Test ved dårlig GPS-nøjagtighed (>50m): ingen ruteadvarsel; status skal sige upræcis.
 
-Bemærk: Android kan suspendere webapps ved slukket skærm. Denne version lover ikke kontinuerlig GPS i baggrunden.
-
-
-## Ekstra test 0.5.1
-- Importér en GPX med tidspunkter: statistik for distance, rutepunkter, varighed og gennemsnitshastighed vises i Importeret GPX-rute.
-- Importér en GPX uden tidspunkter: distance og punkter vises, tid/hastighed viser –.
-- Kontroller, at Min vandretur ikke overskrives af import.
-- Fjern importeret rute: statistikpanelet forsvinder.
-- Åbn gemt tur: Min vandretur udfyldes stadig korrekt.
+Advarsel er kun visuel i aktiv browser. GPS-afvigelse kan medføre falske eller manglende advarsler.

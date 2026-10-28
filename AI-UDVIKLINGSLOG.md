@@ -1,15 +1,15 @@
-# AI-udviklingslog – VandreApp 0.3
+# AI-udviklingslog – VandreApp 0.4
 
-**Formål:** Udvide fungerende version 0.2 med GPX-import uden at ændre GPS-registrering og GPX-eksport.
+**Opgave:** Udvid fungerende MVP 0.3 med seks prioriterede funktioner under hensyntagen til AI-eksamen.
 
-**Prompt:** “tilføj GPX-import i VandreApp version 0.3.”
+**Prompt/krav:** "Udvikl VandreApp version 0.4 med de seks anbefalede funktioner."
 
-**AI-bidrag:** Tilføjet filvælger, XML-fortolkning via DOMParser, støtte til GPX tracks og routes, lilla kortlag, fjern-knap samt validering af koordinater og filstørrelse. Flere spor-segmenter tegnes separat. En eksisterende importeret rute bevares, hvis en ny import fejler.
+**AI-assisterede ændringer:** Lokal browserlagring og genåbning/sletning af ture; pause og genoptagelse af GPS-watch med separat tracksegment; GPS-kortfølgning; GPX-rutedistance; manifest, ikoner og service worker til PWA.
 
-**Teknologivalg:** Ren JavaScript, Leaflet og browserens eksisterende API'er. Ingen nye biblioteker.
+**Tekniske valg:** Ren HTML/CSS/JavaScript + Leaflet fastholdes; localStorage for hurtig implementering uden server; ingen ændringer i kortleverandør eller GPS-API; service worker cacher kun appens egne filer.
 
-**Afgrænsning:** Ingen navigation, offlinekort, waypoint-visning eller automatisk lagring.
+**Kritiske forhold:** Lokal lagring er ikke sikker backup; Android kan stoppe GPS i baggrunden; kort og Leaflet er ikke garanteret offline; GPS-støj påvirker målinger; nye funktioner skal regressionsprøves på telefonen.
 
-**Verifikation:** Syntaxcheck i Node.js; telefonens browser og faktiske GPX-import kræver manuel efterprøvning. Testresultater må først registreres som bestået efter faktisk test.
+**Kvalitetssikring:** JavaScript-syntakskontrol med Node.js samt ZIP- og manifestkontrol. Android-funktionstest af version 0.4 afventer brugerens målinger.
 
-**Kritisk refleksion:** AI kan hurtigt tilføje en funktion, men XML-varianter, dårlig GPX-data, GPS-præcision og mobilbrowser-adfærd bør kontrolleres med rigtige filer og brugerforsøg.
+**Eksamensvinkel:** Demonstrér forløbet krav → AI-kode → tekniske valg → test → fejlrettelser, og skeln tydeligt mellem automatiseret kontrol og fysisk test.

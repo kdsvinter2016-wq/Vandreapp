@@ -1,17 +1,13 @@
-# VandreApp 0.3 – GitHub Pages
+# VandreApp 0.4
 
-Mobilvenlig HTML/CSS/JavaScript-app baseret på VandreApp 0.2. Leaflet + OpenStreetMap, GPS-position, eksempelrute, registrering, distance, varighed og GPX-eksport er bevaret.
+Udvidelse af 0.3 med: (1) lokal lagring af afsluttede ture, (2) turhistorik med Vis og Slet, (3) pause/genoptag, (4) GPS-kortfølgning, (5) rutedistance for importeret GPX, (6) installerbar PWA.
 
-## Nyhed: GPX-import
+## Installation på GitHub Pages
+Upload **alle filerne fra ZIP-arkivets rod** til samme repository som den eksisterende version. `index.html`, `manifest.webmanifest`, `sw.js` og ikonerne skal ligge ved siden af hinanden. Commit til `main`, behold Pages = root. Genindlæs siden og kontrollér at der står Prototype 0.4. Installer via Chromes menu ("Installér app" eller "Føj til startskærm", afhængigt af Chrome-version).
 
-Tryk **Importér GPX**, vælg en `.gpx`-fil fra telefonen, og se ruten som en **lilla linje**. Understøtter GPX `trk/trkseg/trkpt` og `rte/rtept`, også flere segmenter. Kortet zoomer til ruten. **Fjern importeret rute** fjerner kun den lilla rute; den registrerede blå tur påvirkes ikke. Filen behandles lokalt i browseren og uploades ikke til en server.
-
-Filer over 10 MB og ruter over 20.000 punkter afvises. GPX-waypoints alene (`wpt`) vises ikke. Ugyldig XML, koordinater eller tomme ruter afvises.
-
-## Publicering
-
-Upload filerne i denne mappe til roden af det eksisterende GitHub-repository `kdsvinter2016-wq/Vandreapp` (ikke selve ZIP-filen). Behold GitHub Pages-opsætningen `main / (root)`. App: https://kdsvinter2016-wq.github.io/Vandreapp/ . Opdateringen bliver synlig, når GitHub Pages har publiceret den.
-
-## Test
-
-Se `TESTPLAN.md`. Ægte Android- og GPS-test skal udføres på telefonen. GPS kræver HTTPS, positionsrettigheder og at browseren holdes aktiv.
+## Vigtigt
+- Gemte ture ligger i browserens `localStorage`, kun på den aktuelle enhed/browser. Sletning af browserdata kan fjerne ture. Eksportér GPX som backup. Op til 50 ture vises; browserens lagergrænse kan nås før dette.
+- Timeren stopper under pause. Afstanden mellem det sidste punkt før pausen og det første efter genoptagelse tælles ikke med. GPX-eksport bevarer dette som separate track-segmenter.
+- PWA er installerbar, men **ikke en fuldt offline-fungerende kortapp**. Leaflet og OpenStreetMap-kortfliser hentes eksternt og kræver typisk netadgang; service worker cacher kun appens egne filer.
+- Geolocation kræver HTTPS og kan blive stoppet, hvis skærmen er slukket.
+- Ændringer er kun syntakskontrolleret automatisk; funktionerne kræver test på Android.

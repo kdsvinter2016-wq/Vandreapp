@@ -1,17 +1,16 @@
-# VandreApp 0.3 – testplan
+# VandreApp 0.4 – testplan
 
-## Teknisk kontrol
-- [x] JavaScript-syntaks kontrolleret med Node.js `node --check`.
-- [ ] Browserintegration med rigtige GPX-filer kontrolleres på Android.
+Status: Android-tests **ikke udført endnu**. Udfyld resultat efter faktisk afprøvning.
 
-## Android-test (udføres af brugeren)
-1. Åbn https://kdsvinter2016-wq.github.io/Vandreapp/ og kontrollér at der står **Prototype 0.3**.
-2. Tryk **Importér GPX**, vælg GPX-filen eksporteret fra VandreApp 0.2. Kontrollér at en **lilla rute** vises og antallet af punkter oplyses.
-3. Tryk **Fjern importeret rute**. Kontrollér at lilla rute forsvinder.
-4. Importér igen, start GPS-registrering. Kontrollér at **blå registreret tur** og **lilla importeret rute** vises samtidigt, og at distance og varighed virker.
-5. Stop tur og eksportér GPX. Kontrollér at importen ikke har ændret antallet af registrerede GPS-punkter.
-6. Prøv en tekstfil eller beskadiget GPX med filtypen `.gpx`: appen viser fejl i stedet for at gå ned.
-7. Test en GPX med `rtept` hvis tilgængelig.
-8. Kontrollér at den orange eksempelrute stadig kan vises og skjules.
+1. Regression: Kort og GPS-position kan vises.
+2. Regression: Start → gå → Stop; distance, varighed og blåt spor stemmer nogenlunde.
+3. Regression: Eksporter tur som GPX, og importer igen. Ruten skal vises.
+4. Pause: Start → gå → Pause; timer skal standse. Gå lidt → Genoptag → gå → Stop; ingen kunstig streg/afstand over pausen. GPX-eksport skal have separate segmenter.
+5. Gem: Efter Stop → Gem tur lokalt; genindlæs siden → Mine gemte ture → Vis; ruten og distance vises igen.
+6. Historik: Slet en tur og kontroller at den forsvinder. GPS-registrering må ikke erstattes af historik mens den er aktiv.
+7. Kortfølgning: Slå Følg GPS til; nye GPS-positioner panorerer kortet. Slå fra, så kortet kan flyttes frit.
+8. GPX: Importér GPX og kontrollér at rutedistance vises. Segmenter må ikke forbindes på tværs.
+9. PWA: I Chrome på Android, vælg Installer app/Føj til startskærm og start via ikon. Kontrollér også at appen kan opdateres efter ny commit.
+10. Fejltest: Ugyldig GPX, afvist GPS-tilladelse og manglende netadgang. Offline-kort forventes ikke at virke fuldt ud.
 
-Notér Android-version, browser, navn på GPX-filen, resultat og eventuelle fejl. Eksisterende Android-test af version 0.2 er tidligere oplyst bestået af brugeren; version 0.3 er ikke Android-testet endnu.
+Før en vellykket afsluttende test må version 0.4 ikke kaldes Android-verificeret.

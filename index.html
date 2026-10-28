@@ -5,13 +5,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#173e31" />
   <title>VandreApp – AI-eksamensprototype</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icon-192.png" sizes="192x192" type="image/png" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <style>
-    * { box-sizing: border-box; } body {margin:0; font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif; background:#f0f4ef;color:#183126;} header {background:#173e31;color:white;padding:17px 18px 13px;} header h1{margin:0;font-size:23px}header small{opacity:.8} main{max-width:950px;margin:auto;padding:14px;} .intro{font-size:14px;color:#455d52;margin:0 0 12px} #map{height:clamp(310px,52vh,570px);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px #0002;} .panel{background:white;margin-top:12px;padding:15px;border-radius:14px;box-shadow:0 1px 8px #0001}.actions{display:flex;flex-wrap:wrap;gap:9px}button{border:none;background:#246e4e;color:white;border-radius:10px;padding:11px 14px;font-size:15px;font-weight:650;cursor:pointer}button:disabled{background:#a8b8af;cursor:not-allowed}button.secondary{background:#e4eee7;color:#194331}button.danger{background:#9d3030}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.stat{background:#f1f6f2;border-radius:10px;padding:12px 6px;text-align:center}.stat strong{display:block;font-size:23px;font-variant-numeric:tabular-nums}.stat span{font-size:12px;color:#53695e}.note{color:#50665b;font-size:13px;line-height:1.5;margin:10px 0 0}.status{background:#e8f1ed;border-left:4px solid #3c815e;padding:10px 12px;border-radius:5px;margin-bottom:12px;font-size:14px}footer{text-align:center;font-size:12px;color:#52675e;margin:16px 0 25px} .legend{display:flex;gap:16px;font-size:13px;flex-wrap:wrap}.swatch{display:inline-block;width:17px;height:4px;vertical-align:middle;margin-right:5px}.sample{background:#e6922e}.actual{background:#1688b8}.imported{background:#7952b3}.import-summary{margin:10px 0 0;font-size:13px;color:#334f40}a{color:#155c42}@media(max-width:420px){.stats{gap:6px}.stat strong{font-size:19px}button{flex:1;padding:11px 9px;font-size:14px}}
+    * { box-sizing: border-box; } body {margin:0; font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif; background:#f0f4ef;color:#183126;} header {background:#173e31;color:white;padding:17px 18px 13px;} header h1{margin:0;font-size:23px}header small{opacity:.8} main{max-width:950px;margin:auto;padding:14px;} .intro{font-size:14px;color:#455d52;margin:0 0 12px} #map{height:clamp(310px,52vh,570px);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px #0002;} .panel{background:white;margin-top:12px;padding:15px;border-radius:14px;box-shadow:0 1px 8px #0001}.actions{display:flex;flex-wrap:wrap;gap:9px}button{border:none;background:#246e4e;color:white;border-radius:10px;padding:11px 14px;font-size:15px;font-weight:650;cursor:pointer}button:disabled{background:#a8b8af;cursor:not-allowed}button.secondary{background:#e4eee7;color:#194331}button.danger{background:#9d3030}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.stat{background:#f1f6f2;border-radius:10px;padding:12px 6px;text-align:center}.stat strong{display:block;font-size:23px;font-variant-numeric:tabular-nums}.stat span{font-size:12px;color:#53695e}.note{color:#50665b;font-size:13px;line-height:1.5;margin:10px 0 0}.status{background:#e8f1ed;border-left:4px solid #3c815e;padding:10px 12px;border-radius:5px;margin-bottom:12px;font-size:14px}footer{text-align:center;font-size:12px;color:#52675e;margin:16px 0 25px} .legend{display:flex;gap:16px;font-size:13px;flex-wrap:wrap}.swatch{display:inline-block;width:17px;height:4px;vertical-align:middle;margin-right:5px}.sample{background:#e6922e}.actual{background:#1688b8}.imported{background:#7952b3}.import-summary{margin:10px 0 0;font-size:13px;color:#334f40}a{color:#155c42}.history-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid #ddd}.history-row small{display:block;color:#53695e}.history-row .actions{flex-shrink:0}.compact{padding:7px 9px;font-size:13px} .stats.four{grid-template-columns:repeat(4,1fr)}@media(max-width:420px){.stats{gap:6px}.stats.four{grid-template-columns:repeat(2,1fr)}.stat strong{font-size:19px}button{flex:1;padding:11px 9px;font-size:14px}}
   </style>
 </head>
 <body>
-<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.3</small></header>
+<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.4</small></header>
 <main>
 <p class="intro">Se en eksempelrute på kortet, find din position, og registrér en kort vandretur med GPS.</p>
 <div id="status" class="status" role="status" aria-live="polite">Kortet vises omkring København. GPS bruges først, når du vælger det.</div>
@@ -20,6 +23,7 @@
  <div class="actions">
   <button class="secondary" id="locate">Find min position</button>
   <button class="secondary" id="example">Vis eksempelrute</button>
+  <button class="secondary" id="follow" aria-pressed="false">Følg GPS: Fra</button>
   <button class="secondary" id="clearExample">Skjul eksempelrute</button>
   <button class="secondary" id="importGpx">Importér GPX</button>
   <button class="secondary" id="clearGpx" disabled>Fjern importeret rute</button>
@@ -33,13 +37,15 @@
  <h2 style="margin:0 0 12px;font-size:19px">Min vandretur</h2>
  <div class="actions">
   <button id="start">Start tur</button>
+  <button id="pause" class="secondary" disabled>Pause tur</button>
   <button id="stop" class="danger" disabled>Stop tur</button>
   <button id="reset" class="secondary">Nulstil</button>
  </div>
- <div class="stats"><div class="stat"><strong id="distance">0,00</strong><span>Distance (km)</span></div><div class="stat"><strong id="duration">00:00</strong><span>Varighed</span></div><div class="stat"><strong id="points">0</strong><span>GPS-punkter</span></div></div>
+ <div class="stats four"><div class="stat"><strong id="distance">0,00</strong><span>Distance (km)</span></div><div class="stat"><strong id="duration">00:00</strong><span>Varighed</span></div><div class="stat"><strong id="points">0</strong><span>GPS-punkter</span></div><div class="stat"><strong id="speed">0,0</strong><span>Gns. km/t</span></div></div>
  <p class="note" id="gpsNotice">GPS-registreringen kræver HTTPS (eller localhost) og tilladelse til position. Lad browseren være aktiv og skærmen tændt under testen. Positionsmålinger kan være upræcise.</p>
- <div class="actions" style="margin-top:12px"><button class="secondary" id="export" disabled>Eksportér tur (GPX)</button></div>
+ <div class="actions" style="margin-top:12px"><button class="secondary" id="export" disabled>Eksportér tur (GPX)</button><button class="secondary" id="save" disabled>Gem tur lokalt</button></div>
 </div>
+<div class="panel"><h2 style="margin:0 0 8px;font-size:19px">Mine gemte ture</h2><p class="note">Gemte ture ligger kun i denne browsers lokale lager på denne enhed. Rydning af browserdata kan slette dem. Eksportér GPX som sikkerhedskopi.</p><div id="history" aria-live="polite"></div></div>
 <footer>Prototype til AI-eksamen · Ingen login eller serverlagring · Kortdata © OpenStreetMap-bidragsydere</footer>
 </main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -52,11 +58,15 @@
   const demoPoints = [[55.7045,12.5664],[55.7059,12.5695],[55.7067,12.5732],[55.7047,12.5765],[55.7025,12.5742],[55.7028,12.5697],[55.7045,12.5664]];
   let demoLine = null, userMarker = null, trackLine = L.polyline([], {color:'#1688b8',weight:5}).addTo(map);
   let importedLayer = null;
-  let watchId = null, startedAt = 0, elapsedMs = 0, tickTimer = null, tracking = false, points = [], totalMeters = 0;
+  let watchId = null, startedAt = 0, elapsedMs = 0, tickTimer = null, tracking = false, paused = false, points = [], totalMeters = 0;
+  let breakSegment = false, followGps = false, currentSaved = false;
+  const STORAGE_KEY='vandreapp-trips-v04';
+  const getTrips=()=>{try{const data=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');return Array.isArray(data)?data.filter(t=>t&&Array.isArray(t.points)&&Number.isFinite(t.meters)&&Number.isFinite(t.duration)).slice(0,50):[];}catch{return [];}};
+  const fmtLength = m => (m/1000).toLocaleString('da-DK',{minimumFractionDigits:2,maximumFractionDigits:2});
   const showStatus = (message) => {$('status').textContent = message;};
   const fmtTime = ms => {const s=Math.floor(ms/1000);return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;};
-  function render(){ $('distance').textContent=(totalMeters/1000).toLocaleString('da-DK',{minimumFractionDigits:2,maximumFractionDigits:2});$('duration').textContent=fmtTime(elapsedMs+(tracking?Date.now()-startedAt:0));$('points').textContent=points.length;$('export').disabled=tracking||points.length===0; }
-  function setPosition(latlng, accuracy){ if(userMarker) userMarker.setLatLng(latlng); else userMarker=L.circleMarker(latlng,{radius:8,color:'#fff',weight:2,fillColor:'#175f9a',fillOpacity:1}).addTo(map);userMarker.bindPopup(`GPS-position (nøjagtighed ca. ${Math.round(accuracy)} m)`); }
+  function render(){ $('distance').textContent=(totalMeters/1000).toLocaleString('da-DK',{minimumFractionDigits:2,maximumFractionDigits:2});$('duration').textContent=fmtTime(elapsedMs+(tracking&&!paused?Date.now()-startedAt:0));$('points').textContent=points.length;$('export').disabled=tracking||points.length===0;$('save').disabled=tracking||points.length===0||currentSaved;$('speed').textContent=((totalMeters/1000)/Math.max((elapsedMs+(tracking&&!paused?Date.now()-startedAt:0))/3600000,0.00001)).toLocaleString('da-DK',{maximumFractionDigits:1,minimumFractionDigits:1}); }
+  function setPosition(latlng, accuracy){ if(userMarker) userMarker.setLatLng(latlng); else userMarker=L.circleMarker(latlng,{radius:8,color:'#fff',weight:2,fillColor:'#175f9a',fillOpacity:1}).addTo(map);userMarker.bindPopup(`GPS-position (nøjagtighed ca. ${Math.round(accuracy)} m)`);if(followGps)map.panTo(latlng); }
   function errorText(error){return error.code===1?'Tilladelse til GPS blev afvist. Giv browseren positionsadgang.':error.code===2?'GPS-position er ikke tilgængelig. Tjek enhedens lokationstjenester.':'GPS-positionen kunne ikke findes i tide. Prøv igen.';}
   function validPosition(p){return p && p.coords && Number.isFinite(p.coords.latitude) && Number.isFinite(p.coords.longitude) && Math.abs(p.coords.latitude)<=90 && Math.abs(p.coords.longitude)<=180;}
   $('locate').onclick=()=>{
@@ -71,6 +81,7 @@
     },e=>{$('locate').disabled=false;showStatus(errorText(e));},{enableHighAccuracy:true,timeout:15000,maximumAge:0}); }
     catch(e){$('locate').disabled=false;showStatus('GPS kunne ikke startes. Tjek browserens tilladelser.');}
   };
+  $('follow').onclick=()=>{followGps=!followGps;$('follow').textContent='Følg GPS: '+(followGps?'Til':'Fra');$('follow').setAttribute('aria-pressed',String(followGps));showStatus(followGps?'Kortet følger nye GPS-positioner.':'Automatisk kortfølgning slået fra.');};
   $('example').onclick=()=>{if(demoLine)map.removeLayer(demoLine);demoLine=L.polyline(demoPoints,{color:'#e6922e',weight:5,dashArray:'7,8'}).addTo(map);map.fitBounds(demoLine.getBounds(),{padding:[25,25]});showStatus('Illustrativ eksempelrute vist. Ruten er ikke verificeret til vandring.');};
   $('clearExample').onclick=()=>{if(demoLine){map.removeLayer(demoLine);demoLine=null;}showStatus('Eksempelrute skjult.');};
   // GPX-import: browserens XML-parser, uden nye eksterne biblioteker.
@@ -131,7 +142,8 @@
       const bounds=L.latLngBounds(data.segments.flat());
       if(bounds.isValid())map.fitBounds(bounds,{padding:[25,25]});
       $('clearGpx').disabled=false;
-      $('importSummary').textContent=`Importeret: ${file.name} · ${data.pointCount} punkter · ${data.segments.length} segment(er).`;
+      const meters=data.segments.reduce((sum,seg)=>sum+seg.slice(1).reduce((d,p,i)=>d+L.latLng(seg[i]).distanceTo(p),0),0);
+      $('importSummary').textContent=`Importeret: ${file.name} · ${data.pointCount} punkter · ${data.segments.length} segment(er) · ${fmtLength(meters)} km.`;
       showStatus(`GPX-rute importeret: ${data.pointCount} punkter. Den blå GPS-registrering er uændret.`);
     }catch(e){showStatus(`GPX-import mislykkedes: ${e.message || 'Kunne ikke læse filen.'}`);}
     finally{$('importGpx').disabled=false;}
@@ -144,29 +156,31 @@
   };
   let sessionId=0;
   function onPosition(p, session){
-    if(!tracking || session!==sessionId)return;
+    if(!tracking || paused || session!==sessionId)return;
     if(!validPosition(p)){showStatus('Ugyldig GPS-position fravalgt.');return;}
     const latlng=[p.coords.latitude,p.coords.longitude],accuracy=p.coords.accuracy;
     if(Number.isFinite(accuracy) && accuracy>=0)setPosition(latlng,accuracy);
     if(!Number.isFinite(accuracy)||accuracy<0||accuracy>35){showStatus('GPS-måling fravalgt: utilstrækkelig nøjagtighed.');return;}
     if(!Number.isFinite(p.timestamp)||p.timestamp<=0){showStatus('GPS-måling uden gyldigt tidsstempel fravalgt.');return;}
     const last=points.length?points[points.length-1]:null;
-    if(last){
+    if(last && !breakSegment){
       const distance=L.latLng(last.lat,last.lng).distanceTo(latlng),dt=(p.timestamp-last.time)/1000;
       if(dt<=0||distance<3)return;
       if(distance/dt>4.5){showStatus('GPS-spring fravalgt: urealistisk hastighed.');return;}
       totalMeters+=distance;
     }
-    points.push({lat:latlng[0],lng:latlng[1],time:p.timestamp,alt:p.coords.altitude});
-    trackLine.addLatLng(latlng);if(points.length===1)map.setView(latlng,16);
+    points.push({lat:latlng[0],lng:latlng[1],time:p.timestamp,alt:p.coords.altitude,segmentStart:breakSegment||!last});
+    breakSegment=false;
+    const segments=[];for(const pt of points){if(pt.segmentStart||!segments.length)segments.push([]);segments[segments.length-1].push([pt.lat,pt.lng]);}
+    trackLine.setLatLngs(segments);if(points.length===1)map.setView(latlng,16);
     render();showStatus(`Tur registreres – ${points.length} GPS-punkter modtaget.`);
   }
   function stopTracking(){
     if(!tracking)return;
-    elapsedMs+=Date.now()-startedAt;tracking=false;sessionId++;
+    if(!paused)elapsedMs+=Date.now()-startedAt;tracking=false;paused=false;sessionId++;
     if(watchId!==null)navigator.geolocation.clearWatch(watchId);
     watchId=null;clearInterval(tickTimer);tickTimer=null;
-    $('start').disabled=false;$('stop').disabled=true;render();
+    $('start').disabled=false;$('pause').disabled=true;$('pause').textContent='Pause tur';$('stop').disabled=true;render();
   }
   $('start').onclick=()=>{
     if(tracking)return;
@@ -174,8 +188,9 @@
     if(!window.isSecureContext){showStatus('GPS kræver HTTPS eller localhost. Brug en HTTPS-adresse til test på telefon.');return;}
     // Start af ny tur erstatter det gamle spor. Eksporter først, hvis det skal gemmes.
     if(points.length){points=[];totalMeters=0;elapsedMs=0;trackLine.setLatLngs([]);}
+    currentSaved=false;breakSegment=false;paused=false;
     const session=++sessionId;
-    startedAt=Date.now();tracking=true;$('start').disabled=true;$('stop').disabled=false;$('export').disabled=true;
+    startedAt=Date.now();tracking=true;$('start').disabled=true;$('stop').disabled=false;$('pause').disabled=false;$('export').disabled=true;
     showStatus('GPS-sporing starter. Giv tilladelse til positionsadgang, hvis browseren spørger.');
     try {
       watchId=navigator.geolocation.watchPosition(
@@ -185,14 +200,49 @@
       tickTimer=setInterval(render,1000);render();
     } catch(e){stopTracking();showStatus('GPS-overvågning kunne ikke startes. Kontrollér browserens GPS-tilladelser.');}
   };
+  $('pause').onclick=()=>{
+    if(!tracking)return;
+    if(!paused){elapsedMs+=Date.now()-startedAt;paused=true;sessionId++;if(watchId!==null)navigator.geolocation.clearWatch(watchId);watchId=null;breakSegment=true;$('pause').textContent='Genoptag tur';showStatus('Turen er sat på pause. Tiden tæller ikke videre.');}
+    else{const session=++sessionId;paused=false;startedAt=Date.now();$('pause').textContent='Pause tur';try{watchId=navigator.geolocation.watchPosition(p=>onPosition(p,session),e=>{if(!tracking||paused||session!==sessionId)return;if(e.code===1)stopTracking();showStatus(errorText(e));},{enableHighAccuracy:true,timeout:20000,maximumAge:0});showStatus('GPS-registrering genoptaget.');}catch{paused=true;sessionId++;showStatus('Kunne ikke genoptage GPS. Prøv igen.');}}
+    render();
+  };
   $('stop').onclick=()=>{stopTracking();showStatus(`Turen er afsluttet: ${(totalMeters/1000).toFixed(2).replace('.',',')} km og ${points.length} GPS-punkter. Eksportér turen for at gemme den.`);};
-  $('reset').onclick=()=>{stopTracking();points=[];totalMeters=0;elapsedMs=0;trackLine.setLatLngs([]);render();showStatus('Turdata er nulstillet.');};
+  $('reset').onclick=()=>{stopTracking();points=[];totalMeters=0;elapsedMs=0;breakSegment=false;currentSaved=false;trackLine.setLatLngs([]);render();showStatus('Turdata er nulstillet.');};
   document.addEventListener('visibilitychange',()=>{
-    if(document.hidden&&tracking)showStatus('Appen er i baggrunden. GPS-sporing kan blive afbrudt. Hold skærmen tændt.');
+    if(document.hidden&&tracking&&!paused)showStatus('Appen er i baggrunden. GPS-sporing kan blive afbrudt. Hold skærmen tændt.');
   });
   function xmlEsc(s){return String(s).replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]));}
-  $('export').onclick=()=>{if(!points.length)return;const track=points.map(p=>`<trkpt lat="${p.lat}" lon="${p.lng}">${Number.isFinite(p.alt)?`<ele>${p.alt}</ele>`:''}<time>${new Date(p.time).toISOString()}</time></trkpt>`).join('');const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp MVP" xmlns="http://www.topografix.com/GPX/1/1"><trk><name>${xmlEsc('Min vandretur')}</name><trkseg>${track}</trkseg></trk></gpx>`;const blob=new Blob([xml],{type:'application/gpx+xml'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='vandreapp-tur.gpx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);showStatus('GPX-fil genereret og overført til browserens downloadfunktion.');};
-  render();
+  $('export').onclick=()=>{if(!points.length)return;const track=points.map((p,i)=>`${p.segmentStart&&i>0?'</trkseg><trkseg>':''}<trkpt lat="${p.lat}" lon="${p.lng}">${Number.isFinite(p.alt)?`<ele>${p.alt}</ele>`:''}<time>${new Date(p.time).toISOString()}</time></trkpt>`).join('');const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp MVP" xmlns="http://www.topografix.com/GPX/1/1"><trk><name>${xmlEsc('Min vandretur')}</name><trkseg>${track}</trkseg></trk></gpx>`;const blob=new Blob([xml],{type:'application/gpx+xml'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='vandreapp-tur.gpx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);showStatus('GPX-fil genereret og overført til browserens downloadfunktion.');};
+  function renderHistory(){
+    const container=$('history');container.replaceChildren();const trips=getTrips();
+    if(!trips.length){const p=document.createElement('p');p.className='note';p.textContent='Ingen gemte ture endnu.';container.append(p);return;}
+    trips.forEach(t=>{
+      const row=document.createElement('div');row.className='history-row';
+      const details=document.createElement('div');const title=document.createElement('strong');title.textContent=t.name||'Vandretur';
+      const info=document.createElement('small');info.textContent=`${new Date(t.created).toLocaleString('da-DK')} · ${fmtLength(t.meters)} km · ${fmtTime(t.duration)}`;details.append(title,info);
+      const actions=document.createElement('div');actions.className='actions';
+      const load=document.createElement('button');load.className='secondary compact';load.textContent='Vis';load.onclick=()=>{
+        if(tracking){showStatus('Stop den aktive tur, før du åbner en gemt tur.');return;}
+        const valid=t.points.every(p=>p&&Number.isFinite(p.lat)&&Math.abs(p.lat)<=90&&Number.isFinite(p.lng)&&Math.abs(p.lng)<=180&&Number.isFinite(p.time));
+        if(!valid){showStatus('Den gemte tur indeholder ugyldige koordinater.');return;}
+        points=t.points.map(p=>({...p}));totalMeters=t.meters;elapsedMs=t.duration;currentSaved=true;breakSegment=false;
+        const groups=[];points.forEach(p=>{if(!groups.length||p.segmentStart)groups.push([]);groups[groups.length-1].push([p.lat,p.lng]);});trackLine.setLatLngs(groups);
+        if(points.length)map.fitBounds(L.latLngBounds(points.map(p=>[p.lat,p.lng])),{padding:[25,25],maxZoom:17});render();showStatus('Gemt tur vist. Du kan eksportere den som GPX.');
+      };
+      const del=document.createElement('button');del.className='danger compact';del.textContent='Slet';del.onclick=()=>{if(!confirm('Slet denne gemte tur fra telefonen?'))return;try{localStorage.setItem(STORAGE_KEY,JSON.stringify(getTrips().filter(x=>x.id!==t.id)));renderHistory();showStatus('Den gemte tur er slettet.');}catch{showStatus('Kunne ikke slette turen fra lokal lagring.');}};
+      actions.append(load,del);row.append(details,actions);container.append(row);
+    });
+  }
+  $('save').onclick=()=>{
+    if(tracking||!points.length||currentSaved)return;
+    try{
+      const trips=getTrips();const created=new Date().toISOString();
+      trips.unshift({id:String(Date.now())+'-'+Math.random().toString(36).slice(2),name:'Vandretur '+new Date().toLocaleDateString('da-DK'),created,meters:totalMeters,duration:elapsedMs,points:points.map(p=>({...p}))});
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(trips.slice(0,50)));currentSaved=true;render();renderHistory();showStatus('Turen er gemt lokalt på denne enhed. GPX-eksport anbefales som sikkerhedskopi.');
+    }catch{showStatus('Kunne ikke gemme turen. Browserens lokale lager kan være fyldt eller blokeret.');}
+  };
+  if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
+  renderHistory();render();
 })();
 </script>
 </body>

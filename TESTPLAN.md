@@ -1,23 +1,17 @@
-# Testplan og testresultater – VandreApp 0.2
+# VandreApp 0.3 – testplan
 
-## Automatiseret test udført 28. oktober 2026
+## Teknisk kontrol
+- [x] JavaScript-syntaks kontrolleret med Node.js `node --check`.
+- [ ] Browserintegration med rigtige GPX-filer kontrolleres på Android.
 
-Et Node.js-testharness har eksekveret appens faktiske JavaScript med simulerede DOM-, Leaflet- og Geolocation-objekter. Følgende scenarier bestod: initialtilstand, GPS-start, valide GPS-punkter, frasortering af urealistisk hastighed, frasortering af dårlig nøjagtighed, stop, forsinket GPS-callback efter stop, gammel GPS-callback efter ny tur, afvist placeringstilladelse, nulstilling og positionsknap.
+## Android-test (udføres af brugeren)
+1. Åbn https://kdsvinter2016-wq.github.io/Vandreapp/ og kontrollér at der står **Prototype 0.3**.
+2. Tryk **Importér GPX**, vælg GPX-filen eksporteret fra VandreApp 0.2. Kontrollér at en **lilla rute** vises og antallet af punkter oplyses.
+3. Tryk **Fjern importeret rute**. Kontrollér at lilla rute forsvinder.
+4. Importér igen, start GPS-registrering. Kontrollér at **blå registreret tur** og **lilla importeret rute** vises samtidigt, og at distance og varighed virker.
+5. Stop tur og eksportér GPX. Kontrollér at importen ikke har ændret antallet af registrerede GPS-punkter.
+6. Prøv en tekstfil eller beskadiget GPX med filtypen `.gpx`: appen viser fejl i stedet for at gå ned.
+7. Test en GPX med `rtept` hvis tilgængelig.
+8. Kontrollér at den orange eksempelrute stadig kan vises og skjules.
 
-**Begrænsning:** Testen er en logiktest med mock-objekter. Den dokumenterer ikke at Leaflet-kort, GPS eller GPX-download fungerer i en rigtig mobilbrowser.
-
-## Manuel Android-test (endnu IKKE udført)
-
-Afkryds og noter konkret resultat efter afprøvning på telefon:
-
-- [ ] A1 – Åbn appen via HTTPS i Chrome: kort og OpenStreetMap-fliser vises.
-- [ ] A2 – Tryk »Vis eksempelrute«: orange rute vises; »Skjul« fjerner den.
-- [ ] A3 – Tryk »Find min position« og tillad placering: kortet zoomer til brugerens position.
-- [ ] A4 – Tryk »Start tur«, gå 100–300 m udendørs med skærmen tændt: punkter, blå linje, distance og varighed ændrer sig.
-- [ ] A5 – Tryk »Stop tur«: varighed og sporlængde holder op med at ændre sig.
-- [ ] A6 – Tryk »Eksportér tur (GPX)«: telefonen henter en .gpx-fil, som kan åbnes i en GPX-læser.
-- [ ] A7 – Tryk »Nulstil«: distance, varighed, punktantal og sporet nulstilles.
-- [ ] A8 – Afvis placeringstilladelse: appen viser en forståelig fejl og kan startes igen.
-- [ ] A9 – Sluk/lås skærmen kort under registrering: notér reel opførsel og GPS-begrænsning (ikke krav om baggrundssporing).
-
-Notér ved testen: Android-version, Chrome-version, dato, vejrlig/område, om GPS-permission var givet, distance og fejlmeddelelser. Ingen GPS-resultater er opfundet.
+Notér Android-version, browser, navn på GPX-filen, resultat og eventuelle fejl. Eksisterende Android-test af version 0.2 er tidligere oplyst bestået af brugeren; version 0.3 er ikke Android-testet endnu.

@@ -1,41 +1,17 @@
-# VandreApp – version 0.2
+# VandreApp 0.3 – GitHub Pages
 
-Mobilvenlig webapp med HTML, CSS, JavaScript og Leaflet 1.9.4. Bygger videre på VandreApp-MVP 0.1.
+Mobilvenlig HTML/CSS/JavaScript-app baseret på VandreApp 0.2. Leaflet + OpenStreetMap, GPS-position, eksempelrute, registrering, distance, varighed og GPX-eksport er bevaret.
 
-## Funktioner
-1. Interaktivt OpenStreetMap-kort
-2. Vis brugerens GPS-position
-3. Illustrativ eksempelrute (ikke verificeret som vandrerute)
-4. Start/stop GPS-registrering
-5. Distance og varighed
-6. Tegn registreret GPS-spor
-Ekstra: GPX-eksport af stoppet tur.
+## Nyhed: GPX-import
 
-## Start på PC
-Åbn en terminal i mappen med `index.html` og kør:
+Tryk **Importér GPX**, vælg en `.gpx`-fil fra telefonen, og se ruten som en **lilla linje**. Understøtter GPX `trk/trkseg/trkpt` og `rte/rtept`, også flere segmenter. Kortet zoomer til ruten. **Fjern importeret rute** fjerner kun den lilla rute; den registrerede blå tur påvirkes ikke. Filen behandles lokalt i browseren og uploades ikke til en server.
 
-```sh
-python -m http.server 8000
-```
+Filer over 10 MB og ruter over 20.000 punkter afvises. GPX-waypoints alene (`wpt`) vises ikke. Ugyldig XML, koordinater eller tomme ruter afvises.
 
-Åbn http://localhost:8000. Internetforbindelse kræves til Leaflet og kortfliser.
+## Publicering
 
-## Test på Android
-Publicér filen på et statisk HTTPS-websted, fx GitHub Pages. Åbn HTTPS-adressen i Chrome på telefonen, og giv tilladelse til placering. En HTTP-adresse fra en anden maskine på hjemmenetværket er normalt ikke en sikker kontekst og tillader ikke GPS. Test fysisk udenfor med skærmen tændt.
+Upload filerne i denne mappe til roden af det eksisterende GitHub-repository `kdsvinter2016-wq/Vandreapp` (ikke selve ZIP-filen). Behold GitHub Pages-opsætningen `main / (root)`. App: https://kdsvinter2016-wq.github.io/Vandreapp/ . Opdateringen bliver synlig, når GitHub Pages har publiceret den.
 
-## Bemærkninger
-- Starter du en ny tur, erstattes den foregående tur i hukommelsen. Eksportér GPX først, hvis turen skal gemmes.
-- Der er ikke baggrundssporing eller lokal lagring. Genindlæsning sletter turen.
-- GPS-punkter med oplyst nøjagtighed over 35 m eller hastighedsspring over 4,5 m/s filtreres fra. Dette er simple heuristikker, ikke garanti for korrekt GPS-distance.
-- Varigheden tæller fra start-knappen, også mens appen afventer GPS-tilladelse eller første position.
-- GPS kan stoppe eller blive ustabilt, når telefonen låses eller browseren er i baggrunden.
-- Eksempelruten er en illustration og må ikke bruges som sikker navigation.
-- GPS kræver sikker kontekst (HTTPS eller localhost) og brugerens placeringstilladelse.
-- Ingen login eller serverlagring af spor; korttiles og Leaflet hentes dog fra eksterne tjenester.
+## Test
 
-## Licenser og kilder
-Leaflet 1.9.4: https://leafletjs.com/
-Kort © OpenStreetMap contributors: https://www.openstreetmap.org/copyright
-OSM Tile Usage Policy: https://operations.osmfoundation.org/policies/tiles/
-
-Se `TESTPLAN.md` og `AI-UDVIKLINGSLOG.md`.
+Se `TESTPLAN.md`. Ægte Android- og GPS-test skal udføres på telefonen. GPS kræver HTTPS, positionsrettigheder og at browseren holdes aktiv.

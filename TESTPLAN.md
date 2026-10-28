@@ -1,23 +1,14 @@
-# Android-testplan – VandreApp 0.7
+# Testplan 0.7.2
 
-- [ ] Importér GPX med `<ele>`: afstand, højdemeter og højdeprofil vises.
-- [ ] Importér GPX uden `<ele>`: appen viser ikke falske højdemeter.
-- [ ] Åbn en gemt tur med højdedata: turanalyse vises; uden data vises forklaring.
-- [ ] Omdøb en gemt tur; genindlæs siden og kontrollér navnet.
-- [ ] Gem to ture, download JSON-backup, slet én og gendan den. Den anden må ikke duplikeres.
-- [ ] GPX-import/-eksport, start/stop, pause, gendannelse, kortfølgning og Wake Lock fungerer stadig.
-- [ ] Navigationens advarsel ved ruteafvigelse testes separat (ikke verificeret i 0.6.1).
+**Ikke testet på fysisk Android-enhed.**
 
-Resultaterne skal dokumenteres efter manuel afprøvning på Galaxy S25 FE.
-
-
-## Version 0.7.1 – Planlagt rute
-1. Vælg Start tegning og tryk tre forskellige steder på kortet: tre pink punkter og to rette linjestykker.
-2. Kontrollér at distance og punkttal vises.
-3. Fortryd punkt, og kontrollér at ruten og distance ændres.
-4. Afslut tegning, eksportér GPX, og importér filen igen.
-5. Vælg Brug ruten til navigation, og verificér status efter GPS-position.
-6. Kontrollér at tegning ikke sletter eksisterende gemte ture eller det aktive GPS-spor.
-7. Test både Android touch og mus på pc.
-
-**Afventer praktisk Android-test.** Tegning følger ikke vejnettet automatisk.
+1. Kontroller teksten Prototype 0.7.2.
+2. Tegn to punkter langs en vej/sti. Kontroller pink manuel rute og afstand.
+3. Tryk Beregn vandrerute langs stier. Bekræft grøn rute, der følger kortets stier, og ændret afstand.
+4. Tilføj et nyt rutepunkt. Bekræft at grøn beregning forsvinder, og at ny beregning kræves.
+5. Beregn igen, tryk Brug ruten til navigation. Bekræft GPS-afstand og status.
+6. Eksportér den grønne rute til GPX og åbn i gpx.studio.
+7. Tryk Vis rette linjer. Bekræft pink linje og tilsvarende eksport.
+8. Slå internet fra inden beregning. Bekræft forståelig fejl og at manuel rute stadig findes.
+9. Regressionstest GPS, pause/genoptag, autosave, Wake Lock, import/eksport, backup og højdeprofil.
+10. Tidligere udestående test: reel ruteafvigelsesadvarsel og GPS-baseret højdeprofil.

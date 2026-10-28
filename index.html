@@ -14,7 +14,7 @@
   </style>
 </head>
 <body>
-<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.7.1</small></header>
+<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.7.2</small></header>
 <main>
 <p class="intro">Se en eksempelrute på kortet, find din position, og registrér en kort vandretur med GPS.</p>
 <div id="status" class="status" role="status" aria-live="polite">Kortet vises omkring København. GPS bruges først, når du vælger det.</div>
@@ -30,7 +30,7 @@
   <input type="file" id="gpxFile" accept=".gpx,application/gpx+xml,application/xml,text/xml" hidden aria-label="Vælg GPX-fil" />
  </div>
  <p class="note">Den orange rute er en <strong>illustrativ demonstrationsrute</strong> – ikke en kontrolleret, anbefalet vandrerute.</p>
- <div class="legend"><span><i class="swatch sample"></i>Eksempelrute</span><span><i class="swatch imported"></i>Importeret GPX-rute</span><span><i class="swatch actual"></i>Registreret GPS-spor</span><span><i class="swatch drawn"></i>Tegnet rute</span></div>
+ <div class="legend"><span><i class="swatch sample"></i>Eksempelrute</span><span><i class="swatch imported"></i>Importeret GPX-rute</span><span><i class="swatch actual"></i>Registreret GPS-spor</span><span><i class="swatch drawn"></i>Tegnet rute (pink) / stitilpasset rute (grøn)</span></div>
  <p id="importSummary" class="import-summary" aria-live="polite">Ingen GPX-rute indlæst.</p>
  <section id="importStats" class="import-stats" hidden aria-live="polite">
   <h3 class="import-heading">Importeret GPX-rute</h3>
@@ -47,15 +47,18 @@
  </section>
  <section id="drawPanel" class="panel" style="margin-top:14px;box-shadow:none;border:1px solid #d7e5dc" aria-label="Tegn din egen rute">
   <h3 class="import-heading">Tegn din egen rute på kortet</h3>
-  <p class="note draw-guide">Tryk på <strong>Start tegning</strong>, og tryk derefter på kortet for hvert sving eller rutepunkt. Punkterne forbindes med <strong>rette linjer</strong> – de følger ikke automatisk stier og veje.</p>
+  <p class="note draw-guide">Tryk på <strong>Start tegning</strong>, og tryk derefter på kortet for hvert sving eller rutepunkt. Vælg start-, slut- og eventuelle via-punkter. Tryk <strong>Beregn vandrerute langs stier</strong> for at tilpasse ruten til kendte gangstier og veje. Uden ruteberegning bruges rette linjer.</p>
   <div class="actions" style="margin-top:10px">
    <button id="drawToggle" class="secondary" aria-pressed="false">Start tegning</button>
    <button id="drawUndo" class="secondary" disabled>Fortryd punkt</button>
+   <button id="routeCalculate" class="secondary" disabled>Beregn vandrerute langs stier</button>
+   <button id="routeManual" class="secondary" disabled>Vis rette linjer</button>
    <button id="drawClear" class="secondary" disabled>Ryd tegnet rute</button>
    <button id="drawNavigate" class="secondary" disabled>Brug ruten til navigation</button>
    <button id="drawExport" class="secondary" disabled>Eksportér tegnet rute (GPX)</button>
   </div>
   <div class="stats draw-stat"><div class="stat"><strong id="drawDistance">0,00</strong><span>Planlagt distance (km)</span></div><div class="stat"><strong id="drawPoints">0</strong><span>Rutepunkter</span></div><div class="stat"><strong id="drawMode">Fra</strong><span>Tegnetilstand</span></div></div>
+  <p class="note">Automatisk ruteføring bruger en ekstern routingtjeneste og kræver internet. Ruten kan afvige fra dit valg; kontroller altid fremkommelighed og adgangsforhold. Maksimum 20 via-punkter.</p>
   <p class="note" id="drawStatus" aria-live="polite">Tegning er slået fra. En tegnet rute gemmes kun på denne side, indtil du eksporterer den.</p>
  </section>
  <section id="navPanel" class="nav-panel" hidden aria-live="polite">
@@ -98,6 +101,8 @@
   let demoLine = null, userMarker = null, trackLine = L.polyline([], {color:'#1688b8',weight:5}).addTo(map);
   let importedLayer = null;
   const drawnPoints=[];
+  let routedPoints=null, routeLoading=false, routeGeneration=0;
+  const ROUTE_API="https://valhalla1.openstreetmap.de/route";
   const drawnLine=L.polyline([], {color:'#dc436c',weight:5}).addTo(map);
   const drawnMarkers=L.layerGroup().addTo(map);
   let drawing=false, drawnNavigation=false;
@@ -181,9 +186,36 @@
   }
   // Manuel ruteplanlægning: tryk på kortet, én koordinat ad gangen.
   // Linjerne er geometri, ikke vej-/sti-routing. Registreret GPS-spor holdes separat.
-  function drawDistanceMeters(){return drawnPoints.slice(1).reduce((meters,point,i)=>meters+L.latLng(drawnPoints[i]).distanceTo(point),0);}
+  function activeDrawPoints(){return routedPoints&&routedPoints.length>=2?routedPoints:drawnPoints;}
+  function invalidateRoute(){routeGeneration++;routedPoints=null;routeLoading=false;}
+  function drawDistanceMeters(){const arr=activeDrawPoints();return arr.slice(1).reduce((meters,point,i)=>meters+L.latLng(arr[i]).distanceTo(point),0);}
+  function decodePolyline6(value){
+    const output=[];let i=0,lat=0,lng=0;
+    while(i<value.length){const deltas=[];for(let j=0;j<2;j++){let result=0,shift=0,byte;do{if(i>=value.length)throw Error('Ufuldstændig rutekodning');byte=value.charCodeAt(i++)-63;result|=(byte&31)<<shift;shift+=5;if(shift>35)throw Error('Ugyldig rutekodning');}while(byte>=32);deltas.push((result&1)?~(result>>1):(result>>1));}lat+=deltas[0];lng+=deltas[1];output.push([lat/1e6,lng/1e6]);}
+    return output;
+  }
+  async function calculatePedestrianRoute(){
+    if(routeLoading||drawnPoints.length<2)return;
+    if(drawnPoints.length>20){$('drawStatus').textContent='Automatisk ruteføring understøtter højst 20 valgte punkter. Fjern nogle via-punkter.';return;}
+    const generation=++routeGeneration;routeLoading=true;refreshDrawUI();$('drawStatus').textContent='Beregner rute langs stier og gangveje…';
+    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),18000);
+    try{
+      const body={locations:drawnPoints.map(([lat,lon])=>({lat,lon})),costing:'pedestrian',shape_format:'polyline6',units:'km',directions_type:'none'};
+      const response=await fetch(ROUTE_API,{method:'POST',headers:{'Content-Type':'application/json','X-Client-Id':'VandreApp-exam-prototype'},body:JSON.stringify(body),signal:controller.signal});
+      if(!response.ok)throw Error('Routingserver svarede med HTTP '+response.status);
+      const data=await response.json();const legs=data.trip?.legs;
+      if(!Array.isArray(legs)||!legs.length)throw Error('Ingen gangrute fundet mellem punkterne');
+      const result=[];for(const leg of legs){if(typeof leg.shape!=='string')throw Error('Rutens koordinater mangler');const pts=decodePolyline6(leg.shape);if(result.length&&pts.length)pts.shift();result.push(...pts);}
+      if(result.length<2||result.length>100000||result.some(p=>!p.every(Number.isFinite)||Math.abs(p[0])>90||Math.abs(p[1])>180))throw Error('Routingserver returnerede ugyldige koordinater');
+      if(generation!==routeGeneration)return;
+      routedPoints=result;drawing=false;refreshDrawUI();map.fitBounds(drawnLine.getBounds(),{padding:[25,25],maxZoom:17});
+      $('drawStatus').textContent=`Gangrute beregnet med ${result.length} kortpunkter. Kontrollér stier og adgangsforhold før turen. Du kan eksportere eller navigere efter ruten.`;
+    }catch(e){if(generation!==routeGeneration)return; routedPoints=null;refreshDrawUI();$('drawStatus').textContent='Automatisk ruteføring mislykkedes ('+(e.name==='AbortError'?'tidsgrænse overskredet':e.message)+'). Du kan stadig bruge rette linjer og eksportere ruten.';}
+    finally{clearTimeout(timeout);if(generation===routeGeneration){routeLoading=false;refreshDrawUI();}}
+  }
   function refreshDrawUI(){
-    drawnLine.setLatLngs(drawnPoints);
+    drawnLine.setLatLngs(activeDrawPoints());
+    drawnLine.setStyle({color:routedPoints?'#23875a':'#dc436c'});
     drawnMarkers.clearLayers();
     drawnPoints.forEach((p,i)=>L.circleMarker(p,{radius:5,color:'#fff',weight:2,fillColor:'#dc436c',fillOpacity:1,interactive:false}).addTo(drawnMarkers));
     $('drawPoints').textContent=String(drawnPoints.length);
@@ -193,12 +225,15 @@
     $('drawToggle').classList.toggle('draw-active',drawing);
     $('drawToggle').setAttribute('aria-pressed',String(drawing));
     $('drawUndo').disabled=!drawnPoints.length;
+    $('routeCalculate').disabled=routeLoading||drawnPoints.length<2;
+    $('routeCalculate').textContent=routeLoading?'Beregner rute…':'Beregn vandrerute langs stier';
+    $('routeManual').disabled=!routedPoints;
     $('drawClear').disabled=!drawnPoints.length;
     $('drawExport').disabled=drawnPoints.length<2;
     $('drawNavigate').disabled=drawnPoints.length<2;
     $('drawNavigate').textContent=drawnNavigation?'Navigation bruger tegnet rute':'Brug ruten til navigation';
     $('map').classList.toggle('draw-active-map',drawing);
-    if(drawnNavigation){navigationSegments=drawnPoints.length>=2?[drawnPoints.slice()]:[];resetNavigationStatus();if(navLastPosition&&navigationSegments.length)updateNavigation(navLastPosition);}
+    if(drawnNavigation){navigationSegments=activeDrawPoints().length>=2?[activeDrawPoints().slice()]:[];resetNavigationStatus();if(navLastPosition&&navigationSegments.length)updateNavigation(navLastPosition);}
   }
   $('drawToggle').onclick=()=>{
     drawing=!drawing;
@@ -209,29 +244,31 @@
   map.on('click',event=>{
     if(!drawing)return;
     if(drawnPoints.length>=500){$('drawStatus').textContent='Maksimum er 500 rutepunkter. Afslut og eksportér ruten.';return;}
-    drawnPoints.push([event.latlng.lat,event.latlng.lng]);
+    invalidateRoute();drawnPoints.push([event.latlng.lat,event.latlng.lng]);
     refreshDrawUI();
   });
-  $('drawUndo').onclick=()=>{drawnPoints.pop();refreshDrawUI();};
+  $('drawUndo').onclick=()=>{invalidateRoute();drawnPoints.pop();refreshDrawUI();};
+  $('routeCalculate').onclick=calculatePedestrianRoute;
+  $('routeManual').onclick=()=>{invalidateRoute();refreshDrawUI();$('drawStatus').textContent='Viser igen rette linjer mellem dine valgte punkter.';};
   $('drawClear').onclick=()=>{
-    drawnPoints.length=0;
+    invalidateRoute();drawnPoints.length=0;
     if(drawnNavigation){drawnNavigation=false;navigationSegments=[];$('navPanel').hidden=true;navRequestGeneration++;$('navRefresh').disabled=false;}
     refreshDrawUI();$('drawStatus').textContent='Den tegnede rute er ryddet. GPS-sporet og importerede GPX-filer er uændrede.';
   };
   $('drawNavigate').onclick=()=>{
     if(drawnPoints.length<2)return;
-    drawing=false;drawnNavigation=true;navigationSegments=[drawnPoints.slice()];navEnabled=true;
+    drawing=false;drawnNavigation=true;navigationSegments=[activeDrawPoints().slice()];navEnabled=true;
     $('navToggle').textContent='Ruteovervågning: Til';$('navToggle').setAttribute('aria-pressed','true');
     $('navPanel').hidden=false;resetNavigationStatus();refreshDrawUI();requestNavigationPosition();
     $('drawStatus').textContent='Den tegnede rute bruges nu til navigation. GPS-afstand og ruteadvarsler vises under Rutenavigation.';
   };
   $('drawExport').onclick=()=>{
     if(drawnPoints.length<2)return;
-    const vertices=drawnPoints.map(p=>`<rtept lat="${p[0].toFixed(7)}" lon="${p[1].toFixed(7)}"/>`).join('');
-    const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp 0.7.1" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>Min tegnede rute</name>${vertices}</rte></gpx>`;
+    const vertices=activeDrawPoints().map(p=>`<rtept lat="${p[0].toFixed(7)}" lon="${p[1].toFixed(7)}"/>`).join('');
+    const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp 0.7.2" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>Min tegnede rute</name>${vertices}</rte></gpx>`;
     const url=URL.createObjectURL(new Blob([xml],{type:'application/gpx+xml'}));
     const a=document.createElement('a');a.href=url;a.download='vandreapp-tegnet-rute.gpx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-    $('drawStatus').textContent='Tegnet rute eksporteret som GPX. Ruten er ikke automatisk tilpasset veje og stier.';
+    $('drawStatus').textContent=routedPoints?'Beregnet vandrerute eksporteret som GPX.':'Manuelt tegnet rute eksporteret som GPX (rette linjer).';
   };
   $('navRefresh').onclick=requestNavigationPosition;
   $('navToggle').onclick=()=>{navEnabled=!navEnabled;$('navToggle').textContent='Ruteovervågning: '+(navEnabled?'Til':'Fra');$('navToggle').setAttribute('aria-pressed',String(navEnabled));resetNavigationStatus();if(navEnabled&&navLastPosition)updateNavigation(navLastPosition);};

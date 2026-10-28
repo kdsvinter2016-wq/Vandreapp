@@ -1,15 +1,11 @@
-# AI-udviklingslog – VandreApp 0.7
+# AI-udviklingslog – 0.7.2
 
-**Problem:** VandreApp mangler samlet backup og analyse af vandretures højdedata.
+**Ønske:** Automatisk ruteføring langs eksisterende stier og veje før mobilinterfacedesign 0.8.
 
-**Løsning:** AI-assisteret ændring af 0.6.1 med højdeprofil (SVG), summering af stigning/fald, omdøbning og valideret JSON-backup/gendannelse. Den eksisterende GPS-motor er bevaret.
+**AI-arbejde:** Inspicerede 0.7.1-koden, identificerede tegnepunkter, navigationssegmenter og GPX-eksport. Tilføjede særskilt beregnet rutegeometri, request-fejlhåndtering og annullering af forældede svar ved punktændringer.
 
-**Valg:** Ingen nye biblioteker; højder vises kun, når de findes i data. Backup indeholder højst 50 ture og valideres før skrivning til localStorage.
+**Valg:** Valhalla pedestrian routing fra offentlig FOSSGIS-demo. Brugerinitieret POST med `X-Client-Id`; behold manuel rute som fallback. Beregnet geometri anvendes til både navigation og GPX-eksport.
 
-**Begrænsninger:** GPS-højder kan være støjfyldte; 3 m filtrering er en heuristik. Browserlagring er ikke en sikker serverbackup. Ruteafvigelsesadvarsel fra 0.6.1 er endnu ikke praktisk testet.
+**Usikkerheder:** Demoens tilgængelighed, browser-CORS og rutekvalitet er ikke verificeret på Android. Ingen påstand om bestået mobiltest. Valhalla-demo kan ændre vilkår eller rate limits.
 
-**Test:** JavaScript-syntaks og projektfilernes integritet kontrolleres før levering. Android-funktionstest skal gennemføres af bruger.
-
-
-## Version 0.7.1
-Brugerønske: Kunne tegne en ønsket rute på kortet før den større redesignversion 0.8. AI-assisteret udvikling: manuel kortklik/tryk-planlægning, visning af punkter og distance, fortryd/ryd, GPX-eksport og overførsel til eksisterende navigationspanel. Designvalg: lige linjer mellem valgte punkter, ingen ekstern routing-API, adskilt fra GPS-spor. Mangler: fysisk Android-test og slut-til-slut test af rutenavigation.
+**Test:** JavaScript-syntakskontrol og ZIP-integritetskontrol lokalt. Reelle online routingtests og regressionstest afventer Android.

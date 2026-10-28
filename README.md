@@ -1,19 +1,21 @@
-# VandreApp 0.7 – Turanalyse og backup
+# VandreApp 0.7.2 – automatisk ruteføring
 
-Videreudviklet fra 0.6.1. Appen er fortsat en mobilvenlig webapp til GitHub Pages og kræver HTTPS for GPS.
+Bygger på VandreApp 0.7.1. Manuel tegning, GPS, turhistorik, GPX-import/-eksport og navigation bevares.
 
-## Nyt
-- Højdeprofil og stigning/fald for importerede GPX-ruter med gyldige `<ele>`-værdier.
-- Højdeprofil og stigning/fald for registrerede eller åbnede gemte ture med GPS-højder.
-- Turhistorik med opsummering af antal ture og samlet distance samt mulighed for at omdøbe ture.
-- Download alle gemte ture i én JSON-backup og gendan fra samme format. Dubletter med samme tur-id springes over.
+## Ny funktion
+1. Vælg **Start tegning** og markér 2–20 punkter på kortet.
+2. Tryk **Beregn vandrerute langs stier**. Appen sender disse koordinater til Valhallas offentlige demotjeneste og modtager en fodgængerrute.
+3. Grøn linje = beregnet gangrute; pink linje = rette linjer. **Vis rette linjer** vender tilbage til manuel tegning.
+4. **Brug ruten til navigation** og **Eksportér tegnet rute (GPX)** anvender den beregnede rute, hvis den findes.
+5. Ændrer du vejpunkterne, fjernes den tidligere beregning, så der ikke bruges forældede data.
 
-## Begrænsninger
-Højder fra GPS er ofte upræcise. Udsving på under 3 meter ignoreres. Statistik er vejledende, ikke en garanti for reel højdestigning. Hvis en fil ikke indeholder højdedata, vises ingen profil. Backup gælder gemte ture, ikke en aktiv turkladde. Opbevar JSON-backuppen sikkert: den indeholder dine GPS-positioner.
+## Vigtige begrænsninger
+- Internetforbindelse og adgang til `https://valhalla1.openstreetmap.de` er påkrævet for automatisk beregning.
+- Den offentlige Valhalla-demo er en delt tjeneste med fair-use og rate limits, og er ikke egnet til garanteret produktion. En egentlig driftversion skal bruge en aftalt API-udbyder eller egen server.
+- Koordinater for valgte punkter sendes til ekstern tjeneste ved tryk på beregn-knappen. Ingen konto eller API-nøgle kræves i denne prototype.
+- Ruten er et beregnet forslag og kan indeholde ikke-farbare eller forbudte strækninger; kontrollér altid forholdene lokalt.
+- Ingen ruteberegning offline. Manuel tegning fungerer fortsat uden routingserver (kortfliser kræver normalt net).
+- GPS under slukket skærm er fortsat ikke garanteret.
 
-## Publicering
-Udpak ZIP og upload filerne til rodmappen i GitHub-repositoryet. Samme GitHub Pages-adresse som hidtil. Den planlagte 0.6-ruteafvigelsesadvarsel mangler endnu Android-funktionstest.
-
-
-## Version 0.7.1 – Tegn en rute på kortet
-Tryk **Start tegning**, og tryk på kortet for at indsætte punkter. En pink linje forbinder punkterne med lige linjer (ingen automatisk routing langs stier). Brug **Fortryd punkt** eller **Ryd tegnet rute**, vælg eventuelt **Brug ruten til navigation**, eller download den med **Eksportér tegnet rute (GPX)**. Tegnede rutepunkter findes kun i den aktuelle side indtil eksport. GPS-registrering og turhistorik berøres ikke. Når tegning starter, slås GPS-kortfølgning fra, så kortet ikke flytter sig under planlægningen.
+## Installation
+Udpak alle filer i roden af GitHub-repositoryet og commit. Den hidtidige GitHub Pages-adresse er uændret.

@@ -1,15 +1,13 @@
-# AI-udviklingslog – VandreApp 0.4
+# AI-udviklingslog – VandreApp 0.5
 
-**Opgave:** Udvid fungerende MVP 0.3 med seks prioriterede funktioner under hensyntagen til AI-eksamen.
+## Problem
+VandreApp 0.4 kunne tabe en aktiv tur ved genindlæsning, Screen Wake Lock manglede, og kortfølgning var ikke pålidelig, især uden aktiv tur.
 
-**Prompt/krav:** "Udvikl VandreApp version 0.4 med de seks anbefalede funktioner."
+## Løsning
+AI-assisteret kodeændring med genbrug af Leaflet, GPS Geolocation API og eksisterende localStorage-historik. Implementeret separat turkladde for aktiv tur, gendannelse som pause, Screen Wake Lock med statustekst samt løbende GPS-overvågning, når brugeren har valgt positionsvisning. Service worker-cache har nyt versionsnavn.
 
-**AI-assisterede ændringer:** Lokal browserlagring og genåbning/sletning af ture; pause og genoptagelse af GPS-watch med separat tracksegment; GPS-kortfølgning; GPX-rutedistance; manifest, ikoner og service worker til PWA.
+## Test og kvalitetskontrol
+JavaScript-syntakskontrol og ZIP-integritet er kontrolleret automatisk. Android-test er ikke udført af AI og skal gennemføres med testplanen. En fejl i en Wake Lock-betingelse blev opdaget og rettet ved syntakskontrollen.
 
-**Tekniske valg:** Ren HTML/CSS/JavaScript + Leaflet fastholdes; localStorage for hurtig implementering uden server; ingen ændringer i kortleverandør eller GPS-API; service worker cacher kun appens egne filer.
-
-**Kritiske forhold:** Lokal lagring er ikke sikker backup; Android kan stoppe GPS i baggrunden; kort og Leaflet er ikke garanteret offline; GPS-støj påvirker målinger; nye funktioner skal regressionsprøves på telefonen.
-
-**Kvalitetssikring:** JavaScript-syntakskontrol med Node.js samt ZIP- og manifestkontrol. Android-funktionstest af version 0.4 afventer brugerens målinger.
-
-**Eksamensvinkel:** Demonstrér forløbet krav → AI-kode → tekniske valg → test → fejlrettelser, og skeln tydeligt mellem automatiseret kontrol og fysisk test.
+## Begrænsninger og læring
+Webbaseret GPS kan stadig stoppe i baggrunden. localStorage er ikke et sikkert backuplager og kan mangle nyeste punkter ved pludselig afbrydelse. AI-genereret kode kræver syntax-, regressions- og enhedstest på virkelig telefon.

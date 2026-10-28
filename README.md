@@ -1,13 +1,16 @@
-# VandreApp 0.4
+# VandreApp 0.5 – GitHub Pages
 
-Udvidelse af 0.3 med: (1) lokal lagring af afsluttede ture, (2) turhistorik med Vis og Slet, (3) pause/genoptag, (4) GPS-kortfølgning, (5) rutedistance for importeret GPX, (6) installerbar PWA.
+Fortsætter VandreApp 0.4. Nye funktioner: løbende turkladde i localStorage, gendannelse af afbrudt tur (altid i pauset tilstand), valgbar Screen Wake Lock og forbedret GPS-kortfølgning både under og udenfor aktiv tur.
 
-## Installation på GitHub Pages
-Upload **alle filerne fra ZIP-arkivets rod** til samme repository som den eksisterende version. `index.html`, `manifest.webmanifest`, `sw.js` og ikonerne skal ligge ved siden af hinanden. Commit til `main`, behold Pages = root. Genindlæs siden og kontrollér at der står Prototype 0.4. Installer via Chromes menu ("Installér app" eller "Føj til startskærm", afhængigt af Chrome-version).
+## Publicering
+Udpak ZIP-filen og upload alle filerne direkte til roden i GitHub-repositoryet `Vandreapp`. GitHub Pages bruger `index.html`. Overskriv de eksisterende filer og vent på opdatering til 'Prototype 0.5'.
 
-## Vigtigt
-- Gemte ture ligger i browserens `localStorage`, kun på den aktuelle enhed/browser. Sletning af browserdata kan fjerne ture. Eksportér GPX som backup. Op til 50 ture vises; browserens lagergrænse kan nås før dette.
-- Timeren stopper under pause. Afstanden mellem det sidste punkt før pausen og det første efter genoptagelse tælles ikke med. GPX-eksport bevarer dette som separate track-segmenter.
-- PWA er installerbar, men **ikke en fuldt offline-fungerende kortapp**. Leaflet og OpenStreetMap-kortfliser hentes eksternt og kræver typisk netadgang; service worker cacher kun appens egne filer.
-- Geolocation kræver HTTPS og kan blive stoppet, hvis skærmen er slukket.
-- Ændringer er kun syntakskontrolleret automatisk; funktionerne kræver test på Android.
+## Brug
+- **Følg GPS: Til** er standard. Tryk **Find min position**, så kortet fortsætter med at følge GPS i forgrunden, også når en tur ikke registreres. Du kan slå følgning fra for at gennemse kortet.
+- **Start tur** begynder registrering og gemmer automatisk en lokal kladde, også ved GPS-punkter.
+- Genindlæs eller genåbn under en aktiv tur: vælg **Gendan tur**. Turen genoptages først, når du trykker **Genoptag tur**. Pausen mellem sessionsregistreringer tælles ikke med, og der tegnes ingen forbindelseslinje.
+- **Hold skærmen tændt: Til** aktiverer Screen Wake Lock ved en aktiv tur, når browseren tillader det. Et aktiveret valg er ikke det samme som en bekræftet Wake Lock; status vises nedenunder knappen.
+- **Stop tur** eller **Nulstil** fjerner den aktive kladde. Gemte ture bevares separat.
+
+## Begrænsninger
+Automatisk lagring afhænger af browserens localStorage og er ikke en egentlig backup. Systemet kan lukke browseren inden sidste punkt er gemt. Wake Lock fungerer kun ved synlig app med tændt skærm og sikrer **ikke** GPS ved slukket skærm. Kortfliser og Leaflet kræver internet og GPS kræver HTTPS. GPS-tilladelser kan variere på telefoner. Test på Galaxy S25 FE før accept.

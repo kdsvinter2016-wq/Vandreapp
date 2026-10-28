@@ -14,7 +14,7 @@
   </style>
 </head>
 <body>
-<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.4</small></header>
+<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.5</small></header>
 <main>
 <p class="intro">Se en eksempelrute på kortet, find din position, og registrér en kort vandretur med GPS.</p>
 <div id="status" class="status" role="status" aria-live="polite">Kortet vises omkring København. GPS bruges først, når du vælger det.</div>
@@ -23,7 +23,7 @@
  <div class="actions">
   <button class="secondary" id="locate">Find min position</button>
   <button class="secondary" id="example">Vis eksempelrute</button>
-  <button class="secondary" id="follow" aria-pressed="false">Følg GPS: Fra</button>
+  <button class="secondary" id="follow" aria-pressed="true">Følg GPS: Til</button>
   <button class="secondary" id="clearExample">Skjul eksempelrute</button>
   <button class="secondary" id="importGpx">Importér GPX</button>
   <button class="secondary" id="clearGpx" disabled>Fjern importeret rute</button>
@@ -42,6 +42,10 @@
   <button id="reset" class="secondary">Nulstil</button>
  </div>
  <div class="stats four"><div class="stat"><strong id="distance">0,00</strong><span>Distance (km)</span></div><div class="stat"><strong id="duration">00:00</strong><span>Varighed</span></div><div class="stat"><strong id="points">0</strong><span>GPS-punkter</span></div><div class="stat"><strong id="speed">0,0</strong><span>Gns. km/t</span></div></div>
+ <div id="recovery" class="status" hidden><strong>Afbrudt tur fundet</strong><p class="note" id="recoveryDetails"></p><div class="actions" style="margin-top:8px"><button id="recover">Gendan tur</button><button id="discardRecovery" class="secondary">Kassér kladde</button></div></div>
+ <div class="actions" style="margin-top:12px"><button class="secondary" id="wake" aria-pressed="false">Hold skærmen tændt: Fra</button></div>
+ <p class="note" id="wakeStatus">Skærmlås: Ikke aktiveret.</p>
+ <p class="note" id="saveStatus">Automatisk turkladde: Ingen aktiv tur.</p>
  <p class="note" id="gpsNotice">GPS-registreringen kræver HTTPS (eller localhost) og tilladelse til position. Lad browseren være aktiv og skærmen tændt under testen. Positionsmålinger kan være upræcise.</p>
  <div class="actions" style="margin-top:12px"><button class="secondary" id="export" disabled>Eksportér tur (GPX)</button><button class="secondary" id="save" disabled>Gem tur lokalt</button></div>
 </div>
@@ -59,16 +63,56 @@
   let demoLine = null, userMarker = null, trackLine = L.polyline([], {color:'#1688b8',weight:5}).addTo(map);
   let importedLayer = null;
   let watchId = null, startedAt = 0, elapsedMs = 0, tickTimer = null, tracking = false, paused = false, points = [], totalMeters = 0;
-  let breakSegment = false, followGps = false, currentSaved = false;
+  let breakSegment = false, followGps = true, currentSaved = false;
+  let idleFollowWatch = null, followAuthorized=false, wakeRequested=false, wakeLock=null, lastDraftWrite=0;
+  const DRAFT_KEY = "vandreapp-active-draft-v05";
   const STORAGE_KEY='vandreapp-trips-v04';
   const getTrips=()=>{try{const data=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');return Array.isArray(data)?data.filter(t=>t&&Array.isArray(t.points)&&Number.isFinite(t.meters)&&Number.isFinite(t.duration)).slice(0,50):[];}catch{return [];}};
   const fmtLength = m => (m/1000).toLocaleString('da-DK',{minimumFractionDigits:2,maximumFractionDigits:2});
   const showStatus = (message) => {$('status').textContent = message;};
   const fmtTime = ms => {const s=Math.floor(ms/1000);return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;};
   function render(){ $('distance').textContent=(totalMeters/1000).toLocaleString('da-DK',{minimumFractionDigits:2,maximumFractionDigits:2});$('duration').textContent=fmtTime(elapsedMs+(tracking&&!paused?Date.now()-startedAt:0));$('points').textContent=points.length;$('export').disabled=tracking||points.length===0;$('save').disabled=tracking||points.length===0||currentSaved;$('speed').textContent=((totalMeters/1000)/Math.max((elapsedMs+(tracking&&!paused?Date.now()-startedAt:0))/3600000,0.00001)).toLocaleString('da-DK',{maximumFractionDigits:1,minimumFractionDigits:1}); }
-  function setPosition(latlng, accuracy){ if(userMarker) userMarker.setLatLng(latlng); else userMarker=L.circleMarker(latlng,{radius:8,color:'#fff',weight:2,fillColor:'#175f9a',fillOpacity:1}).addTo(map);userMarker.bindPopup(`GPS-position (nøjagtighed ca. ${Math.round(accuracy)} m)`);if(followGps)map.panTo(latlng); }
+  function setPosition(latlng, accuracy){ if(userMarker) userMarker.setLatLng(latlng); else userMarker=L.circleMarker(latlng,{radius:8,color:'#fff',weight:2,fillColor:'#175f9a',fillOpacity:1}).addTo(map);userMarker.bindPopup(`GPS-position (nøjagtighed ca. ${Math.round(accuracy)} m)`);if(followGps){map.panTo(latlng,{animate:false});} }
   function errorText(error){return error.code===1?'Tilladelse til GPS blev afvist. Giv browseren positionsadgang.':error.code===2?'GPS-position er ikke tilgængelig. Tjek enhedens lokationstjenester.':'GPS-positionen kunne ikke findes i tide. Prøv igen.';}
   function validPosition(p){return p && p.coords && Number.isFinite(p.coords.latitude) && Number.isFinite(p.coords.longitude) && Math.abs(p.coords.latitude)<=90 && Math.abs(p.coords.longitude)<=180;}
+  function persistDraft(force=false){
+    if(!tracking)return;
+    if(!force && Date.now()-lastDraftWrite<2000)return;
+    const duration=elapsedMs+(!paused?Math.max(0,Date.now()-startedAt):0);
+    try{
+      localStorage.setItem(DRAFT_KEY,JSON.stringify({schema:1,updated:Date.now(),points,meters:totalMeters,duration,paused,breakSegment:true}));
+      lastDraftWrite=Date.now();$('saveStatus').textContent='Automatisk turkladde: Gemt '+new Date(lastDraftWrite).toLocaleTimeString('da-DK');
+    }catch(e){$('saveStatus').textContent='Advarsel: Kunne ikke gemme turkladden lokalt. Eksportér dine ture jævnligt.';}
+  }
+  function clearDraft(){try{localStorage.removeItem(DRAFT_KEY);}catch{}$('saveStatus').textContent='Automatisk turkladde: Ingen aktiv tur.';}
+  function getDraft(){try{const d=JSON.parse(localStorage.getItem(DRAFT_KEY)||'null');if(!d||d.schema!==1||!Array.isArray(d.points)||d.points.length>20000||!Number.isFinite(d.meters)||d.meters<0||!Number.isFinite(d.duration)||d.duration<0)return null;if(!d.points.every(p=>p&&Number.isFinite(p.lat)&&Math.abs(p.lat)<=90&&Number.isFinite(p.lng)&&Math.abs(p.lng)<=180&&Number.isFinite(p.time)))return null;return d;}catch{return null;}}
+  function drawTrack(){const segments=[];for(const pt of points){if(pt.segmentStart||!segments.length)segments.push([]);segments[segments.length-1].push([pt.lat,pt.lng]);}trackLine.setLatLngs(segments);}
+  function stopIdleFollow(){if(idleFollowWatch!==null&&navigator.geolocation){navigator.geolocation.clearWatch(idleFollowWatch);idleFollowWatch=null;}}
+  function startIdleFollow(){
+    stopIdleFollow();if(!followGps||!followAuthorized||tracking||!navigator.geolocation||!window.isSecureContext||document.hidden)return;
+    try{idleFollowWatch=navigator.geolocation.watchPosition(p=>{if(!followGps||tracking||!validPosition(p))return;const acc=p.coords.accuracy;if(Number.isFinite(acc)&&acc>=0)setPosition([p.coords.latitude,p.coords.longitude],acc);},()=>{},{enableHighAccuracy:true,maximumAge:3000,timeout:20000});}catch{}
+  }
+  function updateFollowButton(){$('follow').textContent='Følg GPS: '+(followGps?'Til':'Fra');$('follow').setAttribute('aria-pressed',String(followGps));}
+  async function releaseWake(){if(wakeLock){const lock=wakeLock;wakeLock=null;try{await lock.release();}catch{}}updateWakeUI();}
+  function updateWakeUI(){
+    $('wake').textContent='Hold skærmen tændt: '+(wakeRequested?'Til':'Fra');$('wake').setAttribute('aria-pressed',String(wakeRequested));
+    $('wakeStatus').textContent=!('wakeLock' in navigator)?'Wake Lock understøttes ikke af denne browser.':wakeLock?'Skærmlås: Wake Lock aktiv.':wakeRequested?'Skærmlås: Afventer en synlig, aktiv tur (eller afvist af Android).':'Skærmlås: Ikke aktiveret.';
+  }
+  async function requestWake(){
+    if(!wakeRequested||!tracking||paused||document.hidden||wakeLock||!('wakeLock' in navigator)){updateWakeUI();return;}
+    try{const lock=await navigator.wakeLock.request('screen');if(!wakeRequested||!tracking||paused||document.hidden){await lock.release();return;}wakeLock=lock;lock.addEventListener('release',()=>{if(wakeLock===lock){wakeLock=null;updateWakeUI();}});}catch{showStatus('Android kunne ikke aktivere Wake Lock. Hold skærmen tændt manuelt.');}
+    updateWakeUI();
+  }
+  $('wake').onclick=()=>{wakeRequested=!wakeRequested;if(wakeRequested)requestWake();else releaseWake();updateWakeUI();};
+  function checkRecovery(){const d=getDraft();$('recovery').hidden=!d;if(d)$('recoveryDetails').textContent=`${d.points.length} GPS-punkter, ${fmtLength(d.meters)} km og ${fmtTime(d.duration)}. Gendannelse fortsætter som en pause, indtil du trykker Genoptag.`;}
+  $('recover').onclick=()=>{
+    const d=getDraft();if(!d){checkRecovery();showStatus('Turkladden kunne ikke gendannes.');return;}
+    stopIdleFollow();points=d.points.map(p=>({...p}));totalMeters=d.meters;elapsedMs=d.duration;breakSegment=true;tracking=true;paused=true;currentSaved=false;startedAt=0;
+    $('start').disabled=true;$('stop').disabled=false;$('pause').disabled=false;$('pause').textContent='Genoptag tur';
+    drawTrack();if(points.length)map.fitBounds(L.latLngBounds(points.map(p=>[p.lat,p.lng])),{padding:[25,25],maxZoom:17});
+    $('recovery').hidden=true;followAuthorized=true;tickTimer=setInterval(()=>{render();persistDraft();},1000);persistDraft(true);render();showStatus('Tur gendannet i pauset tilstand. Tryk Genoptag tur for at fortsætte GPS.');
+  };
+  $('discardRecovery').onclick=()=>{clearDraft();checkRecovery();showStatus('Afbrudt turkladde kasseret. Gemte ture er ikke ændret.');};
   $('locate').onclick=()=>{
     if(!navigator.geolocation){showStatus('GPS understøttes ikke i denne browser.');return;}
     if(!window.isSecureContext){showStatus('GPS kræver HTTPS eller localhost.');return;}
@@ -76,12 +120,12 @@
     try { navigator.geolocation.getCurrentPosition(p=>{
       $('locate').disabled=false;
       if(!validPosition(p)){showStatus('Ugyldig GPS-position modtaget.');return;}
-      const ll=[p.coords.latitude,p.coords.longitude];setPosition(ll,p.coords.accuracy);map.setView(ll,16);
+      const ll=[p.coords.latitude,p.coords.longitude];followAuthorized=true;setPosition(ll,p.coords.accuracy);map.setView(ll,16);startIdleFollow();
       showStatus(`GPS-position fundet. Angivet nøjagtighed: ca. ${Math.round(p.coords.accuracy)} m.`);
     },e=>{$('locate').disabled=false;showStatus(errorText(e));},{enableHighAccuracy:true,timeout:15000,maximumAge:0}); }
     catch(e){$('locate').disabled=false;showStatus('GPS kunne ikke startes. Tjek browserens tilladelser.');}
   };
-  $('follow').onclick=()=>{followGps=!followGps;$('follow').textContent='Følg GPS: '+(followGps?'Til':'Fra');$('follow').setAttribute('aria-pressed',String(followGps));showStatus(followGps?'Kortet følger nye GPS-positioner.':'Automatisk kortfølgning slået fra.');};
+  $('follow').onclick=()=>{followGps=!followGps;updateFollowButton();if(followGps){followAuthorized=true;startIdleFollow();if(userMarker)map.setView(userMarker.getLatLng(),Math.max(map.getZoom(),16));}else stopIdleFollow();showStatus(followGps?'GPS-kortfølgning aktiv. Kortet følger nye positioner.':'Kortfølgning slået fra.');};
   $('example').onclick=()=>{if(demoLine)map.removeLayer(demoLine);demoLine=L.polyline(demoPoints,{color:'#e6922e',weight:5,dashArray:'7,8'}).addTo(map);map.fitBounds(demoLine.getBounds(),{padding:[25,25]});showStatus('Illustrativ eksempelrute vist. Ruten er ikke verificeret til vandring.');};
   $('clearExample').onclick=()=>{if(demoLine){map.removeLayer(demoLine);demoLine=null;}showStatus('Eksempelrute skjult.');};
   // GPX-import: browserens XML-parser, uden nye eksterne biblioteker.
@@ -171,24 +215,24 @@
     }
     points.push({lat:latlng[0],lng:latlng[1],time:p.timestamp,alt:p.coords.altitude,segmentStart:breakSegment||!last});
     breakSegment=false;
-    const segments=[];for(const pt of points){if(pt.segmentStart||!segments.length)segments.push([]);segments[segments.length-1].push([pt.lat,pt.lng]);}
-    trackLine.setLatLngs(segments);if(points.length===1)map.setView(latlng,16);
-    render();showStatus(`Tur registreres – ${points.length} GPS-punkter modtaget.`);
+    drawTrack();if(points.length===1)map.setView(latlng,16);
+    persistDraft(true);render();showStatus(`Tur registreres – ${points.length} GPS-punkter modtaget.`);
   }
   function stopTracking(){
     if(!tracking)return;
     if(!paused)elapsedMs+=Date.now()-startedAt;tracking=false;paused=false;sessionId++;
     if(watchId!==null)navigator.geolocation.clearWatch(watchId);
-    watchId=null;clearInterval(tickTimer);tickTimer=null;
+    watchId=null;clearInterval(tickTimer);tickTimer=null;releaseWake();clearDraft();startIdleFollow();
     $('start').disabled=false;$('pause').disabled=true;$('pause').textContent='Pause tur';$('stop').disabled=true;render();
   }
   $('start').onclick=()=>{
     if(tracking)return;
+    if(getDraft()){checkRecovery();showStatus('Der findes en afbrudt tur. Gendan eller kassér kladden først.');return;}
     if(!navigator.geolocation){showStatus('GPS understøttes ikke i denne browser.');return;}
     if(!window.isSecureContext){showStatus('GPS kræver HTTPS eller localhost. Brug en HTTPS-adresse til test på telefon.');return;}
     // Start af ny tur erstatter det gamle spor. Eksporter først, hvis det skal gemmes.
     if(points.length){points=[];totalMeters=0;elapsedMs=0;trackLine.setLatLngs([]);}
-    currentSaved=false;breakSegment=false;paused=false;
+    followAuthorized=true;stopIdleFollow();currentSaved=false;breakSegment=false;paused=false;clearDraft();
     const session=++sessionId;
     startedAt=Date.now();tracking=true;$('start').disabled=true;$('stop').disabled=false;$('pause').disabled=false;$('export').disabled=true;
     showStatus('GPS-sporing starter. Giv tilladelse til positionsadgang, hvis browseren spørger.');
@@ -197,19 +241,19 @@
         p=>onPosition(p,session),
         e=>{if(!tracking||session!==sessionId)return;const message=errorText(e);if(e.code===1)stopTracking();showStatus(message);},
         {enableHighAccuracy:true,timeout:20000,maximumAge:0});
-      tickTimer=setInterval(render,1000);render();
+      tickTimer=setInterval(()=>{render();persistDraft();},1000);persistDraft(true);requestWake();render();
     } catch(e){stopTracking();showStatus('GPS-overvågning kunne ikke startes. Kontrollér browserens GPS-tilladelser.');}
   };
   $('pause').onclick=()=>{
     if(!tracking)return;
-    if(!paused){elapsedMs+=Date.now()-startedAt;paused=true;sessionId++;if(watchId!==null)navigator.geolocation.clearWatch(watchId);watchId=null;breakSegment=true;$('pause').textContent='Genoptag tur';showStatus('Turen er sat på pause. Tiden tæller ikke videre.');}
-    else{const session=++sessionId;paused=false;startedAt=Date.now();$('pause').textContent='Pause tur';try{watchId=navigator.geolocation.watchPosition(p=>onPosition(p,session),e=>{if(!tracking||paused||session!==sessionId)return;if(e.code===1)stopTracking();showStatus(errorText(e));},{enableHighAccuracy:true,timeout:20000,maximumAge:0});showStatus('GPS-registrering genoptaget.');}catch{paused=true;sessionId++;showStatus('Kunne ikke genoptage GPS. Prøv igen.');}}
-    render();
+    if(!paused){elapsedMs+=Date.now()-startedAt;paused=true;sessionId++;releaseWake();if(watchId!==null)navigator.geolocation.clearWatch(watchId);watchId=null;breakSegment=true;$('pause').textContent='Genoptag tur';persistDraft(true);showStatus('Turen er sat på pause. Tiden tæller ikke videre.');}
+    else{const session=++sessionId;paused=false;startedAt=Date.now();$('pause').textContent='Pause tur';try{watchId=navigator.geolocation.watchPosition(p=>onPosition(p,session),e=>{if(!tracking||paused||session!==sessionId)return;if(e.code===1)stopTracking();showStatus(errorText(e));},{enableHighAccuracy:true,timeout:20000,maximumAge:0});persistDraft(true);requestWake();showStatus('GPS-registrering genoptaget.');}catch{paused=true;sessionId++;showStatus('Kunne ikke genoptage GPS. Prøv igen.');}}
+    persistDraft(true);render();
   };
   $('stop').onclick=()=>{stopTracking();showStatus(`Turen er afsluttet: ${(totalMeters/1000).toFixed(2).replace('.',',')} km og ${points.length} GPS-punkter. Eksportér turen for at gemme den.`);};
-  $('reset').onclick=()=>{stopTracking();points=[];totalMeters=0;elapsedMs=0;breakSegment=false;currentSaved=false;trackLine.setLatLngs([]);render();showStatus('Turdata er nulstillet.');};
+  $('reset').onclick=()=>{stopTracking();clearDraft();checkRecovery();points=[];totalMeters=0;elapsedMs=0;breakSegment=false;currentSaved=false;trackLine.setLatLngs([]);render();showStatus('Turdata er nulstillet.');};
   document.addEventListener('visibilitychange',()=>{
-    if(document.hidden&&tracking&&!paused)showStatus('Appen er i baggrunden. GPS-sporing kan blive afbrudt. Hold skærmen tændt.');
+    if(document.hidden){persistDraft(true);releaseWake();stopIdleFollow();if(tracking&&!paused)showStatus('App i baggrunden: GPS kan blive afbrudt. Din seneste turkladde er gemt.');}else{requestWake();startIdleFollow();setTimeout(()=>map.invalidateSize(),150);}
   });
   function xmlEsc(s){return String(s).replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]));}
   $('export').onclick=()=>{if(!points.length)return;const track=points.map((p,i)=>`${p.segmentStart&&i>0?'</trkseg><trkseg>':''}<trkpt lat="${p.lat}" lon="${p.lng}">${Number.isFinite(p.alt)?`<ele>${p.alt}</ele>`:''}<time>${new Date(p.time).toISOString()}</time></trkpt>`).join('');const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp MVP" xmlns="http://www.topografix.com/GPX/1/1"><trk><name>${xmlEsc('Min vandretur')}</name><trkseg>${track}</trkseg></trk></gpx>`;const blob=new Blob([xml],{type:'application/gpx+xml'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='vandreapp-tur.gpx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);showStatus('GPX-fil genereret og overført til browserens downloadfunktion.');};
@@ -242,7 +286,7 @@
     }catch{showStatus('Kunne ikke gemme turen. Browserens lokale lager kan være fyldt eller blokeret.');}
   };
   if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
-  renderHistory();render();
+  checkRecovery();updateFollowButton();updateWakeUI();renderHistory();render();
 })();
 </script>
 </body>

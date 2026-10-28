@@ -1,16 +1,14 @@
-# VandreApp 0.4 – testplan
+# VandreApp 0.5 – Testplan
 
-Status: Android-tests **ikke udført endnu**. Udfyld resultat efter faktisk afprøvning.
+Alle punkter er **afventer test på Android**, medmindre særskilt markeret.
 
-1. Regression: Kort og GPS-position kan vises.
-2. Regression: Start → gå → Stop; distance, varighed og blåt spor stemmer nogenlunde.
-3. Regression: Eksporter tur som GPX, og importer igen. Ruten skal vises.
-4. Pause: Start → gå → Pause; timer skal standse. Gå lidt → Genoptag → gå → Stop; ingen kunstig streg/afstand over pausen. GPX-eksport skal have separate segmenter.
-5. Gem: Efter Stop → Gem tur lokalt; genindlæs siden → Mine gemte ture → Vis; ruten og distance vises igen.
-6. Historik: Slet en tur og kontroller at den forsvinder. GPS-registrering må ikke erstattes af historik mens den er aktiv.
-7. Kortfølgning: Slå Følg GPS til; nye GPS-positioner panorerer kortet. Slå fra, så kortet kan flyttes frit.
-8. GPX: Importér GPX og kontrollér at rutedistance vises. Segmenter må ikke forbindes på tværs.
-9. PWA: I Chrome på Android, vælg Installer app/Føj til startskærm og start via ikon. Kontrollér også at appen kan opdateres efter ny commit.
-10. Fejltest: Ugyldig GPX, afvist GPS-tilladelse og manglende netadgang. Offline-kort forventes ikke at virke fuldt ud.
+1. **Kortfølgning:** Tryk Find min position, bekræft Følg GPS: Til. Flyt dig med skærmen tændt, og kontrollér at kortcentret flytter sig. Slå Følg GPS fra og kontrollér at kortet ikke længere automatisk flyttes. Slå til igen og kontrollér at det centrerer.
+2. **Aktiv tur/kladde:** Start en tur, registrér mindst to punkter og genindlæs uden at stoppe. Banneret Afbrudt tur fundet skal vises.
+3. **Gendannelse:** Tryk Gendan tur. Kontrollér antal punkter, distance, varighed og kortspor. Turen skal være sat på pause.
+4. **Genoptag:** Tryk Genoptag tur. Kontrollér at nye punkter tilføjes uden forbindelseslinje over tids-/positionshullet.
+5. **Kassér kladde:** Start en ny testtur og genindlæs. Kassér kladde. Ingen gendannelse vises efter endnu en genindlæsning.
+6. **Wake Lock:** Start tur og vælg Hold skærmen tændt: Til. Status skal vise om Wake Lock er aktiv. Pause/Stop frigiver Wake Lock. Kontroller at skærmen ikke sover automatisk, hvis browseren understøtter API'et.
+7. **Regression:** GPX-import, GPX-eksport, gem tur, Mine ture, pause/genoptag, distance og eksempelrute fungerer stadig.
+8. **Browserlager:** Test med begrænset lagerplads / privat browsing; fejl ved lagring skal give en advarsel.
 
-Før en vellykket afsluttende test må version 0.4 ikke kaldes Android-verificeret.
+Bemærk: Android kan suspendere webapps ved slukket skærm. Denne version lover ikke kontinuerlig GPS i baggrunden.

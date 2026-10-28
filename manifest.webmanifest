@@ -1,5 +1,5 @@
 {
-  "name": "VandreApp – Vandreture",
+  "name": "VandreApp",
   "short_name": "VandreApp",
   "description": "Registrér vandreture med GPS og importér GPX-ruter",
   "start_url": "./",

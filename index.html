@@ -10,11 +10,11 @@
   <link rel="apple-touch-icon" href="./icon-192.png" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <style>
-    * { box-sizing: border-box; } body {margin:0; font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif; background:#f0f4ef;color:#183126;} header {background:#173e31;color:white;padding:17px 18px 13px;} header h1{margin:0;font-size:23px}header small{opacity:.8} main{max-width:950px;margin:auto;padding:14px;} .intro{font-size:14px;color:#455d52;margin:0 0 12px} #map{height:clamp(310px,52vh,570px);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px #0002;} .panel{background:white;margin-top:12px;padding:15px;border-radius:14px;box-shadow:0 1px 8px #0001}.actions{display:flex;flex-wrap:wrap;gap:9px}button{border:none;background:#246e4e;color:white;border-radius:10px;padding:11px 14px;font-size:15px;font-weight:650;cursor:pointer}button:disabled{background:#a8b8af;cursor:not-allowed}button.secondary{background:#e4eee7;color:#194331}button.danger{background:#9d3030}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.stat{background:#f1f6f2;border-radius:10px;padding:12px 6px;text-align:center}.stat strong{display:block;font-size:23px;font-variant-numeric:tabular-nums}.stat span{font-size:12px;color:#53695e}.note{color:#50665b;font-size:13px;line-height:1.5;margin:10px 0 0}.status{background:#e8f1ed;border-left:4px solid #3c815e;padding:10px 12px;border-radius:5px;margin-bottom:12px;font-size:14px}footer{text-align:center;font-size:12px;color:#52675e;margin:16px 0 25px} .legend{display:flex;gap:16px;font-size:13px;flex-wrap:wrap}.swatch{display:inline-block;width:17px;height:4px;vertical-align:middle;margin-right:5px}.sample{background:#e6922e}.actual{background:#1688b8}.imported{background:#7952b3}.import-summary{margin:10px 0 0;font-size:13px;color:#334f40}.import-stats{margin-top:12px}.import-stats[hidden]{display:none}.nav-panel[hidden]{display:none}.nav-state{font-weight:700;font-size:17px}.nav-warning{background:#fff1df;border-left:4px solid #c47a17;padding:10px;border-radius:6px}.nav-safe{background:#e9f4ec;border-left:4px solid #35805b;padding:10px;border-radius:6px}.nav-unknown{background:#eff2f3;border-left:4px solid #829399;padding:10px;border-radius:6px}.import-heading{font-size:17px;margin:0 0 5px}.import-note{margin:6px 0 0;font-size:12px;color:#53695e;overflow-wrap:anywhere}a{color:#155c42}.history-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid #ddd}.history-row small{display:block;color:#53695e}.history-row .actions{flex-shrink:0}.compact{padding:7px 9px;font-size:13px} .stats.four{grid-template-columns:repeat(4,1fr)}@media(max-width:420px){.stats{gap:6px}.stats.four{grid-template-columns:repeat(2,1fr)}.stat strong{font-size:19px}button{flex:1;padding:11px 9px;font-size:14px}}
+    * { box-sizing: border-box; } body {margin:0; font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif; background:#f0f4ef;color:#183126;} header {background:#173e31;color:white;padding:17px 18px 13px;} header h1{margin:0;font-size:23px}header small{opacity:.8} main{max-width:950px;margin:auto;padding:14px;} .intro{font-size:14px;color:#455d52;margin:0 0 12px} #map{height:clamp(310px,52vh,570px);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px #0002;} .panel{background:white;margin-top:12px;padding:15px;border-radius:14px;box-shadow:0 1px 8px #0001}.actions{display:flex;flex-wrap:wrap;gap:9px}button{border:none;background:#246e4e;color:white;border-radius:10px;padding:11px 14px;font-size:15px;font-weight:650;cursor:pointer}button:disabled{background:#a8b8af;cursor:not-allowed}button.secondary{background:#e4eee7;color:#194331}button.danger{background:#9d3030}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.stat{background:#f1f6f2;border-radius:10px;padding:12px 6px;text-align:center}.stat strong{display:block;font-size:23px;font-variant-numeric:tabular-nums}.stat span{font-size:12px;color:#53695e}.note{color:#50665b;font-size:13px;line-height:1.5;margin:10px 0 0}.status{background:#e8f1ed;border-left:4px solid #3c815e;padding:10px 12px;border-radius:5px;margin-bottom:12px;font-size:14px}footer{text-align:center;font-size:12px;color:#52675e;margin:16px 0 25px} .legend{display:flex;gap:16px;font-size:13px;flex-wrap:wrap}.swatch{display:inline-block;width:17px;height:4px;vertical-align:middle;margin-right:5px}.sample{background:#e6922e}.actual{background:#1688b8}.imported{background:#7952b3}.import-summary{margin:10px 0 0;font-size:13px;color:#334f40}.import-stats{margin-top:12px}.import-stats[hidden]{display:none}.nav-panel[hidden]{display:none}.nav-state{font-weight:700;font-size:17px}.nav-warning{background:#fff1df;border-left:4px solid #c47a17;padding:10px;border-radius:6px}.nav-safe{background:#e9f4ec;border-left:4px solid #35805b;padding:10px;border-radius:6px}.nav-unknown{background:#eff2f3;border-left:4px solid #829399;padding:10px;border-radius:6px}.import-heading{font-size:17px;margin:0 0 5px}.import-note{margin:6px 0 0;font-size:12px;color:#53695e;overflow-wrap:anywhere}a{color:#155c42}.history-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid #ddd}.history-row small{display:block;color:#53695e}.history-row .actions{flex-shrink:0}.compact{padding:7px 9px;font-size:13px} .stats.four{grid-template-columns:repeat(4,1fr)}.profile[hidden]{display:none}.profile{margin-top:12px;padding:12px;background:#f1f6f2;border-radius:10px}.profile svg{width:100%;height:150px;display:block}.profile .note{margin:5px 0}.history-summary{font-size:14px;font-weight:600;margin:8px 0}.history-row strong{display:block}.history-row small{line-height:1.5}@media(max-width:420px){.stats{gap:6px}.stats.four{grid-template-columns:repeat(2,1fr)}.stat strong{font-size:19px}button{flex:1;padding:11px 9px;font-size:14px}}
   </style>
 </head>
 <body>
-<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.6.1</small></header>
+<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.7</small></header>
 <main>
 <p class="intro">Se en eksempelrute på kortet, find din position, og registrér en kort vandretur med GPS.</p>
 <div id="status" class="status" role="status" aria-live="polite">Kortet vises omkring København. GPS bruges først, når du vælger det.</div>
@@ -42,6 +42,7 @@
    <div class="stat"><strong id="importSpeed">–</strong><span>Gns. km/t</span></div>
   </div>
   <p class="import-note" id="importDetails"></p>
+  <section class="profile" id="importElevation" hidden><strong>Højdeprofil for importeret rute</strong><p class="note" id="importElevationText"></p><svg id="importElevationChart" viewBox="0 0 600 150" role="img" aria-label="Højdeprofil for importeret GPX-rute"></svg></section>
   <p class="note">Dette er den planlagte/importerede rute. Statistik i <strong>Min vandretur</strong> viser din egen registrerede eller valgte gemte tur.</p>
  </section>
  <section id="navPanel" class="nav-panel" hidden aria-live="polite">
@@ -69,7 +70,8 @@
  <p class="note" id="gpsNotice">GPS-registreringen kræver HTTPS (eller localhost) og tilladelse til position. Lad browseren være aktiv og skærmen tændt under testen. Positionsmålinger kan være upræcise.</p>
  <div class="actions" style="margin-top:12px"><button class="secondary" id="export" disabled>Eksportér tur (GPX)</button><button class="secondary" id="save" disabled>Gem tur lokalt</button></div>
 </div>
-<div class="panel"><h2 style="margin:0 0 8px;font-size:19px">Mine gemte ture</h2><p class="note">Gemte ture ligger kun i denne browsers lokale lager på denne enhed. Rydning af browserdata kan slette dem. Eksportér GPX som sikkerhedskopi.</p><div id="history" aria-live="polite"></div></div>
+<div class="panel"><h2 style="margin:0 0 8px;font-size:19px">Turanalyse</h2><p class="note">Højdemeter og profil vises kun, når data indeholder højder. Små udsving under 3 meter ignoreres, men GPS-højder kan stadig være upræcise.</p><div id="tripElevation" class="profile" hidden><strong>Højdeprofil for min vandretur</strong><p class="note" id="tripElevationText"></p><svg id="tripElevationChart" viewBox="0 0 600 150" role="img" aria-label="Højdeprofil for min vandretur"></svg></div><p id="noTripElevation" class="note">Ingen tur med brugbare højdedata valgt.</p></div>
+<div class="panel"><h2 style="margin:0 0 8px;font-size:19px">Mine gemte ture</h2><p class="note">Gemte ture ligger kun i denne browsers lokale lager på denne enhed. Rydning af browserdata kan slette dem. Eksportér GPX som sikkerhedskopi.</p><p id="historySummary" class="history-summary" aria-live="polite"></p><div class="actions" style="margin:9px 0"><button class="secondary" id="backupTrips">Download backup (JSON)</button><button class="secondary" id="restoreTrips">Gendan backup (JSON)</button><input type="file" id="restoreFile" accept=".json,application/json" hidden aria-label="Vælg backupfil"></div><p class="note">Gendannelse tilføjer ture, der ikke allerede findes (baseret på tur-id). Højst 50 ture opbevares lokalt.</p><div id="history" aria-live="polite"></div></div>
 <footer>Prototype til AI-eksamen · Ingen login eller serverlagring · Kortdata © OpenStreetMap-bidragsydere</footer>
 </main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -234,9 +236,11 @@
     const segments=[];
     let pointCount=0;
     const segmentTimes=[];
+    const segmentElevations=[];
     const readPoints=(elements)=>{
       const segment=[];
       const times=[];
+      const elevations=[];
       for(const el of elements){
         if(++pointCount>MAX_GPX_POINTS)throw new Error('GPX-filen indeholder for mange punkter (maks. 20.000).');
         const lat=Number(el.getAttribute('lat')),lng=Number(el.getAttribute('lon'));
@@ -245,11 +249,12 @@
            !Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)
           throw new Error('GPX-filen indeholder ugyldige GPS-koordinater.');
         segment.push([lat,lng]);
+        const eleNode=directChildren(el,'ele')[0];const eleValue=eleNode?Number(eleNode.textContent.trim()):NaN;elevations.push(eleNode&&eleNode.textContent.trim()!==''&&Number.isFinite(eleValue)?eleValue:null);
         const timeNode=directChildren(el,'time')[0];
         const parsedTime=timeNode?Date.parse(timeNode.textContent.trim()):NaN;
         times.push(Number.isFinite(parsedTime)?parsedTime:null);
       }
-      if(segment.length)segmentTimes.push(times);
+      if(segment.length){segmentTimes.push(times);segmentElevations.push(elevations);}
       return segment;
     };
     for(const trk of descendants(doc.documentElement,'trk')){
@@ -263,7 +268,7 @@
       if(coords.length)segments.push(coords);
     }
     if(!segments.length)throw new Error('GPX-filen indeholder ingen track- eller rutepunkter.');
-    return {segments,pointCount,segmentTimes};
+    return {segments,pointCount,segmentTimes,segmentElevations};
   }
   $('importGpx').onclick=()=>{$('gpxFile').value='';$('gpxFile').click();};
   $('gpxFile').addEventListener('change', async event=>{
@@ -290,6 +295,7 @@
       $('importName').textContent=file.name;
       $('importDistance').textContent=fmtLength(meters);
       $('importPoints').textContent=String(data.pointCount);
+      renderElevation('importElevation','importElevationText','importElevationChart',data.segments.map((seg,i)=>seg.map((coords,j)=>({lat:coords[0],lng:coords[1],ele:data.segmentElevations[i][j]}))));
       $('importDuration').textContent=elapsed===null?'–':fmtTime(elapsed);
       $('importSpeed').textContent=elapsed===null||elapsed<=0?'–':((meters/1000)/(elapsed/3600000)).toLocaleString('da-DK',{minimumFractionDigits:1,maximumFractionDigits:1});
       $('importDetails').textContent=`${data.segments.length} segment(er). ${elapsed===null?'Filen indeholder ikke komplette tidsstempler, så varighed og hastighed kan ikke beregnes.':'Varighed beregnes som summen af tidsrum mellem første og sidste punkt i hvert segment.'}`;
@@ -303,7 +309,7 @@
     navRequestGeneration++;$('navRefresh').disabled=false;
     importedLayer=null;navigationSegments=[];navLastPosition=null;$('navPanel').hidden=true;resetNavigationStatus();$('clearGpx').disabled=true;
     $('importSummary').textContent='Ingen GPX-rute indlæst.';
-    $('importStats').hidden=true;
+    $('importStats').hidden=true;$('importElevation').hidden=true;
     showStatus('Den importerede GPX-rute er fjernet.');
   };
   let sessionId=0;
@@ -324,7 +330,7 @@
     }
     points.push({lat:latlng[0],lng:latlng[1],time:p.timestamp,alt:p.coords.altitude,segmentStart:breakSegment||!last});
     breakSegment=false;
-    drawTrack();if(points.length===1)map.setView(latlng,16);
+    drawTrack();renderTripElevation();if(points.length===1)map.setView(latlng,16);
     persistDraft(true);render();showStatus(`Tur registreres – ${points.length} GPS-punkter modtaget.`);
   }
   function stopTracking(){
@@ -366,24 +372,75 @@
   });
   function xmlEsc(s){return String(s).replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'}[c]));}
   $('export').onclick=()=>{if(!points.length)return;const track=points.map((p,i)=>`${p.segmentStart&&i>0?'</trkseg><trkseg>':''}<trkpt lat="${p.lat}" lon="${p.lng}">${Number.isFinite(p.alt)?`<ele>${p.alt}</ele>`:''}<time>${new Date(p.time).toISOString()}</time></trkpt>`).join('');const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp MVP" xmlns="http://www.topografix.com/GPX/1/1"><trk><name>${xmlEsc('Min vandretur')}</name><trkseg>${track}</trkseg></trk></gpx>`;const blob=new Blob([xml],{type:'application/gpx+xml'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='vandreapp-tur.gpx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);showStatus('GPX-fil genereret og overført til browserens downloadfunktion.');};
+  // Analyse er afledt af GPS/GPX-højdedata og må ikke forveksles med målt terrænhøjde.
+  function analyzeElevation(segments){
+    const samples=[];let distance=0,up=0,down=0,lastElevation=null,prev=null;
+    for(const segment of segments){
+      prev=null;lastElevation=null;
+      for(const pt of segment){
+        if(prev)distance+=L.latLng(prev.lat,prev.lng).distanceTo([pt.lat,pt.lng]);
+        prev=pt;
+        if(!Number.isFinite(pt.ele)||pt.ele < -500||pt.ele > 9000)continue;
+        samples.push({x:distance,y:pt.ele});
+        if(lastElevation!==null){const change=pt.ele-lastElevation;if(Math.abs(change)>=3){if(change>0)up+=change;else down-=change;lastElevation=pt.ele;}}
+        else lastElevation=pt.ele;
+      }
+    }
+    return samples.length>=2?{samples,up,down}:null;
+  }
+  function renderElevation(panelId,textId,chartId,segments){
+    const panel=$(panelId),text=$(textId),svg=$(chartId),data=analyzeElevation(segments);
+    panel.hidden=!data;svg.replaceChildren();if(!data)return false;
+    text.textContent=`Stigning: ca. ${Math.round(data.up)} m · Fald: ca. ${Math.round(data.down)} m · ${data.samples.length} højdepunkter (vejledende).`;
+    const ys=data.samples.map(p=>p.y),min=Math.min(...ys),max=Math.max(...ys),height=Math.max(1,max-min),xEnd=Math.max(1,data.samples[data.samples.length-1].x);
+    const line=data.samples.map(p=>`${(20+560*p.x/xEnd).toFixed(1)},${(125-100*(p.y-min)/height).toFixed(1)}`).join(' ');
+    const ns='http://www.w3.org/2000/svg';
+    const poly=document.createElementNS(ns,'polyline');poly.setAttribute('points',line);poly.setAttribute('fill','none');poly.setAttribute('stroke','#35785b');poly.setAttribute('stroke-width','3');poly.setAttribute('stroke-linejoin','round');svg.append(poly);
+    for(const [label,y] of [[`${Math.round(max)} m`,18],[`${Math.round(min)} m`,144]]){const el=document.createElementNS(ns,'text');el.setAttribute('x','5');el.setAttribute('y',String(y));el.setAttribute('font-size','13');el.setAttribute('fill','#344d3f');el.textContent=label;svg.append(el);}
+    return true;
+  }
+  function renderTripElevation(){
+    const groups=[];for(const p of points){if(!groups.length||p.segmentStart)groups.push([]);groups[groups.length-1].push({lat:p.lat,lng:p.lng,ele:p.alt});}
+    $('noTripElevation').hidden=renderElevation('tripElevation','tripElevationText','tripElevationChart',groups);
+  }
+  function validateBackupTrip(t){
+    return t&&typeof t.id==='string'&&t.id.length<=120&&typeof t.name==='string'&&t.name.length<=150&&typeof t.created==='string'&&Number.isFinite(Date.parse(t.created))&&Number.isFinite(t.meters)&&t.meters>=0&&Number.isFinite(t.duration)&&t.duration>=0&&Array.isArray(t.points)&&t.points.length<=20000&&t.points.every(p=>p&&Number.isFinite(p.lat)&&Math.abs(p.lat)<=90&&Number.isFinite(p.lng)&&Math.abs(p.lng)<=180&&Number.isFinite(p.time)&&p.time>0&&(p.alt==null||Number.isFinite(p.alt)));
+  }
+  $('backupTrips').onclick=()=>{
+    const data={schema:'vandreapp-trips',version:1,exported:new Date().toISOString(),trips:getTrips()};
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='vandreapp-ture-backup.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);showStatus(`${data.trips.length} ture samlet i backupfil.`);
+  };
+  $('restoreTrips').onclick=()=>{$('restoreFile').value='';$('restoreFile').click();};
+  $('restoreFile').addEventListener('change',async e=>{
+    const file=e.target.files&&e.target.files[0];if(!file)return;
+    if(file.size>10*1024*1024){showStatus('Backupfilen er for stor (maks. 10 MB).');return;}
+    try{
+      const data=JSON.parse(await file.text());
+      if(!data||data.schema!=='vandreapp-trips'||data.version!==1||!Array.isArray(data.trips)||data.trips.length>50||!data.trips.every(validateBackupTrip))throw new Error('Forkert backupformat eller ugyldige ture.');
+      const existing=getTrips(),ids=new Set(existing.map(t=>t.id));let added=0;
+      for(const trip of data.trips){if(ids.has(trip.id))continue;existing.push(trip);ids.add(trip.id);added++;}
+      if(existing.length>50)throw new Error('Der er ikke plads til mere end 50 ture. Slet nogle før gendannelse.');
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(existing));renderHistory();showStatus(`${added} nye ture gendannet. Eksisterende ture er bevaret.`);
+    }catch(err){showStatus(`Backup kunne ikke indlæses: ${err.message||'Ukendt fejl'}`);}
+  });
   function renderHistory(){
-    const container=$('history');container.replaceChildren();const trips=getTrips();
+    const container=$('history');container.replaceChildren();const trips=getTrips();$('historySummary').textContent=`${trips.length} gemte ture · ${fmtLength(trips.reduce((sum,t)=>sum+t.meters,0))} km samlet`; 
     if(!trips.length){const p=document.createElement('p');p.className='note';p.textContent='Ingen gemte ture endnu.';container.append(p);return;}
     trips.forEach(t=>{
       const row=document.createElement('div');row.className='history-row';
       const details=document.createElement('div');const title=document.createElement('strong');title.textContent=t.name||'Vandretur';
       const info=document.createElement('small');info.textContent=`${new Date(t.created).toLocaleString('da-DK')} · ${fmtLength(t.meters)} km · ${fmtTime(t.duration)}`;details.append(title,info);
-      const actions=document.createElement('div');actions.className='actions';
+      const actions=document.createElement('div');actions.className='actions';const rename=document.createElement('button');rename.className='secondary compact';rename.textContent='Omdøb';rename.onclick=()=>{const newName=prompt('Navn på tur:',t.name||'Vandretur');if(newName===null)return;const trimmed=newName.trim().slice(0,150);if(!trimmed)return;try{const all=getTrips();const record=all.find(item=>item.id===t.id);if(record){record.name=trimmed;localStorage.setItem(STORAGE_KEY,JSON.stringify(all));renderHistory();}}catch{showStatus('Kunne ikke ændre navnet.');}};
       const load=document.createElement('button');load.className='secondary compact';load.textContent='Vis';load.onclick=()=>{
         if(tracking){showStatus('Stop den aktive tur, før du åbner en gemt tur.');return;}
         const valid=t.points.every(p=>p&&Number.isFinite(p.lat)&&Math.abs(p.lat)<=90&&Number.isFinite(p.lng)&&Math.abs(p.lng)<=180&&Number.isFinite(p.time));
         if(!valid){showStatus('Den gemte tur indeholder ugyldige koordinater.');return;}
         points=t.points.map(p=>({...p}));totalMeters=t.meters;elapsedMs=t.duration;currentSaved=true;breakSegment=false;
         const groups=[];points.forEach(p=>{if(!groups.length||p.segmentStart)groups.push([]);groups[groups.length-1].push([p.lat,p.lng]);});trackLine.setLatLngs(groups);
-        if(points.length)map.fitBounds(L.latLngBounds(points.map(p=>[p.lat,p.lng])),{padding:[25,25],maxZoom:17});render();showStatus('Gemt tur vist. Du kan eksportere den som GPX.');
+        if(points.length)map.fitBounds(L.latLngBounds(points.map(p=>[p.lat,p.lng])),{padding:[25,25],maxZoom:17});render();renderTripElevation();showStatus('Gemt tur vist. Du kan eksportere den som GPX.');
       };
       const del=document.createElement('button');del.className='danger compact';del.textContent='Slet';del.onclick=()=>{if(!confirm('Slet denne gemte tur fra telefonen?'))return;try{localStorage.setItem(STORAGE_KEY,JSON.stringify(getTrips().filter(x=>x.id!==t.id)));renderHistory();showStatus('Den gemte tur er slettet.');}catch{showStatus('Kunne ikke slette turen fra lokal lagring.');}};
-      actions.append(load,del);row.append(details,actions);container.append(row);
+      actions.append(load,rename,del);row.append(details,actions);container.append(row);
     });
   }
   $('save').onclick=()=>{
@@ -395,7 +452,7 @@
     }catch{showStatus('Kunne ikke gemme turen. Browserens lokale lager kan være fyldt eller blokeret.');}
   };
   if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
-  checkRecovery();updateFollowButton();updateWakeUI();renderHistory();render();
+  checkRecovery();updateFollowButton();updateWakeUI();renderHistory();render();renderTripElevation();
 })();
 </script>
 </body>

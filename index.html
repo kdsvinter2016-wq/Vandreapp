@@ -43,7 +43,7 @@
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.2</small></div><span class="header-tag">Vandring og GPS</span></div></header>
+<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.3</small></div><span class="header-tag">Vandring og GPS</span></div></header>
 <nav id="mainTabs" class="main-tabs" aria-label="Hovednavigation">
   <button type="button" class="tab selected" data-tab="kort" aria-current="page">Kort</button>
   <button type="button" class="tab" data-tab="ture">Mine ture</button>
@@ -77,6 +77,12 @@
    <div class="stat"><strong id="importSpeed">–</strong><span>Gns. km/t</span></div>
   </div>
   <p class="import-note" id="importDetails"></p>
+  <div id="importStartPanel" class="route-start-panel" hidden aria-live="polite">
+   <strong>Startpunkt for importeret GPX-rute</strong>
+   <p class="note" style="margin:5px 0"><span id="importStartCoords"></span></p>
+   <a id="importStartMaps" class="maps-link" target="_blank" rel="noopener noreferrer">Navigér til start i Google Maps</a>
+   <p class="note">Google Maps bruger rutens første punkt som destination. Det er transport til startpunktet – ikke selve GPX-vandreruten.</p>
+  </div>
   <section class="profile" id="importElevation" hidden><strong>Højdeprofil for importeret rute</strong><p class="note" id="importElevationText"></p><svg id="importElevationChart" viewBox="0 0 600 150" role="img" aria-label="Højdeprofil for importeret GPX-rute"></svg></section>
   <p class="note">Dette er den planlagte/importerede rute. Statistik i <strong>Min vandretur</strong> viser din egen registrerede eller valgte gemte tur.</p>
  </section>
@@ -390,7 +396,7 @@
   $('drawExport').onclick=()=>{
     if(drawnPoints.length<2)return;
     const vertices=activeDrawPoints().map(p=>`<rtept lat="${p[0].toFixed(7)}" lon="${p[1].toFixed(7)}"/>`).join('');
-    const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp 0.8.2" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>Min tegnede rute</name>${vertices}</rte></gpx>`;
+    const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp 0.8.3" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>Min tegnede rute</name>${vertices}</rte></gpx>`;
     const url=URL.createObjectURL(new Blob([xml],{type:'application/gpx+xml'}));
     const a=document.createElement('a');a.href=url;a.download='vandreapp-tegnet-rute.gpx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
     $('drawStatus').textContent=routedPoints?'Beregnet vandrerute eksporteret som GPX.':'Manuelt tegnet rute eksporteret som GPX (rette linjer).';
@@ -529,6 +535,18 @@
       $('importName').textContent=file.name;
       $('importDistance').textContent=fmtLength(meters);
       $('importPoints').textContent=String(data.pointCount);
+      // Første punkt i den importerede GPX-rute/track anvendes som destination.
+      // Vis kun linket efter vellykket validering af hele GPX-filen.
+      const firstImportedPoint=data.segments[0]?.[0];
+      if(firstImportedPoint && Number.isFinite(firstImportedPoint[0]) && Number.isFinite(firstImportedPoint[1])){
+        const destination=firstImportedPoint[0].toFixed(6)+','+firstImportedPoint[1].toFixed(6);
+        $('importStartCoords').textContent='Koordinater: '+destination;
+        $('importStartMaps').href='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(destination)+'&travelmode=driving';
+        $('importStartPanel').hidden=false;
+      }else{
+        $('importStartPanel').hidden=true;
+        $('importStartMaps').removeAttribute('href');
+      }
       renderElevation('importElevation','importElevationText','importElevationChart',data.segments.map((seg,i)=>seg.map((coords,j)=>({lat:coords[0],lng:coords[1],ele:data.segmentElevations[i][j]}))));
       $('importDuration').textContent=elapsed===null?'–':fmtTime(elapsed);
       $('importSpeed').textContent=elapsed===null||elapsed<=0?'–':((meters/1000)/(elapsed/3600000)).toLocaleString('da-DK',{minimumFractionDigits:1,maximumFractionDigits:1});
@@ -543,7 +561,7 @@
     navRequestGeneration++;$('navRefresh').disabled=false;
     importedLayer=null;if(!drawnNavigation)navigationSegments=[];navLastPosition=null;$('navPanel').hidden=!drawnNavigation;resetNavigationStatus();$('clearGpx').disabled=true;
     $('importSummary').textContent='Ingen GPX-rute indlæst.';
-    $('importStats').hidden=true;$('importElevation').hidden=true;
+    $('importStats').hidden=true;$('importElevation').hidden=true;$('importStartPanel').hidden=true;$('importStartMaps').removeAttribute('href');$('importStartCoords').textContent='';
     showStatus('Den importerede GPX-rute er fjernet.');
   };
   let sessionId=0;

@@ -24,3 +24,6 @@ GPS-knapper og rutegenvej er nu placeret synligt over kortet. Knappen Planlæg r
 
 ## Nyt i 0.8.2 – Google Maps til rutens start
 Første valgte tegnepunkt vises med koordinater og linket **Navigér til start i Google Maps**. Google Maps åbnes med punktet som destination (bil som udgangspunkt), og ruten til start beregnes i Google Maps. Der foretages ikke adresseopslag. Linket opdateres ved fortryd/ryd rutepunkt og efter automatisk ruteberegning.
+
+## Nyt i 0.8.3 – Startpunkt fra GPX til Google Maps
+Efter import af en gyldig GPX-rute eller et GPX-spor vises det første rutepunkts koordinater og et Google Maps-link til destinationen. Linket opdateres ved ny import og skjules ved fjernelse. Eksisterende ruteplanlægning og GPS-spor er uændrede.

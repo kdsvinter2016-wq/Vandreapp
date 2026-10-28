@@ -32,3 +32,12 @@ Hvis der opstår fejl: registrér trin, forventet/faktisk resultat og telefonens
 4. Fortryd samtlige punkter eller tryk Ryd tegnet rute; startpanelet skal forsvinde.
 5. Lav en ny rute; linket skal opdateres til det nye første punkt.
 6. Regressionstest GPS, GPX, gemte ture, kortfølgning og faner på Android.
+
+## Test for 0.8.3
+1. Importér GPX-fil med `<trk><trkseg><trkpt ...>`; kontrollér at første koordinat vises i Importeret GPX-rute, og Google Maps åbner med det som destination.
+2. Importér GPX-fil med `<rte><rtept ...>`; verificér tilsvarende.
+3. Importér en anden fil og kontrollér at koordinat og destination ændres.
+4. Fjern GPX-ruten; startpunktspanelet skal forsvinde.
+5. Importér ugyldig GPX; appen må ikke vise et nyt forkert startpunkt.
+6. Regressionstest: tegn rute, Google Maps-startpunkt, GPS-registrering, turhistorik og GPX-eksport.
+Test på fysisk Android er endnu ikke gennemført.

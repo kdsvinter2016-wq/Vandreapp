@@ -14,3 +14,9 @@
 **Brugerønske:** Vis startpunkt for manuelt/automatisk planlagt rute og link til Google Maps for vejvisning dertil.
 **Løsning:** Brug første valgte punkt `drawnPoints[0]`, vis koordinater og Google Maps Directions URL med API 1 og destination samt biltransport som standard. Linket opdateres ved ændringer af rutepunkter. Ingen ekstern geokodning og ingen deling, før brugeren åbner Google Maps.
 **Test:** JavaScript-syntaks og HTML-struktur kontrolleret automatisk; faktisk Android-åbning af Google Maps afventer brugerens test.
+
+## 0.8.3 – GPX-startpunkt
+**Problem:** Google Maps-link til start fandtes kun for tegnede ruter.
+**Løsning:** Genbrug URL-formatet fra tegnet rute, men hent startkoordinater fra første segment og første punkt i en valideret GPX-import. Link skjules ved fjernelse af rute. Ingen nyt API.
+**Kontrol:** JavaScript-syntakskontrol, HTML-ID-kontrol og ZIP-integritet. Android-test afventer.
+**Begrænsning:** GPX med flere segmenter bruger det første punkt i den aktuelle parsers rækkefølge (tracks før routes). Ingen adresseopslag.

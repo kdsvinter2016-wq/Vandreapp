@@ -11,3 +11,7 @@ JavaScript-syntakskontrol og ZIP-integritet er kontrolleret automatisk. Android-
 
 ## Begrænsninger og læring
 Webbaseret GPS kan stadig stoppe i baggrunden. localStorage er ikke et sikkert backuplager og kan mangle nyeste punkter ved pludselig afbrydelse. AI-genereret kode kræver syntax-, regressions- og enhedstest på virkelig telefon.
+
+
+## Version 0.5.1 – Fejlrapport og rettelse
+Brugertest: Efter GPX-import blev statistikken under Min vandretur ikke udfyldt, mens åbning af gemt tur virkede. Kodeanalyse viste, at GPX-distance kun blev vist i en summarisk tekst og at Min vandretur bevidst var separat. Rettelse: særskilt tydeligt statistikpanel for importeret GPX, med beregning af varighed/hastighed kun ved valide timestamps. Regresstest på Android afventer.

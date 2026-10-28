@@ -10,11 +10,11 @@
   <link rel="apple-touch-icon" href="./icon-192.png" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <style>
-    * { box-sizing: border-box; } body {margin:0; font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif; background:#f0f4ef;color:#183126;} header {background:#173e31;color:white;padding:17px 18px 13px;} header h1{margin:0;font-size:23px}header small{opacity:.8} main{max-width:950px;margin:auto;padding:14px;} .intro{font-size:14px;color:#455d52;margin:0 0 12px} #map{height:clamp(310px,52vh,570px);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px #0002;} .panel{background:white;margin-top:12px;padding:15px;border-radius:14px;box-shadow:0 1px 8px #0001}.actions{display:flex;flex-wrap:wrap;gap:9px}button{border:none;background:#246e4e;color:white;border-radius:10px;padding:11px 14px;font-size:15px;font-weight:650;cursor:pointer}button:disabled{background:#a8b8af;cursor:not-allowed}button.secondary{background:#e4eee7;color:#194331}button.danger{background:#9d3030}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.stat{background:#f1f6f2;border-radius:10px;padding:12px 6px;text-align:center}.stat strong{display:block;font-size:23px;font-variant-numeric:tabular-nums}.stat span{font-size:12px;color:#53695e}.note{color:#50665b;font-size:13px;line-height:1.5;margin:10px 0 0}.status{background:#e8f1ed;border-left:4px solid #3c815e;padding:10px 12px;border-radius:5px;margin-bottom:12px;font-size:14px}footer{text-align:center;font-size:12px;color:#52675e;margin:16px 0 25px} .legend{display:flex;gap:16px;font-size:13px;flex-wrap:wrap}.swatch{display:inline-block;width:17px;height:4px;vertical-align:middle;margin-right:5px}.sample{background:#e6922e}.actual{background:#1688b8}.imported{background:#7952b3}.import-summary{margin:10px 0 0;font-size:13px;color:#334f40}a{color:#155c42}.history-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid #ddd}.history-row small{display:block;color:#53695e}.history-row .actions{flex-shrink:0}.compact{padding:7px 9px;font-size:13px} .stats.four{grid-template-columns:repeat(4,1fr)}@media(max-width:420px){.stats{gap:6px}.stats.four{grid-template-columns:repeat(2,1fr)}.stat strong{font-size:19px}button{flex:1;padding:11px 9px;font-size:14px}}
+    * { box-sizing: border-box; } body {margin:0; font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif; background:#f0f4ef;color:#183126;} header {background:#173e31;color:white;padding:17px 18px 13px;} header h1{margin:0;font-size:23px}header small{opacity:.8} main{max-width:950px;margin:auto;padding:14px;} .intro{font-size:14px;color:#455d52;margin:0 0 12px} #map{height:clamp(310px,52vh,570px);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px #0002;} .panel{background:white;margin-top:12px;padding:15px;border-radius:14px;box-shadow:0 1px 8px #0001}.actions{display:flex;flex-wrap:wrap;gap:9px}button{border:none;background:#246e4e;color:white;border-radius:10px;padding:11px 14px;font-size:15px;font-weight:650;cursor:pointer}button:disabled{background:#a8b8af;cursor:not-allowed}button.secondary{background:#e4eee7;color:#194331}button.danger{background:#9d3030}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.stat{background:#f1f6f2;border-radius:10px;padding:12px 6px;text-align:center}.stat strong{display:block;font-size:23px;font-variant-numeric:tabular-nums}.stat span{font-size:12px;color:#53695e}.note{color:#50665b;font-size:13px;line-height:1.5;margin:10px 0 0}.status{background:#e8f1ed;border-left:4px solid #3c815e;padding:10px 12px;border-radius:5px;margin-bottom:12px;font-size:14px}footer{text-align:center;font-size:12px;color:#52675e;margin:16px 0 25px} .legend{display:flex;gap:16px;font-size:13px;flex-wrap:wrap}.swatch{display:inline-block;width:17px;height:4px;vertical-align:middle;margin-right:5px}.sample{background:#e6922e}.actual{background:#1688b8}.imported{background:#7952b3}.import-summary{margin:10px 0 0;font-size:13px;color:#334f40}.import-stats{margin-top:12px}.import-stats[hidden]{display:none}.import-heading{font-size:17px;margin:0 0 5px}.import-note{margin:6px 0 0;font-size:12px;color:#53695e;overflow-wrap:anywhere}a{color:#155c42}.history-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid #ddd}.history-row small{display:block;color:#53695e}.history-row .actions{flex-shrink:0}.compact{padding:7px 9px;font-size:13px} .stats.four{grid-template-columns:repeat(4,1fr)}@media(max-width:420px){.stats{gap:6px}.stats.four{grid-template-columns:repeat(2,1fr)}.stat strong{font-size:19px}button{flex:1;padding:11px 9px;font-size:14px}}
   </style>
 </head>
 <body>
-<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.5</small></header>
+<header><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.5.1</small></header>
 <main>
 <p class="intro">Se en eksempelrute på kortet, find din position, og registrér en kort vandretur med GPS.</p>
 <div id="status" class="status" role="status" aria-live="polite">Kortet vises omkring København. GPS bruges først, når du vælger det.</div>
@@ -31,10 +31,22 @@
  </div>
  <p class="note">Den orange rute er en <strong>illustrativ demonstrationsrute</strong> – ikke en kontrolleret, anbefalet vandrerute.</p>
  <div class="legend"><span><i class="swatch sample"></i>Eksempelrute</span><span><i class="swatch imported"></i>Importeret GPX-rute</span><span><i class="swatch actual"></i>Registreret GPS-spor</span></div>
- <p id="importSummary" class="import-summary" aria-live="polite">Ingen GPX-rute indlæst. Import påvirker ikke den registrerede tur.</p>
+ <p id="importSummary" class="import-summary" aria-live="polite">Ingen GPX-rute indlæst.</p>
+ <section id="importStats" class="import-stats" hidden aria-live="polite">
+  <h3 class="import-heading">Importeret GPX-rute</h3>
+  <p class="import-note" id="importName"></p>
+  <div class="stats four">
+   <div class="stat"><strong id="importDistance">0,00</strong><span>Distance (km)</span></div>
+   <div class="stat"><strong id="importDuration">–</strong><span>Varighed</span></div>
+   <div class="stat"><strong id="importPoints">0</strong><span>Rutepunkter</span></div>
+   <div class="stat"><strong id="importSpeed">–</strong><span>Gns. km/t</span></div>
+  </div>
+  <p class="import-note" id="importDetails"></p>
+  <p class="note">Dette er den planlagte/importerede rute. Statistik i <strong>Min vandretur</strong> viser din egen registrerede eller valgte gemte tur.</p>
+ </section>
 </div>
 <div class="panel">
- <h2 style="margin:0 0 12px;font-size:19px">Min vandretur</h2>
+ <h2 style="margin:0 0 12px;font-size:19px">Min vandretur</h2><p class="note">Aktuel GPS-registrering eller en tur åbnet fra Mine gemte ture – ikke den importerede GPX-rute.</p>
  <div class="actions">
   <button id="start">Start tur</button>
   <button id="pause" class="secondary" disabled>Pause tur</button>
@@ -144,8 +156,10 @@
       throw new Error('Filen er ikke en gyldig GPX-fil.');
     const segments=[];
     let pointCount=0;
+    const segmentTimes=[];
     const readPoints=(elements)=>{
       const segment=[];
+      const times=[];
       for(const el of elements){
         if(++pointCount>MAX_GPX_POINTS)throw new Error('GPX-filen indeholder for mange punkter (maks. 20.000).');
         const lat=Number(el.getAttribute('lat')),lng=Number(el.getAttribute('lon'));
@@ -154,7 +168,11 @@
            !Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)
           throw new Error('GPX-filen indeholder ugyldige GPS-koordinater.');
         segment.push([lat,lng]);
+        const timeNode=directChildren(el,'time')[0];
+        const parsedTime=timeNode?Date.parse(timeNode.textContent.trim()):NaN;
+        times.push(Number.isFinite(parsedTime)?parsedTime:null);
       }
+      if(segment.length)segmentTimes.push(times);
       return segment;
     };
     for(const trk of descendants(doc.documentElement,'trk')){
@@ -168,7 +186,7 @@
       if(coords.length)segments.push(coords);
     }
     if(!segments.length)throw new Error('GPX-filen indeholder ingen track- eller rutepunkter.');
-    return {segments,pointCount};
+    return {segments,pointCount,segmentTimes};
   }
   $('importGpx').onclick=()=>{$('gpxFile').value='';$('gpxFile').click();};
   $('gpxFile').addEventListener('change', async event=>{
@@ -187,15 +205,26 @@
       if(bounds.isValid())map.fitBounds(bounds,{padding:[25,25]});
       $('clearGpx').disabled=false;
       const meters=data.segments.reduce((sum,seg)=>sum+seg.slice(1).reduce((d,p,i)=>d+L.latLng(seg[i]).distanceTo(p),0),0);
-      $('importSummary').textContent=`Importeret: ${file.name} · ${data.pointCount} punkter · ${data.segments.length} segment(er) · ${fmtLength(meters)} km.`;
-      showStatus(`GPX-rute importeret: ${data.pointCount} punkter. Den blå GPS-registrering er uændret.`);
+      // Varighed kan kun beregnes for segmenter med fuldstændige, kronologiske tidsstempler.
+      const allTimed=data.segmentTimes.every(times=>times.every(t=>t!==null)&&times.every((t,i)=>i===0||t>=times[i-1]));
+      const elapsed=allTimed?data.segmentTimes.reduce((sum,times)=>sum+(times.length>1?times[times.length-1]-times[0]:0),0):null;
+      $('importSummary').textContent='GPX-ruten er indlæst og vises på kortet.';
+      $('importStats').hidden=false;
+      $('importName').textContent=file.name;
+      $('importDistance').textContent=fmtLength(meters);
+      $('importPoints').textContent=String(data.pointCount);
+      $('importDuration').textContent=elapsed===null?'–':fmtTime(elapsed);
+      $('importSpeed').textContent=elapsed===null||elapsed<=0?'–':((meters/1000)/(elapsed/3600000)).toLocaleString('da-DK',{minimumFractionDigits:1,maximumFractionDigits:1});
+      $('importDetails').textContent=`${data.segments.length} segment(er). ${elapsed===null?'Filen indeholder ikke komplette tidsstempler, så varighed og hastighed kan ikke beregnes.':'Varighed beregnes som summen af tidsrum mellem første og sidste punkt i hvert segment.'}`;
+      showStatus(`GPX-rute importeret: ${data.pointCount} punkter og ${fmtLength(meters)} km. Den registrerede tur er uændret.`);
     }catch(e){showStatus(`GPX-import mislykkedes: ${e.message || 'Kunne ikke læse filen.'}`);}
     finally{$('importGpx').disabled=false;}
   });
   $('clearGpx').onclick=()=>{
     if(importedLayer)map.removeLayer(importedLayer);
     importedLayer=null;$('clearGpx').disabled=true;
-    $('importSummary').textContent='Ingen GPX-rute indlæst. Import påvirker ikke den registrerede tur.';
+    $('importSummary').textContent='Ingen GPX-rute indlæst.';
+    $('importStats').hidden=true;
     showStatus('Den importerede GPX-rute er fjernet.');
   };
   let sessionId=0;

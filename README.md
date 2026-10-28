@@ -14,3 +14,7 @@ Udpak ZIP-filen og upload alle filerne direkte til roden i GitHub-repositoryet `
 
 ## Begrænsninger
 Automatisk lagring afhænger af browserens localStorage og er ikke en egentlig backup. Systemet kan lukke browseren inden sidste punkt er gemt. Wake Lock fungerer kun ved synlig app med tændt skærm og sikrer **ikke** GPS ved slukket skærm. Kortfliser og Leaflet kræver internet og GPS kræver HTTPS. GPS-tilladelser kan variere på telefoner. Test på Galaxy S25 FE før accept.
+
+
+## Version 0.5.1 – GPX-statistik
+Ved import vises et særskilt panel med distance og antal rutepunkter. Varighed og gennemsnitshastighed vises, når alle punkter i hvert segment har gyldige kronologiske tidsstempler. Min vandretur viser fortsat alene den registrerede eller åbnede gemte tur. GPS-logik, lagring og wake lock er ikke ændret.

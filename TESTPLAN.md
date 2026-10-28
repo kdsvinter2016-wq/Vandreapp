@@ -12,3 +12,11 @@ Alle punkter er **afventer test på Android**, medmindre særskilt markeret.
 8. **Browserlager:** Test med begrænset lagerplads / privat browsing; fejl ved lagring skal give en advarsel.
 
 Bemærk: Android kan suspendere webapps ved slukket skærm. Denne version lover ikke kontinuerlig GPS i baggrunden.
+
+
+## Ekstra test 0.5.1
+- Importér en GPX med tidspunkter: statistik for distance, rutepunkter, varighed og gennemsnitshastighed vises i Importeret GPX-rute.
+- Importér en GPX uden tidspunkter: distance og punkter vises, tid/hastighed viser –.
+- Kontroller, at Min vandretur ikke overskrives af import.
+- Fjern importeret rute: statistikpanelet forsvinder.
+- Åbn gemt tur: Min vandretur udfyldes stadig korrekt.

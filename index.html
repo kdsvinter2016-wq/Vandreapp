@@ -52,10 +52,18 @@
   .route-progress-track{margin-top:9px;height:9px;background:#dbe7de;border-radius:12px;overflow:hidden}
   #routeProgressFill{height:100%;width:0;background:#23875a;transition:width .25s ease}
   .route-progress-caption{font-size:12px;color:#4d6456;margin:7px 0 0}
+  /* 0.8.7: GPS-/ruteplanlægningspanelet foldes sammen under navigation. */
+  .map-quickbar[hidden]{display:none!important}
+  .map-quickbar .quickbar-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .map-quickbar .quickbar-header .map-quickbar-title{margin:0}
+  .map-quickbar .quickbar-toggle{padding:8px 11px;min-height:38px;font-size:13px;flex:0 0 auto}
+  .map-quickbar .map-quick-actions{margin-top:9px}
+  .map-quickbar .map-quick-actions[hidden]{display:none!important}
+  .map-quickbar.compact-navigation{padding:7px 10px;background:#f7faf8}
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.6</small></div><span class="header-tag">Vandring og GPS</span></div></header>
+<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.7</small></div><span class="header-tag">Vandring og GPS</span></div></header>
 <nav id="mainTabs" class="main-tabs" aria-label="Hovednavigation">
   <button type="button" class="tab selected" data-tab="kort" aria-current="page">Kort</button>
   <button type="button" class="tab" data-tab="ture">Mine ture</button>
@@ -174,8 +182,8 @@
   move('tripPanel',mapView);move('mapTools',mapView);
   // Knapperne ligger OVER kortet, men aktiverer den eksisterende og afprøvede logik.
   const quick=document.createElement('div');quick.className='map-quickbar';quick.id='mapQuickbar';
-  quick.innerHTML=`<div class="map-quickbar-title">GPS og ruteplanlægning</div>
-    <div class="map-quick-actions">
+  quick.innerHTML=`<div class="quickbar-header"><div class="map-quickbar-title">GPS og ruteplanlægning</div><button type="button" class="secondary quickbar-toggle" id="quickbarToggle" aria-expanded="true" aria-controls="quickbarActions" hidden>Skjul betjening</button></div>
+    <div class="map-quick-actions" id="quickbarActions">
       <button type="button" id="quickStart">Start tur</button>
       <button type="button" class="secondary" id="quickPause">Pause tur</button>
       <button type="button" class="q-stop" id="quickStop">Stop tur</button>
@@ -183,6 +191,22 @@
       <button type="button" class="secondary q-position" id="quickLocate">Centrér GPS</button>
     </div>`;
   mapView.insertBefore(quick,document.getElementById('map'));
+  const quickToggle=document.getElementById('quickbarToggle');
+  const quickActions=document.getElementById('quickbarActions');
+  let hasNavigationRoute=false;
+  function showQuickActions(expanded){
+    quickActions.hidden=!expanded;
+    quick.classList.toggle('compact-navigation',hasNavigationRoute&&!expanded);
+    quickToggle.setAttribute('aria-expanded',String(expanded));
+    quickToggle.textContent=expanded?'Skjul betjening':'Vis GPS-betjening';
+  }
+  quickToggle.addEventListener('click',()=>showQuickActions(quickActions.hidden));
+  window.vandreSetNavigationControls=(active)=>{
+    hasNavigationRoute=!!active;
+    quickToggle.hidden=!hasNavigationRoute;
+    showQuickActions(!hasNavigationRoute);
+  };
+
   for(const [quickId,actualId] of [['quickStart','start'],['quickPause','pause'],['quickStop','stop'],['quickLocate','locate']]){
     const source=document.getElementById(actualId),proxy=document.getElementById(quickId);
     proxy.addEventListener('click',()=>{if(!source.disabled)source.click();});
@@ -306,6 +330,7 @@
     routeProgressMeters=0;routeLastFixTime=0;routeArmed=false;routeAnchor=null;routeFullMeters=routeTotalMeters(navigationSegments);
     $('navProgress').textContent='Tilbage: '+fmtLength(routeFullMeters)+' km af '+fmtLength(routeFullMeters)+' km.';
     showRemainingRoute();
+    if(window.vandreSetNavigationControls)window.vandreSetNavigationControls(true);
     enableFollowForNavigation();
   }
   function showRemainingRoute(){
@@ -508,7 +533,7 @@
   $('routeManual').onclick=()=>{invalidateRoute();refreshDrawUI();$('drawStatus').textContent='Viser igen rette linjer mellem dine valgte punkter.';};
   $('drawClear').onclick=()=>{
     invalidateRoute();drawnPoints.length=0;
-    if(drawnNavigation){restoreRouteLayer();navigationSource=null;drawnNavigation=false;navigationSegments=[];updateTopRouteProgress();$('navPanel').hidden=true;navRequestGeneration++;$('navRefresh').disabled=false;}
+    if(drawnNavigation){restoreRouteLayer();navigationSource=null;drawnNavigation=false;navigationSegments=[];updateTopRouteProgress();if(window.vandreSetNavigationControls)window.vandreSetNavigationControls(false);$('navPanel').hidden=true;navRequestGeneration++;$('navRefresh').disabled=false;}
     refreshDrawUI();$('drawStatus').textContent='Den tegnede rute er ryddet. GPS-sporet og importerede GPX-filer er uændrede.';
   };
   $('drawNavigate').onclick=()=>{
@@ -684,7 +709,7 @@
   });
   $('clearGpx').onclick=()=>{
     restoreRouteLayer();if(importedLayer)map.removeLayer(importedLayer);
-    if(navigationSource==='imported'){navigationSource=null;navigationSegments=[];routeFullMeters=0;routeProgressMeters=0;updateTopRouteProgress();}
+    if(navigationSource==='imported'){navigationSource=null;navigationSegments=[];routeFullMeters=0;routeProgressMeters=0;updateTopRouteProgress();if(window.vandreSetNavigationControls)window.vandreSetNavigationControls(false);}
     navRequestGeneration++;$('navRefresh').disabled=false;
     importedLayer=null;if(!drawnNavigation)navigationSegments=[];navLastPosition=null;$('navPanel').hidden=!drawnNavigation;resetNavigationStatus();$('clearGpx').disabled=true;
     $('importSummary').textContent='Ingen GPX-rute indlæst.';

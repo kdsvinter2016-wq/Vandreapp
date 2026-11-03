@@ -1,45 +1,11 @@
-# VandreApp 0.8.6 – Rutefremdrift og GPS-centrering
+# VandreApp 0.8.7 – Kompakt betjening under rutenavigation
 
-Denne version bygger videre på 0.8.5 og bevarer GPS, GPX, Mine ture, rutetegning og navigation.
+Bygger videre på 0.8.6. Når en tegnet, importeret GPX- eller gemt rute er valgt til navigation, foldes panelet **GPS og ruteplanlægning** automatisk sammen, så kort og rutefremdrift får mere plads. Knappen **Vis GPS-betjening** åbner stadig Start/Pause/Stop og planlægningsknapperne. **Skjul betjening** folder det sammen igen.
 
-- **Over kortet:** Rutelængde, resterende km og gennemført procent med fremdriftsbjælke. Panelet vises ved valgt navigationsrute.
-- **Centrering:** Ved valg af navigationsrute aktiveres Følg GPS igen, også efter rutetegning har slået det fra. Aktuel GPS-position centrerer kortet, og knappen **Centrér GPS** henter en frisk position.
-- **Ingen sletning:** Originalruter og historik ændres ikke; kun det viste rutespor afkortes.
+Når en tegnet navigationsrute ryddes eller en importeret GPX-rute fjernes, foldes panelet automatisk ud. Gemte ture kan fortsat følges; hvis en ny rute vælges, bliver panelet igen kompakt. Rutestreg, fremdrift, Wake Lock, GPS-kortfølgning, historik og eksport er ikke tilsigtet ændret.
 
-**Begrænsning:** Browseren leverer kun kontinuerlig GPS under de forhold Android/Chrome tillader. GPS-centret kan først opdateres, når telefonen har leveret en position.
+**Test:** Vælg en gemt tur → Følg rute, verificér at betjeningen er foldet sammen, åbn med Vis GPS-betjening, prøv pause/stop med en aktiv tur, og test det samme med importeret GPX og tegnet rute. Fjern GPX-ruten og kontrollér at fuld betjening vises igen.
 
-# VandreApp 0.8.4 – Ruten forsvinder efterhånden som den gennemføres
+Udgivelse: Udpak ZIP-filen og upload filerne direkte i roden af GitHub-repositoryet. Åbn siden med `?v=087` for at mindske risikoen for gammel browsercache.
 
-Dette projekt er en komplet mobilvenlig webapp til GitHub Pages. Pak ZIP-filen ud, og upload filerne i roden af dit GitHub-repository.
-
-## Ny funktion
-
-Ruten afkortes visuelt efterhånden som telefonens GPS-position viser fremdrift. Understøttede navigationskilder:
-
-- Tegnet rute: Tryk **Brug ruten til navigation**. Både rette linjer og beregnet stiføring understøttes.
-- Importeret GPX: Importér GPX-filen. Den bliver automatisk valgt som navigationsrute.
-- **Mine ture**: Klik **Følg rute** ved den gemte tur. Dette er adskilt fra **Vis**, som blot viser turens registrerede statistik.
-
-I panelet **Rutenavigation** vises kilometer tilbage og procent passeret. Knappen **Vis hele ruten igen** nulstiller den synlige fremdrift, uden at ændre originalen. Hvis der vælges en ny rute, nulstilles fremdriften.
-
-Beregningen tager hensyn til GPS-nøjagtighed, accepterer kun en fremadgående bevægelse tæt på ruten og ignorerer større spring. Separate GPX-/GPS-segmenter forbindes ikke med en kunstig streg. Rutestrengen gemmes ikke over genindlæsning, så en ny session starter med hele ruten.
-
-## Vigtige begrænsninger
-
-- GPS kræver HTTPS og brugerens tilladelse.
-- GPS i browseren er ikke pålidelig med skærmen slukket. Wake Lock kan bruges.
-- Fremdrift baseres på GPS-positionens nærmeste projektion på ruten og kan blive påvirket af parallelle/overlappende stier, dårlig GPS eller kraftige sving.
-- Hvis brugeren er for langt fra ruten eller GPS-nøjagtigheden er dårlig, fjernes ingen flere rutestykker.
-- Gemte ture og importerede GPX-filer ændres ikke. Den registrerede GPS-rute er en separat blå streg.
-- Beregning af gangruter kræver netforbindelse til en ekstern tjeneste og kan fejle med mange via-punkter.
-
-## Filstruktur
-
-- `index.html`: Hele VandreApp.
-- `manifest.webmanifest`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA-grundlag.
-- `TESTPLAN.md`, `AI-UDVIKLINGSLOG.md`: Tests og eksamensdokumentation.
-
-
-## Version 0.8.5 – rettelse af Mine ture → Følg rute
-
-En tidligere GPS-position ved turens slutning (især rundture) kunne medføre, at hele navigationsruten forsvandt umiddelbart efter valg. Nu må første GPS-måling aldrig afkorte ruten. Fremdrift kræver flere positionsmålinger og reel bevægelse langs ruten; den oprindelige gemte tur ændres ikke.
+**Bemærk:** Ingen funktionstest på fysisk Android-enhed er udført her. GPS-baggrundsregistrering er fortsat ikke garanteret i webappen.

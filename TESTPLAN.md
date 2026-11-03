@@ -1,19 +1,21 @@
-# VandreApp 0.8.10 – Testplan
+# Testplan – VandreApp 0.8.12
 
-## Automatiske kontroller
-- [ ] JavaScript-syntaks
-- [ ] Ingen dublerede HTML-ID'er
-- [ ] Alle fem `data-tab` findes på desktop og mobil
-- [ ] Version i HTML opdateret
-- [ ] ZIP-integritet
+## Test A – Importeret GPX langt fra din position
+1. Åbn version 0.8.12 på Galaxy S25 FE.
+2. Importér en GPX-fil, hvis rute ikke ligger ved telefonens position.
+3. Kontrollér, at hele GPX-ruten vises og **Følg GPS: Fra** står i GPS-panelet.
+4. Vent 30 sekunder. Kortet skal blive på GPX-ruten, også når GPS-nøjagtighed opdateres.
+5. Kontrollér, at afstand til ruten og GPS-nøjagtighed opdateres, hvis telefonen leverer målinger.
 
-## Android-test – Samsung Galaxy S25 FE (endnu ikke gennemført)
-1. Åbn 0.8.10 i Chrome: nederst skal Kort, Ruter, GPS, Mine ture og Mere stå synligt.
-2. Ruter: tegn to punkter og se ruten på kortet. Importér GPX og kontrollér rutestatistik.
-3. GPS: se Start tur, Pause og Stop samt turstatistik. Kontrollér Find GPS.
-4. Kort: kort og navigationsstatistik vises uden overflødige ruteplanlægningsknapper.
-5. Mine ture: vælg Følg rute, gå tilbage til Kort, fjern ruten og kontrollér at topstatistikken skjules.
-6. Genåbn Ruter og GPS flere gange, og kontrollér, at kortet fortsat vises.
-7. Regressionstest: start/stop, GPX-import/-eksport, Wake Lock, gemte ture og gradvis rutefremdrift.
+## Test B – Aktivér GPS-følgning bevidst
+1. Tryk **Følg GPS: Fra**, så knappen viser **Til**.
+2. Kortet skal centreres på telefonens position og følge nye positioner.
+3. Slå Følg GPS fra igen. Kortet skal forblive i det valgte udsnit.
 
-Fysisk GPS og rutefunktioner kan ikke bekræftes gennem HTML-syntakstest alene.
+## Test C – Regression
+1. Importeret GPX: startpunkt i Google Maps, rutelængde, GPX-højdeprofil.
+2. Tegnet rute: tegning, beregning, navigation og GPX-eksport.
+3. Mine ture: Følg rute, visning, gem og backup.
+4. GPS-registrering og pause/genoptag samt rutenulstilling.
+
+Status: kodekontrol og syntaks kan gennemføres lokalt; GPS på fysisk Android kræver brugerens test. Ruteafvigelsesalarmer er fortsat ikke fuldt verificeret.

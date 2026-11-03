@@ -1,17 +1,15 @@
-# VandreApp 0.8.10 – Ruter tilbage i mobilmenuen
+# VandreApp 0.8.12 – rettelse af GPX-kortvisning
 
-Rettelse til version 0.8.9: **Ruter** var blevet slået sammen med GPS i menupunktet “GPS & ruter”. Det er nu to særskilte menupunkter.
+Denne version bygger på 0.8.10 og retter fejlen, hvor en importeret GPX-rute kun blev vist kortvarigt, før kortet automatisk panorerede til telefonens GPS-position.
 
-Mobilmenu: **Kort · Ruter · GPS · Mine ture · Mere**.
+## Ny adfærd
+- Importér en GPX-fil: Kortet tilpasses hele ruten, og **Følg GPS** sættes til **Fra**.
+- GPS-målinger kan stadig opdatere **Meter til ruten** og **GPS-nøjagtighed**, uden at kortets centrum flytter sig.
+- Tryk selv på **Følg GPS: Fra** for at aktivere automatisk centrering, når du vil følge ruten fysisk.
+- Tegnede og gemte ruter beholder tidligere kortfølgning ved valg af navigation.
+- Den originale GPX-rute og gemte ture ændres ikke.
 
-- **Ruter**: vis kort, tegn rute, importér GPX og beregn stitilpasset rute.
-- **GPS**: vis kort, find position, start/pause/stop GPS-registrering og turstatistik.
-- **Kort**: kort og rutefremdrift.
-- **Mine ture**: gemte vandreture og backup.
-- **Mere**: vejledning og indstillinger.
+## Installation
+Udpak ZIP-filen og upload alle otte filer til roden af GitHub-repositoryet. Åbn siden med `?v=0811` og kontrollér versionsnummeret.
 
-Ingen ændringer er foretaget i den eksisterende GPS-, GPX- og navigationsmotor. Den kendte begrænsning med ekstern routingtjeneste og mange punkter gælder stadig.
-
-## Publicering
-
-Pak ZIP-filen ud, og upload filerne til roden af GitHub-repositoryet `kdsvinter2016-wq/Vandreapp`. Åbn `https://kdsvinter2016-wq.github.io/Vandreapp/?v=0810` og kontroller versionsnummeret. Undgå at rydde site data uden backup af gemte ture.
+Se `TESTPLAN.md` for Android-tests. Webappen kan ikke garantere GPS-opdateringer med slukket skærm.

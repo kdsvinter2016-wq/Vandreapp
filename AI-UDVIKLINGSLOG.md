@@ -1,11 +1,11 @@
-# AI-udviklingslog – VandreApp 0.8.10
+# AI-udviklingslog – 0.8.12
 
-**Problem:** Brugeren meldte, at menupunktet Ruter var forsvundet fra 0.8.9.
+**Problem:** Efter GPX-import zoomede VandreApp ind på ruten, men den næste GPS-position flyttede straks kortet til brugeren.
 
-**Årsag:** I 0.8.9 var Ruter omdøbt og kombineret med GPS i én fane, “GPS & ruter”. Menustrukturen svarede ikke til brugerens forventning.
+**Årsag i kildekoden:** `chooseNavigationSource()` kaldte altid `enableFollowForNavigation()`, som satte `followGps=true`. `setPosition()` panorerede derfor ved næste GPS-måling.
 
-**Løsning:** Genskab Ruter og opret GPS som selvstændigt menupunkt. Genbrug samme Leaflet-kort og eksisterende kode, men tilpas fanernes visning. Bevar Mine ture, Mere og Kort.
+**Løsning:** GPX-import vælger navigation med `centerOnGps:false`. Kortfølgning slås fra ved import, mens GPS-observationer fortsat kan opdatere ruteafstand og GPS-nøjagtighed. Automatisk centrering kan aktiveres manuelt. Tegnede og gemte ruter bevarer tidligere standardadfærd.
 
-**Test:** Kodesyntaks, fanereferencer, filstruktur og ZIP. Fysisk Android-test afventer.
+**Verifikation:** JavaScript-syntaks og ZIP-integritet kontrolleres. Regressionstests og fysisk Android-test er endnu ikke gennemført ved levering.
 
-**Refleksion:** En UI-ændring kan utilsigtet fjerne en central adgang til eksisterende funktioner, selv om funktionerne stadig findes i kildekoden. Regressionstest skal omfatte navigation og synlighed, ikke blot JavaScript-syntaks.
+**Refleksion:** Automatisk GPS-centrering er ikke altid hensigtsmæssig ved ruteplanlægning. GPS-overvågning og kortets bevægelse er to selvstændige brugerbehov.

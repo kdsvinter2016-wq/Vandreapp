@@ -136,19 +136,39 @@
   }
   @media(min-width:701px){.mobile-view-title,.trip-mini-strip{display:none!important}}
   @media(max-width:365px){.mobile-bottom-nav button{font-size:10px}.route-progress-grid strong{font-size:17px}.trip-mini-strip strong{font-size:17px}}
+
+  /* 0.8.10: Adskil Ruter og GPS i hver sin navigationsfane. */
+  @media(max-width:700px){
+    .mobile-bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding-left:3px;padding-right:3px;}
+    .mobile-bottom-nav button{font-size:10px;padding:5px 0;}
+    .mobile-bottom-nav button[data-tab="ruter"] span{font-size:10px;}
+    #view-kort.route-mode:not(.gps-mode) #mapQuickbar{display:none!important;}
+    #view-kort.route-mode:not(.gps-mode) #mapTools{display:block;}
+    #view-kort.gps-mode #mapQuickbar{display:block!important;}
+    #view-kort.gps-mode #mapTools{display:none!important;}
+    #view-kort.gps-mode #tripPanel{display:block!important;order:5;}
+    #view-kort.gps-mode #map{order:4;}
+  }
+  @media(min-width:701px){
+    #view-kort.gps-mode #mapTools{display:none;}
+    #view-kort.gps-mode #mapQuickbar{display:block;}
+    #view-kort.gps-mode #tripPanel{display:block;}
+  }
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.9</small></div><span class="header-tag">Vandring og GPS</span></div></header>
+<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.10</small></div><span class="header-tag">Vandring og GPS</span></div></header>
 <nav id="mainTabs" class="main-tabs" aria-label="Hovednavigation">
   <button type="button" class="tab selected" data-tab="kort" aria-current="page">Kort</button>
-  <button type="button" class="tab" data-tab="ruter">GPS &amp; ruter</button>
+  <button type="button" class="tab" data-tab="ruter">Ruter</button>
+  <button type="button" class="tab" data-tab="gps">GPS</button>
   <button type="button" class="tab" data-tab="ture">Mine ture</button>
   <button type="button" class="tab" data-tab="indstillinger">Indstillinger</button>
 </nav>
 <nav id="mobileBottomNav" class="mobile-bottom-nav" aria-label="Mobilnavigation">
   <button type="button" data-tab="kort" class="selected" aria-current="page" aria-label="Kort"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15m6-12v15"/></svg><span>Kort</span></button>
-  <button type="button" data-tab="ruter" aria-label="GPS og ruteplanlægning"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h6a4 4 0 0 0 0-8h-4a4 4 0 0 1 0-8h6"/></svg><span>GPS &amp; ruter</span></button>
+  <button type="button" data-tab="ruter" aria-label="Ruter og ruteplanlægning"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h6a4 4 0 0 0 0-8h-4a4 4 0 0 1 0-8h6"/></svg><span>Ruter</span></button>
+  <button type="button" data-tab="gps" aria-label="GPS og registrering"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 1v4m0 14v4M1 12h4m14 0h4"/></svg><span>GPS</span></button>
   <button type="button" data-tab="ture" aria-label="Mine ture"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v15H4zM4 10h16M8 2v6m8-6v6M8 14h3m-3 3h7"/></svg><span>Mine ture</span></button>
   <button type="button" data-tab="indstillinger" aria-label="Mere"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><path d="M3 20h18"/></svg><span>Mere</span></button>
 </nav>
@@ -321,15 +341,17 @@
   <div class="settings-row"><strong>GPS og kort</strong><p>Brug “Find min position” og “Følg GPS” på Kort-fanen. Positionsadgang kræver HTTPS og tilladelse i Chrome.</p></div>
   <div class="settings-row"><strong>Skærm og registrering</strong><p>Brug “Hold skærmen tændt” under Min vandretur. GPS med slukket skærm understøttes ikke pålideligt af webappen.</p></div>
   <div class="settings-row"><strong>Dine data</strong><p>Gemte ture opbevares lokalt i browseren. Du kan hente en JSON-backup fra Mine ture. Backupfiler indeholder GPS-koordinater.</p></div>
-  <div class="settings-row"><strong>Ruteplanlægning</strong><p>Åbn “Planlæg en rute på kortet”, og vælg manuel tegning eller beregning langs stier. Ruteberegning kræver internet og kan fejle med visse via-punkter.</p></div>
+  <div class="settings-row"><strong>Ruteplanlægning</strong><p>Åbn fanen “Ruter” og “Planlæg en rute på kortet”, og vælg manuel tegning eller beregning langs stier. Ruteberegning kræver internet og kan fejle med visse via-punkter.</p></div>
   <div class="quick-actions"><button type="button" id="settingsToMap" class="secondary">Til kort og GPS</button><button type="button" id="settingsToTours" class="secondary">Til mine ture</button></div></div>`;
   function selectTab(name){
-    if(!['kort','ruter','ture','indstillinger'].includes(name))name='kort';
-    const mapTab=(name==='kort'||name==='ruter');
+    if(!['kort','ruter','gps','ture','indstillinger'].includes(name))name='kort';
+    const mapTab=(name==='kort'||name==='ruter'||name==='gps');
     mapView.hidden=!mapTab;toursView.hidden=name!=='ture';settingsView.hidden=name!=='indstillinger';
-    mapView.classList.toggle('route-mode',name==='ruter');
-    viewLabel.textContent=name==='ruter'?'GPS og ruteplanlægning':'Kort og navigation';
+    mapView.classList.toggle('route-mode',name==='ruter'||name==='gps');
+    mapView.classList.toggle('gps-mode',name==='gps');
+    viewLabel.textContent=name==='ruter'?'Ruteplanlægning':name==='gps'?'GPS og registrering':'Kort og navigation';
     if(name==='ruter')document.getElementById('routeDisclosure').open=true;
+    if(name==='gps')document.getElementById('routeDisclosure').open=false;
     for(const tab of document.querySelectorAll('#mainTabs .tab,#mobileBottomNav button')){
       const active=tab.dataset.tab===name;tab.classList.toggle('selected',active);
       if(active)tab.setAttribute('aria-current','page');else tab.removeAttribute('aria-current');

@@ -1,11 +1,11 @@
-# AI-udviklingslog – 0.8.9
+# AI-udviklingslog – VandreApp 0.8.10
 
-**Problem:** Navigationsbanner og rutelag blev ikke altid nulstillet efter fjernelse af en rute. GPS og ruteplanlægning optog plads på Kort-fanen.
+**Problem:** Brugeren meldte, at menupunktet Ruter var forsvundet fra 0.8.9.
 
-**Løsning:** Fælles `stopRouteNavigation` til oprydning i alle navigationskilder (tegnet, importeret, gemt); tydelig knap i navigationsbanner; omorganisering af menupunkt til **GPS & ruter** med betjening og kort sammen.
+**Årsag:** I 0.8.9 var Ruter omdøbt og kombineret med GPS i én fane, “GPS & ruter”. Menustrukturen svarede ikke til brugerens forventning.
 
-**Valg:** GPS-spor, turhistorik og lagrede data bevares; kun aktiv navigationsrute og dens indikatorer nulstilles. Ingen nye biblioteker.
+**Løsning:** Genskab Ruter og opret GPS som selvstændigt menupunkt. Genbrug samme Leaflet-kort og eksisterende kode, men tilpas fanernes visning. Bevar Mine ture, Mere og Kort.
 
-**Test:** Automatiseret JavaScript-syntaks og strukturelle kontroller, efterfulgt af nødvendig test på Android.
+**Test:** Kodesyntaks, fanereferencer, filstruktur og ZIP. Fysisk Android-test afventer.
 
-**AI-begrænsning:** Syntaks og simuleret browseradfærd kan ikke erstatte en fysisk vandretest med GPS.
+**Refleksion:** En UI-ændring kan utilsigtet fjerne en central adgang til eksisterende funktioner, selv om funktionerne stadig findes i kildekoden. Regressionstest skal omfatte navigation og synlighed, ikke blot JavaScript-syntaks.

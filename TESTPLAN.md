@@ -1,12 +1,19 @@
-# Testplan – VandreApp 0.8.9
+# VandreApp 0.8.10 – Testplan
 
-1. Åbn appen på Galaxy S25 FE og bekræft version 0.8.9.
-2. Vælg **Kort**: Kortet vises; GPS-betjening er ikke permanent udvidet; genvejen til GPS & ruter virker.
-3. Vælg **GPS & ruter**: Start/Pause/Stop, centrér GPS, GPX-import og ruteplanlægning er tilgængelig sammen med kortet.
-4. Vælg **Mine ture → Følg rute**: Navigationsbanner vises. Tryk **Fjern rute og afslut navigation**: banner forsvinder og ruten fjernes fra kortet, mens den gemte tur stadig findes i historikken.
-5. Importér GPX. Kontrollér banner. Tryk **Fjern importeret rute**: banner forsvinder og navigationslag fjernes. Gentag med **Fjern rute og afslut navigation**.
-6. Tegn en rute og vælg navigation. Kontrollér banner. Tryk **Ryd tegnet rute**: banner forsvinder. Gentag med **Fjern rute og afslut navigation**.
-7. Kontrollér at GPS-registrering, afstand, varighed, pause/genoptag, rutefremdrift og GPX-eksport stadig fungerer.
-8. Genindlæs og kontrollér at gemte ture og backup er bevaret.
+## Automatiske kontroller
+- [ ] JavaScript-syntaks
+- [ ] Ingen dublerede HTML-ID'er
+- [ ] Alle fem `data-tab` findes på desktop og mobil
+- [ ] Version i HTML opdateret
+- [ ] ZIP-integritet
 
-**Status:** Syntaks/struktur kontrolleres automatiseret; den praktiske Android-test er afventende.
+## Android-test – Samsung Galaxy S25 FE (endnu ikke gennemført)
+1. Åbn 0.8.10 i Chrome: nederst skal Kort, Ruter, GPS, Mine ture og Mere stå synligt.
+2. Ruter: tegn to punkter og se ruten på kortet. Importér GPX og kontrollér rutestatistik.
+3. GPS: se Start tur, Pause og Stop samt turstatistik. Kontrollér Find GPS.
+4. Kort: kort og navigationsstatistik vises uden overflødige ruteplanlægningsknapper.
+5. Mine ture: vælg Følg rute, gå tilbage til Kort, fjern ruten og kontrollér at topstatistikken skjules.
+6. Genåbn Ruter og GPS flere gange, og kontrollér, at kortet fortsat vises.
+7. Regressionstest: start/stop, GPX-import/-eksport, Wake Lock, gemte ture og gradvis rutefremdrift.
+
+Fysisk GPS og rutefunktioner kan ikke bekræftes gennem HTML-syntakstest alene.

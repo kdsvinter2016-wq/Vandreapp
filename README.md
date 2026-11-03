@@ -1,16 +1,17 @@
-# VandreApp 0.8.9 – mobilnavigation og nulstilling
+# VandreApp 0.8.10 – Ruter tilbage i mobilmenuen
 
-Baseret på version 0.8.8. Kort, GPX, GPS, turhistorik og ruteberegning er bevaret.
+Rettelse til version 0.8.9: **Ruter** var blevet slået sammen med GPS i menupunktet “GPS & ruter”. Det er nu to særskilte menupunkter.
 
-## Ændringer
-- **GPS & ruter** er nu et særskilt menupunkt i den faste bundnavigation. GPS-knapperne og ruteplanlægningen vises her sammen med kortet.
-- Kort-fanen viser kort, navigationsfremdrift og genvejen **Åbn GPS og ruteplanlægning**.
-- **Fjern rute og afslut navigation** er synlig i fremdriftspanelet for tegnede, importerede og gemte ruter.
-- Når en rute fjernes, ryddes navigationslag, afstand, procent og topbanner. Gemte ture og registrerede GPS-spor slettes ikke.
-- De eksisterende knapper til at rydde tegnet rute og fjerne importeret GPX rydder nu også den tilknyttede navigation.
+Mobilmenu: **Kort · Ruter · GPS · Mine ture · Mere**.
+
+- **Ruter**: vis kort, tegn rute, importér GPX og beregn stitilpasset rute.
+- **GPS**: vis kort, find position, start/pause/stop GPS-registrering og turstatistik.
+- **Kort**: kort og rutefremdrift.
+- **Mine ture**: gemte vandreture og backup.
+- **Mere**: vejledning og indstillinger.
+
+Ingen ændringer er foretaget i den eksisterende GPS-, GPX- og navigationsmotor. Den kendte begrænsning med ekstern routingtjeneste og mange punkter gælder stadig.
 
 ## Publicering
-Udpak ZIP og upload alle filer til roden i GitHub-repositoryet `kdsvinter2016-wq/Vandreapp`. GitHub Pages URL: https://kdsvinter2016-wq.github.io/Vandreapp/?v=089
 
-## Begrænsninger
-Fysisk Android-test af version 0.8.9 er endnu ikke gennemført. Baggrunds-GPS med slukket skærm garanteres ikke. Offentlig Valhalla-routingtjeneste kan afvise visse ruter.
+Pak ZIP-filen ud, og upload filerne til roden af GitHub-repositoryet `kdsvinter2016-wq/Vandreapp`. Åbn `https://kdsvinter2016-wq.github.io/Vandreapp/?v=0810` og kontroller versionsnummeret. Undgå at rydde site data uden backup af gemte ture.

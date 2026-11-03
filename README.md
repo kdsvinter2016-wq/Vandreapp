@@ -1,22 +1,16 @@
-# VandreApp 0.8.8 – mobilvenligt layout
+# VandreApp 0.8.9 – mobilnavigation og nulstilling
 
-Bygger på **0.8.7** uden tilsigtede ændringer i GPS-, GPX-, navigations- og lagringsmotoren.
+Baseret på version 0.8.8. Kort, GPX, GPS, turhistorik og ruteberegning er bevaret.
 
-## Nyheder
-- **Fast mobil-bundmenu:** Kort, Ruter, Mine ture og Mere. Desktop bevarer sin fanenavigation.
-- **Kort:** større, roligere visning med kompakt status over kortet og eksisterende GPS-knapper.
-- **Ruter:** viser planlægningspanelet og kortet på samme side, så der kan placeres punkter med fingertryk.
-- **Mine ture:** større handlingsknapper med to kolonner på telefoner.
-- **Mere:** de eksisterende hjælpetekster og genveje.
-- **Ministatistik:** gået distance og tid opdateres under kortvisning; rutefremdrift vises fortsat separat med total, tilbage og procent.
-- **Bevar rute-navigationens kompakte GPS-panel:** når en rute følges, kan GPS-knapperne foldes ud.
+## Ændringer
+- **GPS & ruter** er nu et særskilt menupunkt i den faste bundnavigation. GPS-knapperne og ruteplanlægningen vises her sammen med kortet.
+- Kort-fanen viser kort, navigationsfremdrift og genvejen **Åbn GPS og ruteplanlægning**.
+- **Fjern rute og afslut navigation** er synlig i fremdriftspanelet for tegnede, importerede og gemte ruter.
+- Når en rute fjernes, ryddes navigationslag, afstand, procent og topbanner. Gemte ture og registrerede GPS-spor slettes ikke.
+- De eksisterende knapper til at rydde tegnet rute og fjerne importeret GPX rydder nu også den tilknyttede navigation.
 
-## Udgivelse
-Udpak ZIP-filen og upload **alle otte filer** til roden af GitHub-repositoryet. Åbn `https://kdsvinter2016-wq.github.io/Vandreapp/?v=088` og kontrollér teksten `Prototype 0.8.8`.
-
-De gemte ture ligger i browserens lokale lager. **Slet ikke webstedsdata** for at få en ny version; lav JSON-backup først, hvis dette bliver nødvendigt.
+## Publicering
+Udpak ZIP og upload alle filer til roden i GitHub-repositoryet `kdsvinter2016-wq/Vandreapp`. GitHub Pages URL: https://kdsvinter2016-wq.github.io/Vandreapp/?v=089
 
 ## Begrænsninger
-- Baggrunds-GPS med slukket skærm er ikke pålideligt i en browser.
-- Automatisk ruteføring bruger ekstern tjeneste, kræver internet og kan fejle for visse via-punkter.
-- De nye mobilfaner og kortets størrelsesændringer skal afprøves på fysisk Android-telefon.
+Fysisk Android-test af version 0.8.9 er endnu ikke gennemført. Baggrunds-GPS med slukket skærm garanteres ikke. Offentlig Valhalla-routingtjeneste kan afvise visse ruter.

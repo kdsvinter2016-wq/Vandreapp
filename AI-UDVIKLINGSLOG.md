@@ -1,11 +1,11 @@
-# AI-udviklingslog – VandreApp 0.8.8
+# AI-udviklingslog – 0.8.9
 
-**Problem:** Mobilgrænsefladen i 0.8.7 havde mange lodrette elementer, for meget scrolling og vanskelig adgang til ruteplanlægning og gemte ture.
+**Problem:** Navigationsbanner og rutelag blev ikke altid nulstillet efter fjernelse af en rute. GPS og ruteplanlægning optog plads på Kort-fanen.
 
-**AI-opgave:** Bevar alle eksisterende rute-/GPS-funktioner og lav et mere ergonomisk mobil-layout.
+**Løsning:** Fælles `stopRouteNavigation` til oprydning i alle navigationskilder (tegnet, importeret, gemt); tydelig knap i navigationsbanner; omorganisering af menupunkt til **GPS & ruter** med betjening og kort sammen.
 
-**Valg:** Kun HTML/CSS og UI-navigation ændres. Ny firepunkts bundnavigation på mobil; Ruter viser planlægningskontroller og kort samtidig. Eksisterende element-ID'er og registreringsmotor bevares. Minidistance og -tid spejler de eksisterende statistikfelter, så ingen parallel turberegning opstår.
+**Valg:** GPS-spor, turhistorik og lagrede data bevares; kun aktiv navigationsrute og dens indikatorer nulstilles. Ingen nye biblioteker.
 
-**Kontrol:** Syntaks, unikke ID'er, lokale målrettede UI-test og ZIP-integritet. Fysisk Android-test er nødvendig.
+**Test:** Automatiseret JavaScript-syntaks og strukturelle kontroller, efterfulgt af nødvendig test på Android.
 
-**Risici:** Mobilkortet skal få `invalidateSize` efter faneskift. Data opbevares lokalt, og browserens cache må ikke ryddes uden backup. Routing-API kan afvise visse via-punkter.
+**AI-begrænsning:** Syntaks og simuleret browseradfærd kan ikke erstatte en fysisk vandretest med GPS.

@@ -25,3 +25,7 @@ Node.js syntakskontrol og simulerede beregningstests bestået. Android-test er e
 ## Kritisk refleksion
 
 GPS-position er usikker. Overlappende rutesegmenter og ruter med tætliggende parallelle stier kan give forkert fremdriftsestimat. Funktionen viser derfor en vejledende visuel status og ændrer aldrig originalruten. Feltmålinger er nødvendige før endelig godkendelse.
+
+
+## 0.8.5 – fejl fundet på Android
+Brugerobservation: Mine ture → Følg rute viste ruten kortvarigt, hvorefter den forsvandt. Kodeanalyse: første GPS-fix kunne projekteres langt fremme på den gemte rute, især når start/slut er tæt. Rettelse: fremdrift er uaktiveret på første fix og kræver bevægelse og begrænset fremrykning. Android-test afventer.

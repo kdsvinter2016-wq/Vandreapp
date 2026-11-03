@@ -22,3 +22,11 @@ Disse kontroller erstatter **ikke** en praktisk Android-test.
 
 - Virkelig bevægelse på Android.
 - Advarsler ved ruteafvigelse og GPS-højde fra tidligere versioner, som fortsat kræver særskilt feltkontrol.
+
+
+## Regression i 0.8.5
+1. Mine ture → Følg rute på en rundtur, hvor start og slut ligger samme sted: hele ruten skal forblive synlig efter den første GPS-måling.
+2. Stå stille i 30 sekunder: ruten skal ikke forsvinde.
+3. Gå langs ruten: den passerede del forkortes gradvist.
+4. Tryk Vis hele ruten igen: hele ruten genskabes.
+5. Test importeret GPX og tegnet rute samt GPS-registrering og eksport.

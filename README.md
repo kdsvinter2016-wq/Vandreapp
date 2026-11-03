@@ -28,3 +28,8 @@ Beregningen tager hensyn til GPS-nøjagtighed, accepterer kun en fremadgående b
 - `index.html`: Hele VandreApp.
 - `manifest.webmanifest`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA-grundlag.
 - `TESTPLAN.md`, `AI-UDVIKLINGSLOG.md`: Tests og eksamensdokumentation.
+
+
+## Version 0.8.5 – rettelse af Mine ture → Følg rute
+
+En tidligere GPS-position ved turens slutning (især rundture) kunne medføre, at hele navigationsruten forsvandt umiddelbart efter valg. Nu må første GPS-måling aldrig afkorte ruten. Fremdrift kræver flere positionsmålinger og reel bevægelse langs ruten; den oprindelige gemte tur ændres ikke.

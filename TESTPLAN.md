@@ -1,32 +1,12 @@
-# Testplan – VandreApp 0.8.4
+# VandreApp 0.8.6 – Testplan
 
-## Gennemført i udviklingsmiljø
+1. Upload ZIP-filerne i rodmappen på GitHub Pages. Kontrollér `Prototype 0.8.6`.
+2. Vælg **Mine ture → Følg rute**. Kontrollér at Rutelængde, Tilbage og Gennemført vises **over** kortet med 0 % ved start.
+3. Vælg **Centrér GPS**. Kortet skal centrere om din aktuelle position. Bevæger du dig med Følg GPS: Til, skal kortet følge positionen.
+4. Vælg **Planlæg rute**, **Start tegning**, sæt punkter, afslut tegning, vælg **Brug ruten til navigation**. Kontrollér at Følg GPS står Til igen.
+5. Gå langs en planlagt rute: rutestregen skal gradvist afkortes, Tilbage falde, procent stige, og det blå GPS-spor bevares.
+6. Gentag med importeret GPX og gemt tur. Kontrollér at originalruten bevares.
+7. Tryk **Vis hele ruten igen**; topstatistik skal nulstilles til 0 % og fuld længde.
+8. Regression: GPS start/pause/genoptag/stop, GPX import/eksport, turhistorik, Wake Lock, backup.
 
-- JavaScript-syntakskontrol (Node.js).
-- Simuleret fremdrift langs rute, forhindring af tilbagespring, afvisning af GPS langt fra ruten, afvisning af urealistisk langt spring og adskillelse af flere rutestykker.
-- ZIP-integritet.
-
-Disse kontroller erstatter **ikke** en praktisk Android-test.
-
-## Udføres på Samsung Galaxy S25 FE
-
-1. Åbn appen med `?v=084`; kontrollér at der står `Prototype 0.8.4`.
-2. Tegn en rute tæt på din position. Vælg **Brug ruten til navigation**. Gå et stykke langs ruten med skærmen tændt. Bekræft at den passerede streg forsvinder, at resterende kilometer falder, og at det registrerede blå GPS-spor bevares.
-3. Tryk **Vis hele ruten igen**. Bekræft at hele den oprindelige rute vises igen.
-4. Importér en GPX med kendt start. Gå langs ruten og kontrollér afkortning. Eksportér/importér originalen på ny, og bekræft at den stadig er komplet.
-5. Gå til **Mine ture**, vælg **Følg rute** for en gemt tur, og kontrollér afkortningen. Åbn den gemte tur via **Vis**, og bekræft uændrede data.
-6. Test GPS-afvigelse fra ruten. Den resterende rute må ikke forsvinde, mens GPS er langt fra ruten.
-7. Test stop, pause/genoptag, gendannelse, GPX-import/-eksport, JSON-backup, Wake Lock og Google Maps-startlink som regressionstest.
-
-### Ikke testet her
-
-- Virkelig bevægelse på Android.
-- Advarsler ved ruteafvigelse og GPS-højde fra tidligere versioner, som fortsat kræver særskilt feltkontrol.
-
-
-## Regression i 0.8.5
-1. Mine ture → Følg rute på en rundtur, hvor start og slut ligger samme sted: hele ruten skal forblive synlig efter den første GPS-måling.
-2. Stå stille i 30 sekunder: ruten skal ikke forsvinde.
-3. Gå langs ruten: den passerede del forkortes gradvist.
-4. Tryk Vis hele ruten igen: hele ruten genskabes.
-5. Test importeret GPX og tegnet rute samt GPS-registrering og eksport.
+**Status:** syntaks-/strukturkontrol kan udføres automatisk. Fysiske Android-tests er ikke udført her.

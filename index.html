@@ -40,10 +40,22 @@
   .route-start-panel[hidden]{display:none}
   .maps-link{display:inline-block;background:#155c42;color:white;text-decoration:none;padding:11px 13px;border-radius:9px;font-weight:650;margin-top:7px}
   .maps-link:focus-visible{outline:3px solid #edab39;outline-offset:2px}
+
+  /* 0.8.6: navigationsstatus altid synlig oven over kortet. */
+  .route-progress-banner{margin:10px 0;background:#fff;border:1px solid #c4dccb;border-radius:12px;padding:12px;box-shadow:0 1px 7px #0001}
+  .route-progress-banner[hidden]{display:none!important}
+  .route-progress-banner h2{font-size:15px;margin:0 0 9px;color:#194331}
+  .route-progress-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .route-progress-grid>div{background:#eff5f0;padding:9px 4px;border-radius:9px;text-align:center}
+  .route-progress-grid strong{font-size:clamp(17px,4vw,23px);font-variant-numeric:tabular-nums;display:block}
+  .route-progress-grid span{font-size:11px;color:#52685e}
+  .route-progress-track{margin-top:9px;height:9px;background:#dbe7de;border-radius:12px;overflow:hidden}
+  #routeProgressFill{height:100%;width:0;background:#23875a;transition:width .25s ease}
+  .route-progress-caption{font-size:12px;color:#4d6456;margin:7px 0 0}
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.5</small></div><span class="header-tag">Vandring og GPS</span></div></header>
+<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.6</small></div><span class="header-tag">Vandring og GPS</span></div></header>
 <nav id="mainTabs" class="main-tabs" aria-label="Hovednavigation">
   <button type="button" class="tab selected" data-tab="kort" aria-current="page">Kort</button>
   <button type="button" class="tab" data-tab="ture">Mine ture</button>
@@ -52,6 +64,16 @@
 <main>
 <p class="intro">Planlæg en vandrerute, følg GPS og gem dine ture.</p>
 <div id="status" class="status" role="status" aria-live="polite">Kortet vises omkring København. GPS bruges først, når du vælger det.</div>
+<section id="routeProgressBanner" class="route-progress-banner" hidden aria-label="Fremdrift på valgt rute" aria-live="polite">
+ <h2>Din planlagte rute</h2>
+ <div class="route-progress-grid">
+  <div><strong id="routeTotalTop">0,00</strong><span>Rutelængde (km)</span></div>
+  <div><strong id="routeLeftTop">0,00</strong><span>Tilbage (km)</span></div>
+  <div><strong id="routePercentTop">0 %</strong><span>Gennemført</span></div>
+ </div>
+ <div class="route-progress-track" role="progressbar" id="routeProgressBar" aria-label="Gennemført rute" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="routeProgressFill"></div></div>
+ <p class="route-progress-caption">Ruten afkortes efter GPS-fremdrift. GPS-positionen kan afvige fra stien.</p>
+</section>
 <div id="map" aria-label="Interaktivt kort"></div>
 <div class="panel" id="mapTools">
  <h2 class="section-title">Kort og ruter</h2>
@@ -148,7 +170,7 @@
   const settingsView=document.createElement('section');settingsView.id='view-indstillinger';settingsView.className='app-section';settingsView.hidden=true;
   main.insertBefore(mapView,main.firstChild);main.insertBefore(toursView,mapView.nextSibling);main.insertBefore(settingsView,toursView.nextSibling);
   const move=(id,to)=>{const el=document.getElementById(id);if(el)to.appendChild(el);};
-  for(const node of [...main.children]){if(node.matches('.intro,#status,#map'))mapView.appendChild(node);}
+  for(const node of [...main.children]){if(node.matches('.intro,#status,#map,#routeProgressBanner'))mapView.appendChild(node);}
   move('tripPanel',mapView);move('mapTools',mapView);
   // Knapperne ligger OVER kortet, men aktiverer den eksisterende og afprøvede logik.
   const quick=document.createElement('div');quick.className='map-quickbar';quick.id='mapQuickbar';
@@ -158,7 +180,7 @@
       <button type="button" class="secondary" id="quickPause">Pause tur</button>
       <button type="button" class="q-stop" id="quickStop">Stop tur</button>
       <button type="button" class="q-plan" id="quickPlan">Planlæg rute på kortet</button>
-      <button type="button" class="secondary q-position" id="quickLocate">Find GPS</button>
+      <button type="button" class="secondary q-position" id="quickLocate">Centrér GPS</button>
     </div>`;
   mapView.insertBefore(quick,document.getElementById('map'));
   for(const [quickId,actualId] of [['quickStart','start'],['quickPause','pause'],['quickStop','stop'],['quickLocate','locate']]){
@@ -259,12 +281,32 @@
     if(navigationSource==='imported'&&importedLayer&&!map.hasLayer(importedLayer))importedLayer.addTo(map);
     remainingRouteLayer.clearLayers();
   }
+  function updateTopRouteProgress(){
+    const banner=$('routeProgressBanner');
+    if(!navigationSource||routeFullMeters<=0){banner.hidden=true;return;}
+    banner.hidden=false;
+    const remaining=Math.max(0,routeFullMeters-routeProgressMeters);
+    const percent=Math.max(0,Math.min(100,Math.round(100*routeProgressMeters/routeFullMeters)));
+    $('routeTotalTop').textContent=fmtLength(routeFullMeters);
+    $('routeLeftTop').textContent=fmtLength(remaining);
+    $('routePercentTop').textContent=percent+' %';
+    $('routeProgressFill').style.width=percent+'%';
+    $('routeProgressBar').setAttribute('aria-valuenow',String(percent));
+  }
+  function enableFollowForNavigation(){
+    // Tegnetilstand frakobler med vilje følgning, men navigation kræver den igen.
+    followGps=true;
+    updateFollowButton();
+    if(userMarker)map.panTo(userMarker.getLatLng(),{animate:false});
+    if(!tracking)startIdleFollow();
+  }
   function chooseNavigationSource(source,segments){
     restoreRouteLayer();
     navigationSource=source;navigationSegments=segments.map(seg=>seg.map(p=>[p[0],p[1]]));
     routeProgressMeters=0;routeLastFixTime=0;routeArmed=false;routeAnchor=null;routeFullMeters=routeTotalMeters(navigationSegments);
     $('navProgress').textContent='Tilbage: '+fmtLength(routeFullMeters)+' km af '+fmtLength(routeFullMeters)+' km.';
     showRemainingRoute();
+    enableFollowForNavigation();
   }
   function showRemainingRoute(){
     if(!navigationSource)return;
@@ -291,6 +333,7 @@
     if(navigationSource==='imported'&&importedLayer&&map.hasLayer(importedLayer))map.removeLayer(importedLayer);
     const left=Math.max(0,routeFullMeters-routeProgressMeters);
     $('navProgress').textContent='Tilbage: '+fmtLength(left)+' km af '+fmtLength(routeFullMeters)+' km ('+Math.round(routeFullMeters?100*routeProgressMeters/routeFullMeters:0)+' % passeret).';
+    updateTopRouteProgress();
   }
   function advanceAlongRoute(p){
     if(!navigationSource||!navEnabled||!validPosition(p))return;
@@ -450,6 +493,7 @@
   $('drawToggle').onclick=()=>{
     drawing=!drawing;
     if(drawing){followGps=false;updateFollowButton();stopIdleFollow();}
+    else if(navigationSource){enableFollowForNavigation();}
     $('drawStatus').textContent=drawing?'Tegning aktiv: Tryk på kortet for at tilføje punkter. Brug Zoom +/− og træk kortet mellem punkterne.':'Tegning afsluttet. Du kan eksportere ruten som GPX eller bruge den til navigation.';
     refreshDrawUI();
   };
@@ -464,7 +508,7 @@
   $('routeManual').onclick=()=>{invalidateRoute();refreshDrawUI();$('drawStatus').textContent='Viser igen rette linjer mellem dine valgte punkter.';};
   $('drawClear').onclick=()=>{
     invalidateRoute();drawnPoints.length=0;
-    if(drawnNavigation){restoreRouteLayer();navigationSource=null;drawnNavigation=false;navigationSegments=[];$('navPanel').hidden=true;navRequestGeneration++;$('navRefresh').disabled=false;}
+    if(drawnNavigation){restoreRouteLayer();navigationSource=null;drawnNavigation=false;navigationSegments=[];updateTopRouteProgress();$('navPanel').hidden=true;navRequestGeneration++;$('navRefresh').disabled=false;}
     refreshDrawUI();$('drawStatus').textContent='Den tegnede rute er ryddet. GPS-sporet og importerede GPX-filer er uændrede.';
   };
   $('drawNavigate').onclick=()=>{
@@ -477,7 +521,7 @@
   $('drawExport').onclick=()=>{
     if(drawnPoints.length<2)return;
     const vertices=activeDrawPoints().map(p=>`<rtept lat="${p[0].toFixed(7)}" lon="${p[1].toFixed(7)}"/>`).join('');
-    const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp 0.8.5" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>Min tegnede rute</name>${vertices}</rte></gpx>`;
+    const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp 0.8.6" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>Min tegnede rute</name>${vertices}</rte></gpx>`;
     const url=URL.createObjectURL(new Blob([xml],{type:'application/gpx+xml'}));
     const a=document.createElement('a');a.href=url;a.download='vandreapp-tegnet-rute.gpx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
     $('drawStatus').textContent=routedPoints?'Beregnet vandrerute eksporteret som GPX.':'Manuelt tegnet rute eksporteret som GPX (rette linjer).';
@@ -640,7 +684,7 @@
   });
   $('clearGpx').onclick=()=>{
     restoreRouteLayer();if(importedLayer)map.removeLayer(importedLayer);
-    if(navigationSource==='imported'){navigationSource=null;navigationSegments=[];routeFullMeters=0;routeProgressMeters=0;}
+    if(navigationSource==='imported'){navigationSource=null;navigationSegments=[];routeFullMeters=0;routeProgressMeters=0;updateTopRouteProgress();}
     navRequestGeneration++;$('navRefresh').disabled=false;
     importedLayer=null;if(!drawnNavigation)navigationSegments=[];navLastPosition=null;$('navPanel').hidden=!drawnNavigation;resetNavigationStatus();$('clearGpx').disabled=true;
     $('importSummary').textContent='Ingen GPX-rute indlæst.';
@@ -784,7 +828,7 @@
         $('navToggle').textContent='Ruteovervågning: Til';$('navToggle').setAttribute('aria-pressed','true');resetNavigationStatus();
         if(!tracking&&map.hasLayer(trackLine))map.removeLayer(trackLine);
         if(groups.length)map.fitBounds(L.latLngBounds(groups.flat()),{padding:[25,25],maxZoom:17});
-        window.vandreSelectTab('kort');requestNavigationPosition();showStatus('Gemt tur valgt som navigationsrute. Originalen i Mine ture ændres ikke.');
+        window.vandreSelectTab('kort');if(userMarker&&followGps)map.panTo(userMarker.getLatLng(),{animate:false});requestNavigationPosition();showStatus('Gemt tur valgt som navigationsrute. Originalen i Mine ture ændres ikke.');
       };
       const del=document.createElement('button');del.className='danger compact';del.textContent='Slet';del.onclick=()=>{if(!confirm('Slet denne gemte tur fra telefonen?'))return;try{localStorage.setItem(STORAGE_KEY,JSON.stringify(getTrips().filter(x=>x.id!==t.id)));renderHistory();showStatus('Den gemte tur er slettet.');}catch{showStatus('Kunne ikke slette turen fra lokal lagring.');}};
       actions.append(load,follow,rename,del);row.append(details,actions);container.append(row);

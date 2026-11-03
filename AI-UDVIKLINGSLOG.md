@@ -29,3 +29,9 @@ GPS-position er usikker. Overlappende rutesegmenter og ruter med tætliggende pa
 
 ## 0.8.5 – fejl fundet på Android
 Brugerobservation: Mine ture → Følg rute viste ruten kortvarigt, hvorefter den forsvandt. Kodeanalyse: første GPS-fix kunne projekteres langt fremme på den gemte rute, især når start/slut er tæt. Rettelse: fremdrift er uaktiveret på første fix og kræver bevægelse og begrænset fremrykning. Android-test afventer.
+
+
+## 0.8.6 – 2026-11-03
+**Problem:** Ruteoplysninger stod langt nede på siden; GPS-kortcentrering blev deaktiveret ved rutetegning og ikke automatisk slået til igen ved rutenavigation.
+**Løsning:** Synlig topstatistik, automatisk genaktivering af GPS-kortfølgning ved navigationsvalg, samt mere tydelig Centrér GPS-knap.
+**Test:** JavaScript-syntaks, HTML-ID-kontrol og ZIP-integritet. Test med telefonens faktiske GPS afventer.

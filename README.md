@@ -1,3 +1,13 @@
+# VandreApp 0.8.6 – Rutefremdrift og GPS-centrering
+
+Denne version bygger videre på 0.8.5 og bevarer GPS, GPX, Mine ture, rutetegning og navigation.
+
+- **Over kortet:** Rutelængde, resterende km og gennemført procent med fremdriftsbjælke. Panelet vises ved valgt navigationsrute.
+- **Centrering:** Ved valg af navigationsrute aktiveres Følg GPS igen, også efter rutetegning har slået det fra. Aktuel GPS-position centrerer kortet, og knappen **Centrér GPS** henter en frisk position.
+- **Ingen sletning:** Originalruter og historik ændres ikke; kun det viste rutespor afkortes.
+
+**Begrænsning:** Browseren leverer kun kontinuerlig GPS under de forhold Android/Chrome tillader. GPS-centret kan først opdateres, når telefonen har leveret en position.
+
 # VandreApp 0.8.4 – Ruten forsvinder efterhånden som den gennemføres
 
 Dette projekt er en komplet mobilvenlig webapp til GitHub Pages. Pak ZIP-filen ud, og upload filerne i roden af dit GitHub-repository.

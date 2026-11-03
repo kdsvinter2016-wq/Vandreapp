@@ -1,43 +1,24 @@
-# VandreApp 0.8 – Android-testplan
+# Testplan – VandreApp 0.8.4
 
-**Status:** syntakstest og pakkevalidering; praktisk Android-test afventer.
+## Gennemført i udviklingsmiljø
 
-1. Kontroller at Prototype 0.8 vises.
-2. Kort-fanen: kortet vises med korrekt størrelse og GPS-position.
-3. Start, pause, genoptag, stop og gem en kort tur.
-4. Åbn "Planlæg en rute på kortet"; tegn rute og eksportér GPX.
-5. Beregn rute med få via-punkter; prøv GPX-eksport.
-6. Importér GPX; kontroller importstats og Rutenavigation.
-7. Mine ture: vis tidligere tur, omdøb og lav JSON-backup.
-8. Mine ture: kontrollér at højdegraf vises for GPX med højdedata (via Kort-fanens importstatistik).
-9. Indstillinger: genveje fører til korrekte faner.
-10. Genindlæs og bekræft automatisk gendannelse af aktiv tur.
-11. Test Wake Lock og Følg GPS.
-12. Tidligere ikke gennemført: ruteafvigelsesadvarsel og GPS-højde fra registreret tur.
+- JavaScript-syntakskontrol (Node.js).
+- Simuleret fremdrift langs rute, forhindring af tilbagespring, afvisning af GPS langt fra ruten, afvisning af urealistisk langt spring og adskillelse af flere rutestykker.
+- ZIP-integritet.
 
-Hvis der opstår fejl: registrér trin, forventet/faktisk resultat og telefonens Android/Chrome-version.
+Disse kontroller erstatter **ikke** en praktisk Android-test.
 
+## Udføres på Samsung Galaxy S25 FE
 
-## 0.8.1 – fejlrettelse
-1. På Kort-fanen skal Start tur, Pause tur, Stop tur, Planlæg rute på kortet og Find GPS være synlige **over** kortet.
-2. Pause og Stop skal være deaktiverede før turstart; de aktiveres korrekt ved start.
-3. Planlæg rute åbner panelet og ruller til knapperne til tegning.
-4. GPS-kort, import, gemte ture og eksisterende registrering skal stadig virke.
-5. Test på Galaxy S25 FE; ikke verificeret her på fysisk telefon.
+1. Åbn appen med `?v=084`; kontrollér at der står `Prototype 0.8.4`.
+2. Tegn en rute tæt på din position. Vælg **Brug ruten til navigation**. Gå et stykke langs ruten med skærmen tændt. Bekræft at den passerede streg forsvinder, at resterende kilometer falder, og at det registrerede blå GPS-spor bevares.
+3. Tryk **Vis hele ruten igen**. Bekræft at hele den oprindelige rute vises igen.
+4. Importér en GPX med kendt start. Gå langs ruten og kontrollér afkortning. Eksportér/importér originalen på ny, og bekræft at den stadig er komplet.
+5. Gå til **Mine ture**, vælg **Følg rute** for en gemt tur, og kontrollér afkortningen. Åbn den gemte tur via **Vis**, og bekræft uændrede data.
+6. Test GPS-afvigelse fra ruten. Den resterende rute må ikke forsvinde, mens GPS er langt fra ruten.
+7. Test stop, pause/genoptag, gendannelse, GPX-import/-eksport, JSON-backup, Wake Lock og Google Maps-startlink som regressionstest.
 
-## Version 0.8.2 – startpunkt og Google Maps
-1. Sæt første rutepunkt og kontrollér, at koordinater og Google Maps-link vises.
-2. Klik på linket; kontrollér at destinationen svarer til første rutepunkt (ikke telefonens aktuelle position).
-3. Tilføj flere punkter og beregn gangrute; linket må stadig pege på oprindeligt startpunkt.
-4. Fortryd samtlige punkter eller tryk Ryd tegnet rute; startpanelet skal forsvinde.
-5. Lav en ny rute; linket skal opdateres til det nye første punkt.
-6. Regressionstest GPS, GPX, gemte ture, kortfølgning og faner på Android.
+### Ikke testet her
 
-## Test for 0.8.3
-1. Importér GPX-fil med `<trk><trkseg><trkpt ...>`; kontrollér at første koordinat vises i Importeret GPX-rute, og Google Maps åbner med det som destination.
-2. Importér GPX-fil med `<rte><rtept ...>`; verificér tilsvarende.
-3. Importér en anden fil og kontrollér at koordinat og destination ændres.
-4. Fjern GPX-ruten; startpunktspanelet skal forsvinde.
-5. Importér ugyldig GPX; appen må ikke vise et nyt forkert startpunkt.
-6. Regressionstest: tegn rute, Google Maps-startpunkt, GPS-registrering, turhistorik og GPX-eksport.
-Test på fysisk Android er endnu ikke gennemført.
+- Virkelig bevægelse på Android.
+- Advarsler ved ruteafvigelse og GPS-højde fra tidligere versioner, som fortsat kræver særskilt feltkontrol.

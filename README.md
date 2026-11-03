@@ -1,29 +1,30 @@
-# VandreApp 0.8 – Mobilinterface
+# VandreApp 0.8.4 – Ruten forsvinder efterhånden som den gennemføres
 
-Bygger på 0.7.3 og bevarer eksisterende GPS, rutetegning, Valhalla, GPX, højdeprofiler, backup og turhistorik.
+Dette projekt er en komplet mobilvenlig webapp til GitHub Pages. Pak ZIP-filen ud, og upload filerne i roden af dit GitHub-repository.
 
-## Ny brugerflade
-- Tre faner: Kort, Mine ture og Indstillinger.
-- Kortet fylder mere på telefonen.
-- Knapper til aktiv tur vises tættere på kortet.
-- Rutetegning og automatisk routing ligger under en udfoldelig sektion.
-- Indstillinger indeholder hjælp og genveje til funktionerne.
+## Ny funktion
 
-## Udrulning
-Upload alle 8 filer til roden af GitHub-repositoriet, og commit. Åbn via HTTPS. Reload siden hvis cache holder på gamle filer.
+Ruten afkortes visuelt efterhånden som telefonens GPS-position viser fremdrift. Understøttede navigationskilder:
 
-## Begrænsninger
-- Ingen pålidelig GPS i baggrunden med slukket skærm.
-- Valhalla-demotjenesten kan afvise routinger, særligt med problematiske via-punkter.
-- Data ligger lokalt i browseren – eksportér backup.
-- PWA indeholder manifest og basal service worker, men ikke offline-kort.
+- Tegnet rute: Tryk **Brug ruten til navigation**. Både rette linjer og beregnet stiføring understøttes.
+- Importeret GPX: Importér GPX-filen. Den bliver automatisk valgt som navigationsrute.
+- **Mine ture**: Klik **Følg rute** ved den gemte tur. Dette er adskilt fra **Vis**, som blot viser turens registrerede statistik.
 
+I panelet **Rutenavigation** vises kilometer tilbage og procent passeret. Knappen **Vis hele ruten igen** nulstiller den synlige fremdrift, uden at ændre originalen. Hvis der vælges en ny rute, nulstilles fremdriften.
 
-## Rettelse i 0.8.1
-GPS-knapper og rutegenvej er nu placeret synligt over kortet. Knappen Planlæg rute åbner det eksisterende planlægningspanel og scroller til det. Den underliggende GPS- og rutelogik er ikke ændret.
+Beregningen tager hensyn til GPS-nøjagtighed, accepterer kun en fremadgående bevægelse tæt på ruten og ignorerer større spring. Separate GPX-/GPS-segmenter forbindes ikke med en kunstig streg. Rutestrengen gemmes ikke over genindlæsning, så en ny session starter med hele ruten.
 
-## Nyt i 0.8.2 – Google Maps til rutens start
-Første valgte tegnepunkt vises med koordinater og linket **Navigér til start i Google Maps**. Google Maps åbnes med punktet som destination (bil som udgangspunkt), og ruten til start beregnes i Google Maps. Der foretages ikke adresseopslag. Linket opdateres ved fortryd/ryd rutepunkt og efter automatisk ruteberegning.
+## Vigtige begrænsninger
 
-## Nyt i 0.8.3 – Startpunkt fra GPX til Google Maps
-Efter import af en gyldig GPX-rute eller et GPX-spor vises det første rutepunkts koordinater og et Google Maps-link til destinationen. Linket opdateres ved ny import og skjules ved fjernelse. Eksisterende ruteplanlægning og GPS-spor er uændrede.
+- GPS kræver HTTPS og brugerens tilladelse.
+- GPS i browseren er ikke pålidelig med skærmen slukket. Wake Lock kan bruges.
+- Fremdrift baseres på GPS-positionens nærmeste projektion på ruten og kan blive påvirket af parallelle/overlappende stier, dårlig GPS eller kraftige sving.
+- Hvis brugeren er for langt fra ruten eller GPS-nøjagtigheden er dårlig, fjernes ingen flere rutestykker.
+- Gemte ture og importerede GPX-filer ændres ikke. Den registrerede GPS-rute er en separat blå streg.
+- Beregning af gangruter kræver netforbindelse til en ekstern tjeneste og kan fejle med mange via-punkter.
+
+## Filstruktur
+
+- `index.html`: Hele VandreApp.
+- `manifest.webmanifest`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA-grundlag.
+- `TESTPLAN.md`, `AI-UDVIKLINGSLOG.md`: Tests og eksamensdokumentation.

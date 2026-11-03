@@ -60,14 +60,89 @@
   .map-quickbar .map-quick-actions{margin-top:9px}
   .map-quickbar .map-quick-actions[hidden]{display:none!important}
   .map-quickbar.compact-navigation{padding:7px 10px;background:#f7faf8}
+
+  /* 0.8.8 – mobil-first navigation og mere plads til kortet. */
+  .mobile-bottom-nav { display:none; }
+  .trip-mini-strip { display:none; }
+  .mobile-view-title {display:none;}
+  .map-quickbar .quickbar-header{min-height:40px}
+  .map-quickbar .map-quick-actions button{touch-action:manipulation}
+  .app-section{min-width:0}
+  .history-row .actions{flex-wrap:wrap;}
+  .history-row .actions button{min-height:44px;}
+  @media(max-width:700px){
+    :root{--mobile-nav-height:68px}
+    html{scroll-padding-top:14px;}
+    body{background:#eef3ef;padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom) + 12px);}
+    header{padding:11px 14px 10px;}
+    header h1{font-size:20px;letter-spacing:-.35px;}
+    header small{font-size:11px;}
+    .main-tabs{display:none!important;}
+    main{padding:8px 9px 12px;}
+    .intro{display:none;}
+    .mobile-view-title{display:block;margin:5px 3px 7px;font-size:17px;letter-spacing:-.2px;}
+    #view-kort{display:flex;flex-direction:column;gap:0;}
+    #view-kort[hidden]{display:none!important;}
+    #view-kort .mobile-view-title{order:0;}
+    #routeProgressBanner{order:1;margin:5px 0 7px;}
+    #tripMiniStrip{order:2;}
+    #mapQuickbar{order:3;margin:5px 0 8px;}
+    #map{order:4;height:clamp(310px,54dvh,650px);min-height:310px;border-radius:12px;}
+    #status{order:5;margin:8px 0 1px;font-size:12px;line-height:1.4;padding:8px 10px;}
+    #tripPanel{order:6;}
+    #mapTools{order:7;}
+    .panel{margin-top:9px;padding:12px;border-radius:12px;}
+    .map-quickbar{padding:9px;}
+    .map-quickbar-title{font-size:13px;}
+    .map-quick-actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;}
+    .map-quick-actions button{font-size:13px;min-height:48px;padding:8px 4px;}
+    .route-progress-banner{padding:9px;}
+    .route-progress-banner h2{font-size:14px;margin-bottom:7px;}
+    .route-progress-grid strong{font-size:20px;}
+    .route-progress-grid>div{padding:8px 3px;}
+    .route-progress-caption{font-size:11px;line-height:1.35;}
+    .trip-mini-strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:5px 0 8px;}
+    .trip-mini-strip>div{background:#fff;border:1px solid #d2e2d8;border-radius:11px;padding:8px 12px;display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
+    .trip-mini-strip strong{font-size:20px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+    .trip-mini-strip span{font-size:11px;color:#53695e;}
+    .mobile-bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:4000;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;background:rgba(255,255,255,.98);border-top:1px solid #cfdfd3;box-shadow:0 -3px 15px #0002;padding:5px 6px calc(5px + env(safe-area-inset-bottom));}
+    .mobile-bottom-nav button{min-height:55px;min-width:0;background:transparent;color:#426052;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center;padding:5px 1px;border-radius:11px;font-size:11px;font-weight:700;line-height:1.15;}
+    .mobile-bottom-nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+    .mobile-bottom-nav button.selected{color:#155c42;background:#e4f2e9;}
+    .mobile-bottom-nav button:focus-visible{outline:3px solid #d49d25;outline-offset:-2px;}
+    #view-kort.route-mode #mapTools{order:3;margin-top:4px;}
+    #view-kort.route-mode #map{order:4;height:clamp(300px,48dvh,580px);}
+    #view-kort.route-mode #mapQuickbar{display:none;}
+    #view-kort.route-mode #tripPanel{display:none;}
+    #view-kort.route-mode #mapTools > .actions{gap:8px;}
+    #view-kort.route-mode #mapTools > .actions button{flex:1 1 42%;}
+    #view-kort.route-mode #routeDisclosure{margin:3px 0 10px;}
+    .route-disclosure>summary{min-height:48px;}
+    #view-ture .history-row{padding:13px 0;gap:10px;}
+    #view-ture .history-row .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;}
+    #view-ture .history-row .actions button{font-size:13px;}
+    .actions button,.settings-row button,.maps-link{min-height:44px;}
+    .stats.four{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .stat strong{font-size:20px;}
+    footer{margin:14px 2px 8px;}
+  }
+  @media(min-width:701px){.mobile-view-title,.trip-mini-strip{display:none!important}}
+  @media(max-width:365px){.mobile-bottom-nav button{font-size:10px}.route-progress-grid strong{font-size:17px}.trip-mini-strip strong{font-size:17px}}
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.7</small></div><span class="header-tag">Vandring og GPS</span></div></header>
+<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.8</small></div><span class="header-tag">Vandring og GPS</span></div></header>
 <nav id="mainTabs" class="main-tabs" aria-label="Hovednavigation">
   <button type="button" class="tab selected" data-tab="kort" aria-current="page">Kort</button>
+  <button type="button" class="tab" data-tab="ruter">Ruter</button>
   <button type="button" class="tab" data-tab="ture">Mine ture</button>
   <button type="button" class="tab" data-tab="indstillinger">Indstillinger</button>
+</nav>
+<nav id="mobileBottomNav" class="mobile-bottom-nav" aria-label="Mobilnavigation">
+  <button type="button" data-tab="kort" class="selected" aria-current="page" aria-label="Kort"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15m6-12v15"/></svg><span>Kort</span></button>
+  <button type="button" data-tab="ruter" aria-label="Ruter"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h6a4 4 0 0 0 0-8h-4a4 4 0 0 1 0-8h6"/></svg><span>Ruter</span></button>
+  <button type="button" data-tab="ture" aria-label="Mine ture"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v15H4zM4 10h16M8 2v6m8-6v6M8 14h3m-3 3h7"/></svg><span>Mine ture</span></button>
+  <button type="button" data-tab="indstillinger" aria-label="Mere"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><path d="M3 20h18"/></svg><span>Mere</span></button>
 </nav>
 <main>
 <p class="intro">Planlæg en vandrerute, følg GPS og gem dine ture.</p>
@@ -180,6 +255,14 @@
   const move=(id,to)=>{const el=document.getElementById(id);if(el)to.appendChild(el);};
   for(const node of [...main.children]){if(node.matches('.intro,#status,#map,#routeProgressBanner'))mapView.appendChild(node);}
   move('tripPanel',mapView);move('mapTools',mapView);
+  const viewLabel=document.createElement('h2');viewLabel.className='mobile-view-title';viewLabel.textContent='Kort og navigation';mapView.insertBefore(viewLabel,mapView.firstChild);
+  const mini=document.createElement('div');mini.className='trip-mini-strip';mini.id='tripMiniStrip';
+  mini.innerHTML='<div><span>Gået</span><strong id="miniDistance">0,00 km</strong></div><div><span>Tid</span><strong id="miniDuration">00:00</strong></div>';
+  mapView.insertBefore(mini,document.getElementById('map'));
+  const distanceSource=document.getElementById('distance'),timeSource=document.getElementById('duration');
+  const updateMini=()=>{document.getElementById('miniDistance').textContent=distanceSource.textContent+' km';document.getElementById('miniDuration').textContent=timeSource.textContent;};
+  new MutationObserver(updateMini).observe(distanceSource,{childList:true,characterData:true,subtree:true});
+  new MutationObserver(updateMini).observe(timeSource,{childList:true,characterData:true,subtree:true});updateMini();
   // Knapperne ligger OVER kortet, men aktiverer den eksisterende og afprøvede logik.
   const quick=document.createElement('div');quick.className='map-quickbar';quick.id='mapQuickbar';
   quick.innerHTML=`<div class="quickbar-header"><div class="map-quickbar-title">GPS og ruteplanlægning</div><button type="button" class="secondary quickbar-toggle" id="quickbarToggle" aria-expanded="true" aria-controls="quickbarActions" hidden>Skjul betjening</button></div>
@@ -217,7 +300,7 @@
   }
   document.getElementById('quickPlan').addEventListener('click',()=>{
     const disclosure=document.getElementById('routeDisclosure');disclosure.open=true;
-    disclosure.scrollIntoView({behavior:'smooth',block:'start'});
+    selectTab('ruter');
     if(window.vandreMapInvalidate)window.vandreMapInvalidate();
   });
   move('historyPanel',toursView);move('analysisPanel',toursView);
@@ -228,15 +311,20 @@
   <div class="settings-row"><strong>Ruteplanlægning</strong><p>Åbn “Planlæg en rute på kortet”, og vælg manuel tegning eller beregning langs stier. Ruteberegning kræver internet og kan fejle med visse via-punkter.</p></div>
   <div class="quick-actions"><button type="button" id="settingsToMap" class="secondary">Til kort og GPS</button><button type="button" id="settingsToTours" class="secondary">Til mine ture</button></div></div>`;
   function selectTab(name){
-    for(const [id,section] of [['kort',mapView],['ture',toursView],['indstillinger',settingsView]])section.hidden=id!==name;
-    for(const tab of document.querySelectorAll('#mainTabs .tab')){
+    if(!['kort','ruter','ture','indstillinger'].includes(name))name='kort';
+    const mapTab=(name==='kort'||name==='ruter');
+    mapView.hidden=!mapTab;toursView.hidden=name!=='ture';settingsView.hidden=name!=='indstillinger';
+    mapView.classList.toggle('route-mode',name==='ruter');
+    viewLabel.textContent=name==='ruter'?'Planlæg en rute':'Kort og navigation';
+    if(name==='ruter')document.getElementById('routeDisclosure').open=true;
+    for(const tab of document.querySelectorAll('#mainTabs .tab,#mobileBottomNav button')){
       const active=tab.dataset.tab===name;tab.classList.toggle('selected',active);
       if(active)tab.setAttribute('aria-current','page');else tab.removeAttribute('aria-current');
     }
-    if(name==='kort' && window.vandreMapInvalidate)window.vandreMapInvalidate();
+    if(mapTab && window.vandreMapInvalidate)window.vandreMapInvalidate();
     window.scrollTo({top:0,behavior:'instant'});
   }
-  document.querySelectorAll('#mainTabs .tab').forEach(el=>el.addEventListener('click',()=>selectTab(el.dataset.tab)));
+  document.querySelectorAll('#mainTabs .tab,#mobileBottomNav button').forEach(el=>el.addEventListener('click',()=>selectTab(el.dataset.tab)));
   document.getElementById('settingsToMap').onclick=()=>selectTab('kort');
   document.getElementById('settingsToTours').onclick=()=>selectTab('ture');
   window.vandreSelectTab=selectTab;

@@ -17,3 +17,11 @@
 **Løsning:** Genvejen udløser eksisterende `drawToggle`-knaplogik, hvis tegnetilstand endnu ikke er aktiv. Dermed genbruges GPS-follow-håndteringen og kortets klikfunktion.
 
 **Verifikation:** JavaScript-syntaks og ZIP-integritet kontrolleres; Android-test er ikke gennemført.
+
+## Version 0.8.14 – 4. november 2026
+
+**Problem:** Eksport af tegnet rute brugte altid samme filnavn (`vandreapp-tegnet-rute.gpx`).
+
+**Løsning:** AI-assisteret, afgrænset ændring af downloadnavnet til dato/tid med millisekunder plus kort tilfældig identifikator. GPX-XML og ruteberegning er uændret.
+
+**Kontrol:** Syntaxkontrol og pakkekontrol; praktisk test på Android afventer.

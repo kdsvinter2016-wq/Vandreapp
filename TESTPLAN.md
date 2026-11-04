@@ -29,3 +29,10 @@ Status: kodekontrol og syntaks kan gennemføres lokalt; GPS på fysisk Android k
 5. Kontrollér GPS-position, GPX-import og Mine ture kortvarigt som regressionstest.
 
 Praktisk Android-test afventes.
+
+## Test i 0.8.14 – GPX-filnavne
+
+1. Tegn mindst to punkter og eksportér GPX to gange hurtigt efter hinanden. Kontrollér, at filnavnene er forskellige og ender på `.gpx`.
+2. Åbn begge filer i gpx.studio, og kontrollér, at ruterne vises.
+3. Beregn automatisk rute og eksportér; kontrollér unikt navn og korrekt rute.
+4. Kontrollér, at almindelig GPS-registrering og dens GPX-eksport stadig virker.

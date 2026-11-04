@@ -157,7 +157,7 @@
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.13</small></div><span class="header-tag">Vandring og GPS</span></div></header>
+<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.14</small></div><span class="header-tag">Vandring og GPS</span></div></header>
 <nav id="mainTabs" class="main-tabs" aria-label="Hovednavigation">
   <button type="button" class="tab selected" data-tab="kort" aria-current="page">Kort</button>
   <button type="button" class="tab" data-tab="ruter">Ruter</button>
@@ -753,7 +753,13 @@
     const vertices=activeDrawPoints().map(p=>`<rtept lat="${p[0].toFixed(7)}" lon="${p[1].toFixed(7)}"/>`).join('');
     const xml=`<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VandreApp 0.8.6" xmlns="http://www.topografix.com/GPX/1/1"><rte><name>Min tegnede rute</name>${vertices}</rte></gpx>`;
     const url=URL.createObjectURL(new Blob([xml],{type:'application/gpx+xml'}));
-    const a=document.createElement('a');a.href=url;a.download='vandreapp-tegnet-rute.gpx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    // Lokalt tidsstempel samt en kort tilfældig identifikator, så hver eksport får sit eget filnavn.
+    const exportedAt=new Date();
+    const pad=(value,width=2)=>String(value).padStart(width,'0');
+    const stamp=`${exportedAt.getFullYear()}-${pad(exportedAt.getMonth()+1)}-${pad(exportedAt.getDate())}_${pad(exportedAt.getHours())}-${pad(exportedAt.getMinutes())}-${pad(exportedAt.getSeconds())}-${pad(exportedAt.getMilliseconds(),3)}`;
+    const uniquePart=(globalThis.crypto?.randomUUID?.()||Math.random().toString(36).slice(2)).slice(0,8);
+    const filename=`vandreapp-tegnet-rute_${stamp}_${uniquePart}.gpx`;
+    const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
     $('drawStatus').textContent=routedPoints?'Beregnet vandrerute eksporteret som GPX.':'Manuelt tegnet rute eksporteret som GPX (rette linjer).';
   };
   $('navRefresh').onclick=requestNavigationPosition;

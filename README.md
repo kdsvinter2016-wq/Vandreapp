@@ -17,3 +17,7 @@ Se `TESTPLAN.md` for Android-tests. Webappen kan ikke garantere GPS-opdateringer
 ## Ændring i 0.8.13
 
 Knappen **Planlæg rute på kortet** under **GPS og ruteplanlægning** åbner fanen Ruter og aktiverer automatisk **Start tegning**. Hvis tegning allerede er aktiv, forbliver den aktiv. Øvrige GPS- og rutefunktioner er bevaret.
+
+## Ændring i 0.8.14 – unikke GPX-filnavne
+
+Hver eksport af en tegnet eller automatisk beregnet rute får et filnavn med lokalt dato-/tidsstempel (inklusive millisekunder) og en kort identifikator, eksempelvis `vandreapp-tegnet-rute_2026-11-04_15-34-22-058_a1b2c3d4.gpx`. Det ændrer ikke GPX-filens indhold eller eksport af registrerede ture.

@@ -36,3 +36,13 @@ Praktisk Android-test afventes.
 2. Åbn begge filer i gpx.studio, og kontrollér, at ruterne vises.
 3. Beregn automatisk rute og eksportér; kontrollér unikt navn og korrekt rute.
 4. Kontrollér, at almindelig GPS-registrering og dens GPX-eksport stadig virker.
+
+## Version 0.8.15 – UI-rettelser
+1. Åbn webappen på Galaxy S25 FE. Kontroller Prototype 0.8.15.
+2. På Kort: Den ekstra overskrift “Kort og navigation” vises ikke; kortet er synligt.
+3. Tryk “Åbn GPS og ruteplanlægning”: GPS-fanen vælges og GPS-knapperne vises.
+4. Tryk “Planlæg rute på kortet”: Ruter-fanen vises med tegnepanelet åbent; tryk på kortet for at indsætte punkter.
+5. Skift via bundmenu mellem Kort, Ruter, GPS, Mine ture og Mere.
+6. Kontrollér, at GPS, GPX-import/-eksport og navigationsnulstilling fortsat fungerer.
+
+Automatiseret test: syntakskontrol og mobil browser-simulering af trin 2–4. Fysisk Android-test mangler.

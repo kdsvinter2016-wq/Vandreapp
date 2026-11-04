@@ -25,3 +25,10 @@
 **Løsning:** AI-assisteret, afgrænset ændring af downloadnavnet til dato/tid med millisekunder plus kort tilfældig identifikator. GPX-XML og ruteberegning er uændret.
 
 **Kontrol:** Syntaxkontrol og pakkekontrol; praktisk test på Android afventer.
+
+## Version 0.8.15 – 4. november 2026
+**Problem:** Den overflødige mobiloverskrift “Kort og navigation” blev vist på startsiden. Genvejen “Åbn GPS og ruteplanlægning” førte til fanen Ruter, ikke GPS-betjeningen.
+
+**Ændring:** Skjul overskriften på startsiden, men bevar separate overskrifter for Ruter og GPS. Lad genvejen åbne GPS-fanen og behold knappen “Planlæg rute på kortet” til at åbne Ruter og aktivere tegning. Ingen ændring i GPS-/GPX-/rutemotor.
+
+**Test:** JavaScript-syntaks, mobil browser-simulering af fane- og knapnavigation. Fysisk Android-/GPS-regressionstest afventer.

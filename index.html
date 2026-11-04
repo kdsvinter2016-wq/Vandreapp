@@ -83,6 +83,7 @@
     main{padding:8px 9px 12px;}
     .intro{display:none;}
     .mobile-view-title{display:block;margin:5px 3px 7px;font-size:17px;letter-spacing:-.2px;}
+    .mobile-view-title[hidden]{display:none!important;}
     #view-kort{display:flex;flex-direction:column;gap:0;}
     #view-kort[hidden]{display:none!important;}
     #view-kort .mobile-view-title{order:0;}
@@ -157,7 +158,7 @@
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.14</small></div><span class="header-tag">Vandring og GPS</span></div></header>
+<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.15</small></div><span class="header-tag">Vandring og GPS</span></div></header>
 <nav id="mainTabs" class="main-tabs" aria-label="Hovednavigation">
   <button type="button" class="tab selected" data-tab="kort" aria-current="page">Kort</button>
   <button type="button" class="tab" data-tab="ruter">Ruter</button>
@@ -284,7 +285,7 @@
   const move=(id,to)=>{const el=document.getElementById(id);if(el)to.appendChild(el);};
   for(const node of [...main.children]){if(node.matches('.intro,#status,#map,#routeProgressBanner'))mapView.appendChild(node);}
   move('tripPanel',mapView);move('mapTools',mapView);
-  const viewLabel=document.createElement('h2');viewLabel.className='mobile-view-title';viewLabel.textContent='Kort og navigation';mapView.insertBefore(viewLabel,mapView.firstChild);
+  const viewLabel=document.createElement('h2');viewLabel.className='mobile-view-title';viewLabel.textContent='';viewLabel.hidden=true;mapView.insertBefore(viewLabel,mapView.firstChild);
   const mini=document.createElement('div');mini.className='trip-mini-strip';mini.id='tripMiniStrip';
   mini.innerHTML='<div><span>Gået</span><strong id="miniDistance">0,00 km</strong></div><div><span>Tid</span><strong id="miniDuration">00:00</strong></div>';
   mapView.insertBefore(mini,document.getElementById('map'));
@@ -306,7 +307,8 @@
   const controlsLink=document.createElement('button');controlsLink.id='mapControlsLink';controlsLink.type='button';controlsLink.className='secondary';controlsLink.textContent='Åbn GPS og ruteplanlægning';
   controlsLink.style.cssText='display:block;width:100%;min-height:44px;margin:3px 0 8px';
   mapView.insertBefore(controlsLink,quick);
-  controlsLink.onclick=()=>selectTab('ruter');
+  // Kort-fanens genvej åbner GPS-betjeningen. Herfra fører 'Planlæg rute på kortet' til Ruter.
+  controlsLink.addEventListener('click',()=>{selectTab('gps');});
   const quickToggle=document.getElementById('quickbarToggle');
   const quickActions=document.getElementById('quickbarActions');
   let hasNavigationRoute=false;
@@ -352,7 +354,8 @@
     mapView.hidden=!mapTab;toursView.hidden=name!=='ture';settingsView.hidden=name!=='indstillinger';
     mapView.classList.toggle('route-mode',name==='ruter'||name==='gps');
     mapView.classList.toggle('gps-mode',name==='gps');
-    viewLabel.textContent=name==='ruter'?'Ruteplanlægning':name==='gps'?'GPS og registrering':'Kort og navigation';
+    viewLabel.textContent=name==='ruter'?'Ruteplanlægning':name==='gps'?'GPS og registrering':'';
+    viewLabel.hidden=(name==='kort');
     if(name==='ruter')document.getElementById('routeDisclosure').open=true;
     if(name==='gps')document.getElementById('routeDisclosure').open=false;
     for(const tab of document.querySelectorAll('#mainTabs .tab,#mobileBottomNav button')){

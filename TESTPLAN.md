@@ -1,4 +1,4 @@
-# Testplan – VandreApp 0.8.18
+# Testplan – VandreApp 0.8.19
 
 ## Layout på computer
 1. Åbn VandreApp i browseren med en bred skærm.
@@ -25,3 +25,10 @@
 - Browserkontrol af fem synlige menupunkter på både desktop og mobil, klik Kort/Ruter/GPS.
 - Ingen vandret overflow i de testede visninger.
 - Ikke testet: rigtige korttiles og fysisk GPS i testmiljøet.
+
+## 0.8.19: Desktop-ramme og scrolling
+1. Aabn i computerbrowser i f.eks. 1366x900. Hele telefonens nederste kant skal vaere synlig.
+2. Rul ned med musehjul over telefonens indhold. Rammen og de to kameradetaljer maa ikke flytte sig.
+3. Bundmenuen med fem faner skal vaere synlig hele tiden og placeret INDE i telefonen.
+4. Test ogsaa browserhoejde under 700 px, samt en bred og hoej desktop-skaerm.
+5. Kontrollér paa rigtig telefon, at der ikke er en ekstra ramme.

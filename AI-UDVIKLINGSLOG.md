@@ -46,3 +46,10 @@
 **AI-ændring:** Genbrug eksisterende mobil-CSS på alle skærmstørrelser. På bred skærm tilføjes kun en CSS-baseret telefonramme (430 px) og bundmenuen placeres i rammen. På ægte mobil vises appen fortsat i fuld bredde. Den eksisterende femdelte navigation, Leaflet, GPS, GPX og turhistorik er ikke omskrevet. Statistikpanelet skjules på fanen Kort og vises under GPS.
 
 **Test og begrænsninger:** Browserkontrol af desktop (1366×900) og mobil (393×852) udført; script-syntaks godkendt. Eksterne kortressourcer og fysisk GPS ikke verificeret. Ændringen er kosmetisk og giver ikke Android-APK-/baggrunds-GPS-funktionalitet.
+
+
+## 0.8.19 – telefonrammens scroll-adfaerd
+- Fejl: S25 FE-telefonrammen voksede med dokumentets indhold, og kameradetaljer flyttede sig ved scrolling.
+- Aarsag: `aspect-ratio` uden fast scrollhoejde og pseudo-elementer paa body med `position: fixed`.
+- Loesning: fast CSS-beregnet rammehoejde med scroll inde i body, kameradetaljer paa html og bundnavigation forankret til rammens bund.
+- Konsekvens: Kun desktop-layout CSS er aendret, GPS/GPX-navigation forbliver uændret.

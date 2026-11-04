@@ -1,4 +1,4 @@
-# VandreApp 0.8.18 – Android-inspireret weblayout
+# VandreApp 0.8.19 – Android-inspireret weblayout
 
 Webudgaven anvender nu det samme mobilorienterede layout uanset skærmstørrelse.
 
@@ -10,10 +10,14 @@ Webudgaven anvender nu det samme mobilorienterede layout uanset skærmstørrelse
 
 ## Installation på GitHub Pages
 
-Udpak alle otte filer til roden af GitHub-repositoriet og commit. Åbn `https://kdsvinter2016-wq.github.io/Vandreapp/?v=0818` efter publicering.
+Udpak alle otte filer til roden af GitHub-repositoriet og commit. Åbn `https://kdsvinter2016-wq.github.io/Vandreapp/?v=0819` efter publicering.
 
 GPS kræver HTTPS, positionsadgang og test på telefonen. Kortet kræver adgang til Leaflet og OpenStreetMap.
 
 ## Test
 
 Se `TESTPLAN.md`. Layout og menuskift er browserafprøvet ved 1366 × 900 og 393 × 852. Fysisk Android-GPS og kortindlæsning er ikke afprøvet i denne ændring.
+
+## Version 0.8.19: Rette telefonrammens scrolling
+
+Paa desktop er telefonrammen nu en afgrænset scroll-container med fast hoejde i S25 FE-proportioner. Kameradetaljer bliver staaende, og den faste bundmenu er placeret ved telefonens bund, ogsaa naar indholdet rulles. Mobilvisningen (<=700 px) er ikke aendret.

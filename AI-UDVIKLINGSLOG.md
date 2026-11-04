@@ -40,7 +40,7 @@
 - **Test:** JavaScript-syntaks, kontrol af fravær af mini-boksreferencer, ZIP-integritet. Praktisk Android-test afventes.
 
 
-## Version 0.8.17 – 4. november 2026
+## Version 0.8.18 – 4. november 2026
 **Brugerkrav:** Webudgaven skal have mobilappens Android-layout og ligne en app, der kører på en telefon, også ved visning i desktopbrowser.
 
 **AI-ændring:** Genbrug eksisterende mobil-CSS på alle skærmstørrelser. På bred skærm tilføjes kun en CSS-baseret telefonramme (430 px) og bundmenuen placeres i rammen. På ægte mobil vises appen fortsat i fuld bredde. Den eksisterende femdelte navigation, Leaflet, GPS, GPX og turhistorik er ikke omskrevet. Statistikpanelet skjules på fanen Kort og vises under GPS.

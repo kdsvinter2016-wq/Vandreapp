@@ -1,4 +1,4 @@
-# Testplan – VandreApp 0.8.17
+# Testplan – VandreApp 0.8.18
 
 ## Layout på computer
 1. Åbn VandreApp i browseren med en bred skærm.

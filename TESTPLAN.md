@@ -1,58 +1,27 @@
-# Testplan – VandreApp 0.8.13
+# Testplan – VandreApp 0.8.17
 
-## Test A – Importeret GPX langt fra din position
-1. Åbn version 0.8.13 på Galaxy S25 FE.
-2. Importér en GPX-fil, hvis rute ikke ligger ved telefonens position.
-3. Kontrollér, at hele GPX-ruten vises og **Følg GPS: Fra** står i GPS-panelet.
-4. Vent 30 sekunder. Kortet skal blive på GPX-ruten, også når GPS-nøjagtighed opdateres.
-5. Kontrollér, at afstand til ruten og GPS-nøjagtighed opdateres, hvis telefonen leverer målinger.
+## Layout på computer
+1. Åbn VandreApp i browseren med en bred skærm.
+2. Kontrollér, at appen vises i en centreret telefonlignende ramme og ikke strækkes i bredden.
+3. Kontrollér, at bundmenuen har Kort, Ruter, GPS, Mine ture og Mere.
+4. Skift mellem fanerne. Kortet skal ikke få vandretursstatistik på startsiden.
 
-## Test B – Aktivér GPS-følgning bevidst
-1. Tryk **Følg GPS: Fra**, så knappen viser **Til**.
-2. Kortet skal centreres på telefonens position og følge nye positioner.
-3. Slå Følg GPS fra igen. Kortet skal forblive i det valgte udsnit.
+## Layout på Android
+1. Åbn VandreApp i Chrome på Samsung Galaxy S25 FE.
+2. Kontrollér, at appen fylder skærmens bredde uden kunstig telefonramme.
+3. Kontrollér, at alle fem menupunkter kan trykkes, og at der ikke er vandret scroll.
+4. Test fanerne Kort, Ruter, GPS, Mine ture, Mere.
+5. Kontrollér, at GPS-knapper og distance/varighed findes under GPS, men ikke på Kort.
 
-## Test C – Regression
-1. Importeret GPX: startpunkt i Google Maps, rutelængde, GPX-højdeprofil.
-2. Tegnet rute: tegning, beregning, navigation og GPX-eksport.
-3. Mine ture: Følg rute, visning, gem og backup.
-4. GPS-registrering og pause/genoptag samt rutenulstilling.
+## Regression – kræver faktisk funktionstest
+- Importér en GPX-fil, og kontrollér at ruten bliver synlig på kortet.
+- Tegn en rute og eksportér en GPX med unikt filnavn.
+- Åbn en tur fra Mine ture, og fjern ruten med Fjern rute og afslut navigation.
+- Start og stop GPS-registrering med positionsadgang på telefonen.
+- Kontrollér lokal gemning og eventuel backup/gendannelse.
 
-Status: kodekontrol og syntaks kan gennemføres lokalt; GPS på fysisk Android kræver brugerens test. Ruteafvigelsesalarmer er fortsat ikke fuldt verificeret.
-
-## Ny kontrol i 0.8.13
-
-1. Åbn Kort/GPS og tryk **Planlæg rute på kortet**.
-2. Kontrollér, at fanen Ruter åbner, og at knappen nu hedder **Afslut tegning**.
-3. Tryk på kortet to steder: Pink rutestreg og distance skal vises.
-4. Tryk igen på **Planlæg rute på kortet**: Tegning skal fortsat være aktiv, og de eksisterende punkter må ikke blive slettet.
-5. Kontrollér GPS-position, GPX-import og Mine ture kortvarigt som regressionstest.
-
-Praktisk Android-test afventes.
-
-## Test i 0.8.14 – GPX-filnavne
-
-1. Tegn mindst to punkter og eksportér GPX to gange hurtigt efter hinanden. Kontrollér, at filnavnene er forskellige og ender på `.gpx`.
-2. Åbn begge filer i gpx.studio, og kontrollér, at ruterne vises.
-3. Beregn automatisk rute og eksportér; kontrollér unikt navn og korrekt rute.
-4. Kontrollér, at almindelig GPS-registrering og dens GPX-eksport stadig virker.
-
-## Version 0.8.15 – UI-rettelser
-1. Åbn webappen på Galaxy S25 FE. Kontroller Prototype 0.8.15.
-2. På Kort: Den ekstra overskrift “Kort og navigation” vises ikke; kortet er synligt.
-3. Tryk “Åbn GPS og ruteplanlægning”: GPS-fanen vælges og GPS-knapperne vises.
-4. Tryk “Planlæg rute på kortet”: Ruter-fanen vises med tegnepanelet åbent; tryk på kortet for at indsætte punkter.
-5. Skift via bundmenu mellem Kort, Ruter, GPS, Mine ture og Mere.
-6. Kontrollér, at GPS, GPX-import/-eksport og navigationsnulstilling fortsat fungerer.
-
-Automatiseret test: syntakskontrol og mobil browser-simulering af trin 2–4. Fysisk Android-test mangler.
-
-## Version 0.8.16 – fjern Gået/Tid fra Kort
-1. Åbn `?v=0816` på Galaxy S25 FE; kontrollér Prototype 0.8.16.
-2. Vælg **Kort**; boksene **Gået** og **Tid** må ikke vises over kortet.
-3. Vælg **GPS**; kontrollér at distance og varighed stadig vises under Min vandretur.
-4. Start en kort GPS-registrering; kontrollér at distance og varighed opdateres i GPS-fanen.
-5. Kontrollér at **Åbn GPS og ruteplanlægning** stadig åbner GPS-fanen.
-6. Vælg en gemt rute til navigation; kontrollér at *rutelængde/tilbage/procent* fortsat vises, når navigation er aktiv.
-
-Fysisk Android-test afventes.
+## Udførte automatiserede kontroller
+- Inline JavaScript kan parses af Node.js uden syntaksfejl.
+- Browserkontrol af fem synlige menupunkter på både desktop og mobil, klik Kort/Ruter/GPS.
+- Ingen vandret overflow i de testede visninger.
+- Ikke testet: rigtige korttiles og fysisk GPS i testmiljøet.

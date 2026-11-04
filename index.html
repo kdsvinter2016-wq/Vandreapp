@@ -71,7 +71,7 @@
   .app-section{min-width:0}
   .history-row .actions{flex-wrap:wrap;}
   .history-row .actions button{min-height:44px;}
-  @media(max-width:700px){
+  @media(min-width:0px){
     :root{--mobile-nav-height:68px}
     html{scroll-padding-top:14px;}
     body{background:#eef3ef;padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom) + 12px);}
@@ -133,7 +133,7 @@
   @media(max-width:365px){.mobile-bottom-nav button{font-size:10px}.route-progress-grid strong{font-size:17px}}
 
   /* 0.8.10: Adskil Ruter og GPS i hver sin navigationsfane. */
-  @media(max-width:700px){
+  @media(min-width:0px){
     .mobile-bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding-left:3px;padding-right:3px;}
     .mobile-bottom-nav button{font-size:10px;padding:5px 0;}
     .mobile-bottom-nav button[data-tab="ruter"] span{font-size:10px;}
@@ -149,10 +149,50 @@
     #view-kort.gps-mode #mapQuickbar{display:block;}
     #view-kort.gps-mode #tripPanel{display:block;}
   }
+
+  /* 0.8.17: Android-lignende visning på web, også på en stor PC-skærm.
+     Eksisterende GPS-, rutelogik og fanernes DOM-id'er ændres ikke. */
+  .main-tabs{display:none!important;}
+  .header-tag{display:none!important;}
+  #view-kort:not(.gps-mode) #tripPanel{display:none!important;}
+  .mobile-bottom-nav{display:grid;}
+  .mobile-view-title:not([hidden]){display:block!important;}
+  @media(min-width:701px){
+    html{min-height:100%;background:linear-gradient(145deg,#dde8e0,#b9cfc1 55%,#edf3ee);}
+    body{
+      width:430px;max-width:calc(100% - 32px);
+      min-height:calc(100dvh - 28px);
+      margin:14px auto;
+      background:#f4f7f4;
+      border:8px solid #26392f;
+      border-radius:38px;
+      box-shadow:0 15px 50px rgba(22,47,32,.29);
+      overflow-x:clip;
+      padding-bottom:95px;
+    }
+    header{border-radius:29px 29px 0 0;}
+    header .header-inner{width:100%;}
+    main{width:100%;max-width:none;padding:8px 9px 12px;}
+    #map{height:clamp(310px,54dvh,650px);min-height:310px;}
+    #view-kort.route-mode #map{height:clamp(300px,48dvh,580px);}
+    .mobile-bottom-nav{
+      left:50%;right:auto;bottom:14px;transform:translateX(-50%);
+      width:414px;max-width:calc(100% - 48px);
+      border-radius:0 0 28px 28px;
+      padding-bottom:8px;
+    }
+    .panel{padding:12px;margin-top:9px;}
+    footer{padding-bottom:12px;}
+  }
+  @media(max-width:700px){
+    html{background:#eef3ef;}
+    body{width:100%;max-width:none;margin:0;border:0;border-radius:0;box-shadow:none;}
+    .mobile-bottom-nav{left:0;right:0;bottom:0;transform:none;width:100%;max-width:none;border-radius:0;}
+  }
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.16</small></div><span class="header-tag">Vandring og GPS</span></div></header>
+<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.17</small></div><span class="header-tag">Vandring og GPS</span></div></header>
 <nav id="mainTabs" class="main-tabs" aria-label="Hovednavigation">
   <button type="button" class="tab selected" data-tab="kort" aria-current="page">Kort</button>
   <button type="button" class="tab" data-tab="ruter">Ruter</button>

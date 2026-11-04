@@ -38,3 +38,11 @@
 - **AI-assisteret ændring:** Fjernet DOM-oprettelsen og de to MutationObserver-lyttere til de overflødige bokse samt deres CSS.
 - **Afgrænsning:** Den eksisterende turstatistik i GPS-fanen og navigationspanelet berøres ikke.
 - **Test:** JavaScript-syntaks, kontrol af fravær af mini-boksreferencer, ZIP-integritet. Praktisk Android-test afventes.
+
+
+## Version 0.8.17 – 4. november 2026
+**Brugerkrav:** Webudgaven skal have mobilappens Android-layout og ligne en app, der kører på en telefon, også ved visning i desktopbrowser.
+
+**AI-ændring:** Genbrug eksisterende mobil-CSS på alle skærmstørrelser. På bred skærm tilføjes kun en CSS-baseret telefonramme (430 px) og bundmenuen placeres i rammen. På ægte mobil vises appen fortsat i fuld bredde. Den eksisterende femdelte navigation, Leaflet, GPS, GPX og turhistorik er ikke omskrevet. Statistikpanelet skjules på fanen Kort og vises under GPS.
+
+**Test og begrænsninger:** Browserkontrol af desktop (1366×900) og mobil (393×852) udført; script-syntaks godkendt. Eksterne kortressourcer og fysisk GPS ikke verificeret. Ændringen er kosmetisk og giver ikke Android-APK-/baggrunds-GPS-funktionalitet.

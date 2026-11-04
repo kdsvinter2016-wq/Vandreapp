@@ -27,3 +27,9 @@ Hver eksport af en tegnet eller automatisk beregnet rute får et filnavn med lok
 - “Åbn GPS og ruteplanlægning” åbner nu GPS-fanen med betjeningen.
 - Herfra åbner “Planlæg rute på kortet” fanen Ruter og starter tegning.
 - Alle øvrige funktioner fra 0.8.14 er bevaret i kildekoden.
+
+## Version 0.8.16 – fjern turstatistik fra startsiden
+- Kort-fanen viser ikke længere de to særskilte kort **Gået** og **Tid** over kortet.
+- Turstatistikken i **GPS**-fanen (distance, varighed, GPS-punkter og gennemsnitshastighed) er bevaret.
+- Navigationsstatistik for en valgt rute (rutelængde, tilbage og procent) er uændret.
+- Ingen ændring af GPS-registrering, ruteplanlægning eller lagrede ture.

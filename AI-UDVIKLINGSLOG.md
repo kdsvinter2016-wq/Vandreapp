@@ -32,3 +32,9 @@
 **Ændring:** Skjul overskriften på startsiden, men bevar separate overskrifter for Ruter og GPS. Lad genvejen åbne GPS-fanen og behold knappen “Planlæg rute på kortet” til at åbne Ruter og aktivere tegning. Ingen ændring i GPS-/GPX-/rutemotor.
 
 **Test:** JavaScript-syntaks, mobil browser-simulering af fane- og knapnavigation. Fysisk Android-/GPS-regressionstest afventer.
+
+## Version 0.8.16 – 4. november 2026
+- **Problem:** På startsiden Kort blev to dynamisk oprettede statistikbokse, Gået og Tid, stadig vist efter 0.8.15.
+- **AI-assisteret ændring:** Fjernet DOM-oprettelsen og de to MutationObserver-lyttere til de overflødige bokse samt deres CSS.
+- **Afgrænsning:** Den eksisterende turstatistik i GPS-fanen og navigationspanelet berøres ikke.
+- **Test:** JavaScript-syntaks, kontrol af fravær af mini-boksreferencer, ZIP-integritet. Praktisk Android-test afventes.

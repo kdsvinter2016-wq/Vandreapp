@@ -46,3 +46,13 @@ Praktisk Android-test afventes.
 6. Kontrollér, at GPS, GPX-import/-eksport og navigationsnulstilling fortsat fungerer.
 
 Automatiseret test: syntakskontrol og mobil browser-simulering af trin 2–4. Fysisk Android-test mangler.
+
+## Version 0.8.16 – fjern Gået/Tid fra Kort
+1. Åbn `?v=0816` på Galaxy S25 FE; kontrollér Prototype 0.8.16.
+2. Vælg **Kort**; boksene **Gået** og **Tid** må ikke vises over kortet.
+3. Vælg **GPS**; kontrollér at distance og varighed stadig vises under Min vandretur.
+4. Start en kort GPS-registrering; kontrollér at distance og varighed opdateres i GPS-fanen.
+5. Kontrollér at **Åbn GPS og ruteplanlægning** stadig åbner GPS-fanen.
+6. Vælg en gemt rute til navigation; kontrollér at *rutelængde/tilbage/procent* fortsat vises, når navigation er aktiv.
+
+Fysisk Android-test afventes.

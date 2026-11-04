@@ -65,7 +65,6 @@
   #view-kort:not(.route-mode) #mapQuickbar{display:none;}
   #view-kort.route-mode #mapControlsLink{display:none!important;}
   .mobile-bottom-nav { display:none; }
-  .trip-mini-strip { display:none; }
   .mobile-view-title {display:none;}
   .map-quickbar .quickbar-header{min-height:40px}
   .map-quickbar .map-quick-actions button{touch-action:manipulation}
@@ -88,7 +87,6 @@
     #view-kort[hidden]{display:none!important;}
     #view-kort .mobile-view-title{order:0;}
     #routeProgressBanner{order:1;margin:5px 0 7px;}
-    #tripMiniStrip{order:2;}
     #mapControlsLink{order:3;}
     #mapQuickbar{order:3;margin:5px 0 8px;}
     #map{order:4;height:clamp(310px,54dvh,650px);min-height:310px;border-radius:12px;}
@@ -105,10 +103,6 @@
     .route-progress-grid strong{font-size:20px;}
     .route-progress-grid>div{padding:8px 3px;}
     .route-progress-caption{font-size:11px;line-height:1.35;}
-    .trip-mini-strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:5px 0 8px;}
-    .trip-mini-strip>div{background:#fff;border:1px solid #d2e2d8;border-radius:11px;padding:8px 12px;display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
-    .trip-mini-strip strong{font-size:20px;font-variant-numeric:tabular-nums;white-space:nowrap;}
-    .trip-mini-strip span{font-size:11px;color:#53695e;}
     .mobile-bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:4000;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;background:rgba(255,255,255,.98);border-top:1px solid #cfdfd3;box-shadow:0 -3px 15px #0002;padding:5px 6px calc(5px + env(safe-area-inset-bottom));}
     .mobile-bottom-nav button{min-height:55px;min-width:0;background:transparent;color:#426052;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center;padding:5px 1px;border-radius:11px;font-size:11px;font-weight:700;line-height:1.15;}
     .mobile-bottom-nav button[data-tab="ruter"] span{font-size:10px;}
@@ -135,8 +129,8 @@
     .stat strong{font-size:20px;}
     footer{margin:14px 2px 8px;}
   }
-  @media(min-width:701px){.mobile-view-title,.trip-mini-strip{display:none!important}}
-  @media(max-width:365px){.mobile-bottom-nav button{font-size:10px}.route-progress-grid strong{font-size:17px}.trip-mini-strip strong{font-size:17px}}
+  @media(min-width:701px){.mobile-view-title{display:none!important}}
+  @media(max-width:365px){.mobile-bottom-nav button{font-size:10px}.route-progress-grid strong{font-size:17px}}
 
   /* 0.8.10: Adskil Ruter og GPS i hver sin navigationsfane. */
   @media(max-width:700px){
@@ -158,7 +152,7 @@
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.15</small></div><span class="header-tag">Vandring og GPS</span></div></header>
+<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.16</small></div><span class="header-tag">Vandring og GPS</span></div></header>
 <nav id="mainTabs" class="main-tabs" aria-label="Hovednavigation">
   <button type="button" class="tab selected" data-tab="kort" aria-current="page">Kort</button>
   <button type="button" class="tab" data-tab="ruter">Ruter</button>
@@ -286,13 +280,7 @@
   for(const node of [...main.children]){if(node.matches('.intro,#status,#map,#routeProgressBanner'))mapView.appendChild(node);}
   move('tripPanel',mapView);move('mapTools',mapView);
   const viewLabel=document.createElement('h2');viewLabel.className='mobile-view-title';viewLabel.textContent='';viewLabel.hidden=true;mapView.insertBefore(viewLabel,mapView.firstChild);
-  const mini=document.createElement('div');mini.className='trip-mini-strip';mini.id='tripMiniStrip';
-  mini.innerHTML='<div><span>Gået</span><strong id="miniDistance">0,00 km</strong></div><div><span>Tid</span><strong id="miniDuration">00:00</strong></div>';
-  mapView.insertBefore(mini,document.getElementById('map'));
-  const distanceSource=document.getElementById('distance'),timeSource=document.getElementById('duration');
-  const updateMini=()=>{document.getElementById('miniDistance').textContent=distanceSource.textContent+' km';document.getElementById('miniDuration').textContent=timeSource.textContent;};
-  new MutationObserver(updateMini).observe(distanceSource,{childList:true,characterData:true,subtree:true});
-  new MutationObserver(updateMini).observe(timeSource,{childList:true,characterData:true,subtree:true});updateMini();
+  // 0.8.16: Gået/Tid vises kun i GPS-fanens eksisterende turstatistik.
   // Knapperne ligger OVER kortet, men aktiverer den eksisterende og afprøvede logik.
   const quick=document.createElement('div');quick.className='map-quickbar';quick.id='mapQuickbar';
   quick.innerHTML=`<div class="quickbar-header"><div class="map-quickbar-title">GPS og ruteplanlægning</div><button type="button" class="secondary quickbar-toggle" id="quickbarToggle" aria-expanded="true" aria-controls="quickbarActions" hidden>Skjul betjening</button></div>

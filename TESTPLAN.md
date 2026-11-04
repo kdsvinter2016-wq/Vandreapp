@@ -1,7 +1,7 @@
-# Testplan – VandreApp 0.8.12
+# Testplan – VandreApp 0.8.13
 
 ## Test A – Importeret GPX langt fra din position
-1. Åbn version 0.8.12 på Galaxy S25 FE.
+1. Åbn version 0.8.13 på Galaxy S25 FE.
 2. Importér en GPX-fil, hvis rute ikke ligger ved telefonens position.
 3. Kontrollér, at hele GPX-ruten vises og **Følg GPS: Fra** står i GPS-panelet.
 4. Vent 30 sekunder. Kortet skal blive på GPX-ruten, også når GPS-nøjagtighed opdateres.
@@ -19,3 +19,13 @@
 4. GPS-registrering og pause/genoptag samt rutenulstilling.
 
 Status: kodekontrol og syntaks kan gennemføres lokalt; GPS på fysisk Android kræver brugerens test. Ruteafvigelsesalarmer er fortsat ikke fuldt verificeret.
+
+## Ny kontrol i 0.8.13
+
+1. Åbn Kort/GPS og tryk **Planlæg rute på kortet**.
+2. Kontrollér, at fanen Ruter åbner, og at knappen nu hedder **Afslut tegning**.
+3. Tryk på kortet to steder: Pink rutestreg og distance skal vises.
+4. Tryk igen på **Planlæg rute på kortet**: Tegning skal fortsat være aktiv, og de eksisterende punkter må ikke blive slettet.
+5. Kontrollér GPS-position, GPX-import og Mine ture kortvarigt som regressionstest.
+
+Praktisk Android-test afventes.

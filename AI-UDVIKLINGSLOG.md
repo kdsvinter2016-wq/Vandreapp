@@ -1,4 +1,4 @@
-# AI-udviklingslog – 0.8.12
+# AI-udviklingslog – 0.8.13
 
 **Problem:** Efter GPX-import zoomede VandreApp ind på ruten, men den næste GPS-position flyttede straks kortet til brugeren.
 
@@ -9,3 +9,11 @@
 **Verifikation:** JavaScript-syntaks og ZIP-integritet kontrolleres. Regressionstests og fysisk Android-test er endnu ikke gennemført ved levering.
 
 **Refleksion:** Automatisk GPS-centrering er ikke altid hensigtsmæssig ved ruteplanlægning. GPS-overvågning og kortets bevægelse er to selvstændige brugerbehov.
+
+## Ændring i 0.8.13
+
+**Problem:** Genvejen *Planlæg rute på kortet* åbnede blot ruteplanlægningspanelet og krævede ekstra tryk på *Start tegning*.
+
+**Løsning:** Genvejen udløser eksisterende `drawToggle`-knaplogik, hvis tegnetilstand endnu ikke er aktiv. Dermed genbruges GPS-follow-håndteringen og kortets klikfunktion.
+
+**Verifikation:** JavaScript-syntaks og ZIP-integritet kontrolleres; Android-test er ikke gennemført.

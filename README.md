@@ -1,4 +1,4 @@
-# VandreApp 0.8.12 – rettelse af GPX-kortvisning
+# VandreApp 0.8.13 – rettelse af GPX-kortvisning
 
 Denne version bygger på 0.8.10 og retter fejlen, hvor en importeret GPX-rute kun blev vist kortvarigt, før kortet automatisk panorerede til telefonens GPS-position.
 
@@ -13,3 +13,7 @@ Denne version bygger på 0.8.10 og retter fejlen, hvor en importeret GPX-rute ku
 Udpak ZIP-filen og upload alle otte filer til roden af GitHub-repositoryet. Åbn siden med `?v=0811` og kontrollér versionsnummeret.
 
 Se `TESTPLAN.md` for Android-tests. Webappen kan ikke garantere GPS-opdateringer med slukket skærm.
+
+## Ændring i 0.8.13
+
+Knappen **Planlæg rute på kortet** under **GPS og ruteplanlægning** åbner fanen Ruter og aktiverer automatisk **Start tegning**. Hvis tegning allerede er aktiv, forbliver den aktiv. Øvrige GPS- og rutefunktioner er bevaret.

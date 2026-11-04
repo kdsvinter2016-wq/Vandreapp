@@ -157,7 +157,7 @@
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.12</small></div><span class="header-tag">Vandring og GPS</span></div></header>
+<header><div class="header-inner"><div><h1>VandreApp</h1><small>AI-eksamensprojekt · Prototype 0.8.13</small></div><span class="header-tag">Vandring og GPS</span></div></header>
 <nav id="mainTabs" class="main-tabs" aria-label="Hovednavigation">
   <button type="button" class="tab selected" data-tab="kort" aria-current="page">Kort</button>
   <button type="button" class="tab" data-tab="ruter">Ruter</button>
@@ -332,8 +332,11 @@
     sync();
   }
   document.getElementById('quickPlan').addEventListener('click',()=>{
+    // Åbn ruteplanlægning og aktivér tegning med den eksisterende Start tegning-logik.
     const disclosure=document.getElementById('routeDisclosure');disclosure.open=true;
     selectTab('ruter');
+    const drawToggle=document.getElementById('drawToggle');
+    if(drawToggle && drawToggle.getAttribute('aria-pressed')!=='true')drawToggle.click();
     if(window.vandreMapInvalidate)window.vandreMapInvalidate();
   });
   move('historyPanel',toursView);move('analysisPanel',toursView);
